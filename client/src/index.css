@@ -8,72 +8,84 @@
   --font-body: 'Inter', sans-serif;
   --font-display: 'Outfit', sans-serif;
 
-  /* Refined Blue/Indigo Palette */
-  --background: 210 40% 98%;
-  --foreground: 222 47% 11%;
+  /* Light Mode - Cool Gray Gradient (#8e9eab to #eef2f3) */
+  --background: 200 18% 95%;
+  --background-start: #eef2f3;
+  --background-end: #d4dde4;
+  --foreground: 215 30% 20%;
 
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 215 30% 20%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 215 30% 20%;
 
-  --primary: 221 83% 53%;
-  --primary-foreground: 210 40% 98%;
+  /* Primary - Teal accent complementary to gray */
+  --primary: 185 65% 40%;
+  --primary-foreground: 0 0% 100%;
 
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222 47% 11%;
+  --secondary: 210 15% 92%;
+  --secondary-foreground: 215 30% 20%;
 
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
+  --muted: 210 12% 90%;
+  --muted-foreground: 210 12% 45%;
 
-  --accent: 262 83% 65%;
-  --accent-foreground: 210 40% 98%;
+  /* Accent - Warm cyan for contrast */
+  --accent: 175 55% 42%;
+  --accent-foreground: 0 0% 100%;
 
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive: 0 72% 55%;
+  --destructive-foreground: 0 0% 100%;
 
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 221 83% 53%;
+  --border: 210 15% 85%;
+  --input: 210 15% 85%;
+  --ring: 185 65% 40%;
 
   --radius: 0.75rem;
 }
 
 .dark {
-  --background: 222 47% 11%;
-  --foreground: 210 40% 98%;
+  /* Dark Mode - Deep Blue Gradient (#141e30 to #243b55) */
+  --background: 218 43% 13%;
+  --background-start: #141e30;
+  --background-end: #243b55;
+  --foreground: 210 30% 92%;
 
-  --card: 222 47% 13%;
-  --card-foreground: 210 40% 98%;
+  --card: 215 42% 17%;
+  --card-foreground: 210 30% 92%;
 
-  --popover: 222 47% 11%;
-  --popover-foreground: 210 40% 98%;
+  --popover: 218 43% 13%;
+  --popover-foreground: 210 30% 92%;
 
-  --primary: 217 91% 60%;
-  --primary-foreground: 222 47% 11%;
+  /* Primary - Bright cyan accent */
+  --primary: 185 75% 55%;
+  --primary-foreground: 218 43% 10%;
 
-  --secondary: 217 32% 17%;
-  --secondary-foreground: 210 40% 98%;
+  --secondary: 215 35% 22%;
+  --secondary-foreground: 210 30% 92%;
 
-  --muted: 217 32% 17%;
-  --muted-foreground: 215 20% 65%;
+  --muted: 215 35% 20%;
+  --muted-foreground: 210 20% 60%;
 
-  --accent: 262 83% 65%;
-  --accent-foreground: 210 40% 98%;
+  /* Accent - Vibrant teal */
+  --accent: 175 70% 50%;
+  --accent-foreground: 218 43% 10%;
 
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive: 0 55% 45%;
+  --destructive-foreground: 210 30% 92%;
 
-  --border: 217 32% 17%;
-  --input: 217 32% 17%;
-  --ring: 224 76% 48%;
+  --border: 215 35% 25%;
+  --input: 215 35% 25%;
+  --ring: 185 75% 55%;
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
+    @apply text-foreground antialiased selection:bg-primary/20 selection:text-primary;
     font-family: var(--font-body);
+    background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
