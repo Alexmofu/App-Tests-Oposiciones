@@ -11,6 +11,8 @@ let storage: SqliteStorage | null = null;
 let currentUserId: number | null = null;
 
 function createWindow() {
+  const appPath = app.getAppPath();
+  
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -21,7 +23,9 @@ function createWindow() {
       contextIsolation: true,
       preload: path.join(__dirname, "preload.cjs"),
     },
-    icon: path.join(__dirname, "../client/public/icon-192.png"),
+    icon: isDev 
+      ? path.join(__dirname, "../client/public/icon-192.png")
+      : path.join(appPath, "dist-electron/icon-192.png"),
     title: "OposTest Pro",
   });
 
@@ -29,7 +33,9 @@ function createWindow() {
     mainWindow.loadURL("http://localhost:5000");
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(path.join(__dirname, "../dist-electron/index.html"));
+    const indexPath = path.join(appPath, "dist-electron", "index.html");
+    console.log("Loading:", indexPath);
+    mainWindow.loadFile(indexPath);
   }
 
   mainWindow.on("closed", () => {
