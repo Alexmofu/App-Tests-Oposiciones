@@ -1,5 +1,83 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
+const isElectron = typeof window !== "undefined" && !!(window as any).electronAPI;
+
+async function electronRequest(method: string, url: string, data?: unknown): Promise<any> {
+  const api = (window as any).electronAPI;
+  
+  if (url === "/api/auth/me" || url.includes("/api/auth/me")) {
+    return api.auth.me();
+  }
+  if (url === "/api/auth/login" && method === "POST") {
+    return api.auth.login(data);
+  }
+  if (url === "/api/auth/register" && method === "POST") {
+    return api.auth.register(data);
+  }
+  if (url === "/api/auth/logout" && method === "POST") {
+    return api.auth.logout();
+  }
+  if (url === "/api/tests" && method === "GET") {
+    return api.tests.list();
+  }
+  if (url.match(/\/api\/tests\/[^/]+\/questions/) && method === "GET") {
+    const testId = url.split("/")[3];
+    return api.tests.questions(testId);
+  }
+  if (url.match(/\/api\/tests\/[^/]+$/) && method === "DELETE") {
+    const testId = url.split("/")[3];
+    return api.tests.delete(testId);
+  }
+  if (url === "/api/tests/rename" && method === "POST") {
+    return api.tests.rename((data as any).oldTestId, (data as any).newTestId);
+  }
+  if (url === "/api/tests/import" && method === "POST") {
+    return api.tests.import((data as any).testId, (data as any).questions, (data as any).category);
+  }
+  if (url.match(/\/api\/questions\/\d+/) && method === "PATCH") {
+    const id = parseInt(url.split("/")[3]);
+    return api.questions.update(id, data);
+  }
+  if (url.match(/\/api\/questions\/\d+/) && method === "DELETE") {
+    const id = parseInt(url.split("/")[3]);
+    return api.questions.delete(id);
+  }
+  if (url === "/api/results" && method === "GET") {
+    return api.results.list();
+  }
+  if (url === "/api/results" && method === "POST") {
+    return api.results.create(data);
+  }
+  if (url.match(/\/api\/results\/\d+/) && method === "DELETE") {
+    const id = parseInt(url.split("/")[3]);
+    return api.results.delete(id);
+  }
+  if (url === "/api/attempts" && method === "GET") {
+    return api.attempts.list();
+  }
+  if (url === "/api/attempts" && method === "POST") {
+    return api.attempts.create(data);
+  }
+  if (url.match(/\/api\/attempts\/\d+$/) && method === "GET") {
+    const id = parseInt(url.split("/")[3]);
+    return api.attempts.get(id);
+  }
+  if (url.match(/\/api\/attempts\/\d+/) && method === "PATCH") {
+    const id = parseInt(url.split("/")[3]);
+    return api.attempts.update(id, data);
+  }
+  if (url.match(/\/api\/attempts\/\d+/) && method === "DELETE") {
+    const id = parseInt(url.split("/")[3]);
+    return api.attempts.delete(id);
+  }
+  if (url === "/api/config" && method === "GET") {
+    return api.config.get();
+  }
+  
+  console.warn("Unhandled Electron API request:", method, url);
+  throw new Error(`No Electron handler for ${method} ${url}`);
+}
+
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     const text = (await res.text()) || res.statusText;
@@ -12,6 +90,14 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
+  if (isElectron) {
+    const result = await electronRequest(method, url, data);
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  
   const res = await fetch(url, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
@@ -29,7 +115,20 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const res = await fetch(queryKey.join("/") as string, {
+    const url = queryKey.join("/") as string;
+    
+    if (isElectron) {
+      try {
+        return await electronRequest("GET", url);
+      } catch (error: any) {
+        if (unauthorizedBehavior === "returnNull" && error.message?.includes("401")) {
+          return null;
+        }
+        throw error;
+      }
+    }
+    
+    const res = await fetch(url, {
       credentials: "include",
     });
 

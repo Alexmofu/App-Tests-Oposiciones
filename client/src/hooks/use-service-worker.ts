@@ -16,7 +16,9 @@ export function useServiceWorker() {
   });
 
   useEffect(() => {
-    if (!("serviceWorker" in navigator)) {
+    const isElectron = !!(window as any).electronAPI;
+    
+    if (isElectron || !("serviceWorker" in navigator)) {
       setStatus((prev) => ({ ...prev, isSupported: false }));
       return;
     }
