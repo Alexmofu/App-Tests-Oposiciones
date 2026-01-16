@@ -2,8 +2,13 @@ import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
 const isElectron = typeof window !== "undefined" && !!(window as any).electronAPI;
 
+if (isElectron) {
+  console.log("[Electron] Modo Electron detectado");
+}
+
 async function electronRequest(method: string, url: string, data?: unknown): Promise<any> {
   const api = (window as any).electronAPI;
+  console.log("[Electron IPC]", method, url, data);
   
   if (url === "/api/auth/me" || url.includes("/api/auth/me")) {
     return api.auth.me();
@@ -115,12 +120,20 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const url = queryKey.join("/") as string;
+    let url = queryKey[0] as string;
+    if (queryKey.length > 1) {
+      url = queryKey.join("/");
+    }
+    
+    console.log("[QueryFn] isElectron:", isElectron, "url:", url, "queryKey:", queryKey);
     
     if (isElectron) {
       try {
-        return await electronRequest("GET", url);
+        const result = await electronRequest("GET", url);
+        console.log("[QueryFn] Electron result:", result);
+        return result;
       } catch (error: any) {
+        console.error("[QueryFn] Electron error:", error);
         if (unauthorizedBehavior === "returnNull" && error.message?.includes("401")) {
           return null;
         }
