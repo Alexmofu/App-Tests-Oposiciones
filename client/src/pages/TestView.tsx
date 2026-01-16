@@ -55,8 +55,8 @@ export default function TestView() {
       if (attemptError || (!attemptLoading && !existingAttempt)) {
         setAttemptLoadFailed(true);
         toast({ 
-          title: "Attempt Not Found", 
-          description: "The saved attempt could not be found. Starting fresh.", 
+          title: "Intento No Encontrado", 
+          description: "No se pudo encontrar el intento guardado. Empezando de nuevo.", 
           variant: "destructive" 
         });
         // Clear URL parameter
@@ -76,8 +76,8 @@ export default function TestView() {
       
       if (orderedQuestions.length === 0) {
         toast({ 
-          title: "Questions Missing", 
-          description: "The questions for this test have been deleted. Starting fresh.", 
+          title: "Preguntas No Encontradas", 
+          description: "Las preguntas de este test han sido eliminadas. Empezando de nuevo.", 
           variant: "destructive" 
         });
         setLocation(`/test/${encodeURIComponent(testId)}`, { replace: true });
@@ -125,15 +125,15 @@ export default function TestView() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-        <p className="text-muted-foreground animate-pulse">Loading test...</p>
+        <p className="text-muted-foreground animate-pulse">Cargando test...</p>
       </div>
     </div>
   );
 
   if (!questions || questions.length === 0) return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <h2 className="text-2xl font-bold mb-4">Test Not Found</h2>
-      <Button onClick={() => setLocation("/")}>Back Home</Button>
+      <h2 className="text-2xl font-bold mb-4">Test No Encontrado</h2>
+      <Button onClick={() => setLocation("/")}>Volver al Inicio</Button>
     </div>
   );
 
@@ -143,7 +143,7 @@ export default function TestView() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground animate-pulse">Preparing questions...</p>
+          <p className="text-muted-foreground animate-pulse">Preparando preguntas...</p>
         </div>
       </div>
     );
@@ -181,7 +181,7 @@ export default function TestView() {
       setLocation(`/test/${encodeURIComponent(testId)}?attempt=${attempt.id}`, { replace: true });
       setIsStarted(true);
     } catch (err) {
-      toast({ title: "Error", description: "Failed to start test", variant: "destructive" });
+      toast({ title: "Error", description: "No se pudo iniciar el test", variant: "destructive" });
     }
   };
 
@@ -218,7 +218,7 @@ export default function TestView() {
         currentIndex,
         answers: answers as Record<string, string>,
       });
-      toast({ title: "Progress Saved", description: "You can continue this test later from the History page." });
+      toast({ title: "Progreso Guardado", description: "Puedes continuar este test más tarde desde la página de Historial." });
     }
     setLocation("/results");
   };
@@ -235,24 +235,24 @@ export default function TestView() {
           <Card className="p-8 shadow-xl">
             <div className="text-center mb-8 space-y-2">
               <h1 className="text-3xl font-display font-bold">{testId.replace('.json', '')}</h1>
-              <p className="text-muted-foreground">{questions.length} Questions</p>
+              <p className="text-muted-foreground">{questions.length} Preguntas</p>
             </div>
             
             <div className="space-y-6">
               <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl">
                 <div className="flex items-center gap-3">
                   <Shuffle className="w-5 h-5 text-primary" />
-                  <Label htmlFor="random" className="font-medium cursor-pointer">Randomize Order</Label>
+                  <Label htmlFor="random" className="font-medium cursor-pointer">Orden Aleatorio</Label>
                 </div>
                 <Switch id="random" checked={randomize} onCheckedChange={setRandomize} data-testid="switch-randomize" />
               </div>
 
               <Button size="lg" className="w-full text-lg h-12" onClick={handleStart} data-testid="button-start-test">
-                Start Test
+                Comenzar Test
               </Button>
               
               <Button variant="ghost" className="w-full" onClick={() => setLocation("/")} data-testid="button-cancel">
-                Cancel
+                Cancelar
               </Button>
             </div>
           </Card>
@@ -280,17 +280,17 @@ export default function TestView() {
               </div>
             </div>
             
-            <h2 className="text-2xl font-bold mb-2">{isPass ? "Great Job!" : "Keep Practicing"}</h2>
+            <h2 className="text-2xl font-bold mb-2">{isPass ? "¡Buen Trabajo!" : "Sigue Practicando"}</h2>
             <p className="text-muted-foreground mb-8">
-              You answered {activeQuestions.filter(q => answers[q.id] === q.correctAnswer).length} out of {activeQuestions.length} correctly.
+              Has respondido {activeQuestions.filter(q => answers[q.id] === q.correctAnswer).length} de {activeQuestions.length} correctamente.
             </p>
             
             <div className="grid grid-cols-2 gap-4">
               <Button variant="outline" onClick={() => setLocation("/")} data-testid="button-home">
-                <Home className="w-4 h-4 mr-2" /> Home
+                <Home className="w-4 h-4 mr-2" /> Inicio
               </Button>
               <Button onClick={() => setLocation("/results")} data-testid="button-view-history">
-                View History
+                Ver Historial
               </Button>
             </div>
           </Card>
@@ -303,8 +303,8 @@ export default function TestView() {
   if (!currentQuestion) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
-        <h2 className="text-2xl font-bold mb-4">Error Loading Question</h2>
-        <Button onClick={() => setLocation("/")}>Back Home</Button>
+        <h2 className="text-2xl font-bold mb-4">Error Cargando Pregunta</h2>
+        <Button onClick={() => setLocation("/")}>Volver al Inicio</Button>
       </div>
     );
   }
@@ -316,11 +316,11 @@ export default function TestView() {
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
           <Button variant="ghost" size="sm" onClick={handleSaveAndExit} data-testid="button-save-exit">
-            <Save className="w-4 h-4 mr-1" /> Save & Exit
+            <Save className="w-4 h-4 mr-1" /> Guardar y Salir
           </Button>
           <div className="font-mono font-medium text-sm text-muted-foreground">
             {currentIndex + 1} / {activeQuestions.length}
-            <span className="ml-2 text-xs">({answeredCount} answered)</span>
+            <span className="ml-2 text-xs">({answeredCount} respondidas)</span>
           </div>
           <Button variant="ghost" size="sm" className="text-muted-foreground" data-testid="button-flag">
             <Flag className="w-4 h-4" />
@@ -358,12 +358,12 @@ export default function TestView() {
             disabled={currentIndex === 0}
             data-testid="button-previous"
           >
-            Previous
+            Anterior
           </Button>
 
           {currentIndex === activeQuestions.length - 1 ? (
             <Button size="lg" onClick={handleFinish} className="px-8 bg-green-600 hover:bg-green-700" data-testid="button-finish">
-              Finish Test
+              Finalizar Test
             </Button>
           ) : (
             <Button 
@@ -372,7 +372,7 @@ export default function TestView() {
               className="px-8"
               data-testid="button-next"
             >
-              Next <ChevronRight className="w-4 h-4 ml-2" />
+              Siguiente <ChevronRight className="w-4 h-4 ml-2" />
             </Button>
           )}
         </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { UploadCloud, FileJson } from "lucide-react";
 import { useImportTest } from "@/hooks/use-tests";
@@ -24,7 +24,7 @@ export function ImportDialog() {
     reader.onload = (e) => {
       try {
         const content = JSON.parse(e.target?.result as string);
-        if (!Array.isArray(content)) throw new Error("JSON must be an array");
+        if (!Array.isArray(content)) throw new Error("El JSON debe ser un array");
         
         mutate({ filename: file.name, content }, {
           onSuccess: () => {
@@ -33,7 +33,7 @@ export function ImportDialog() {
           }
         });
       } catch (err) {
-        alert("Invalid JSON file");
+        alert("Archivo JSON inválido");
       }
     };
     reader.readAsText(file);
@@ -43,16 +43,17 @@ export function ImportDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="w-full gap-2 bg-gradient-to-r from-primary to-primary/90 shadow-lg shadow-primary/20">
-          <UploadCloud className="w-4 h-4" /> Import Local JSON
+          <UploadCloud className="w-4 h-4" /> Importar JSON Local
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Import Test Questions</DialogTitle>
+          <DialogTitle>Importar Preguntas de Test</DialogTitle>
+          <DialogDescription>Selecciona un archivo JSON con las preguntas para importar.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="file">Select .json file</Label>
+            <Label htmlFor="file">Selecciona archivo .json</Label>
             <div className="border-2 border-dashed border-border rounded-xl p-8 text-center hover:bg-muted/50 transition-colors cursor-pointer relative">
               <Input 
                 id="file" 
@@ -63,15 +64,15 @@ export function ImportDialog() {
               />
               <div className="flex flex-col items-center gap-2 text-muted-foreground">
                 <FileJson className="w-8 h-8" />
-                <span>{file ? file.name : "Drag & drop or click to select"}</span>
+                <span>{file ? file.name : "Arrastra o haz clic para seleccionar"}</span>
               </div>
             </div>
           </div>
         </div>
         <div className="flex justify-end gap-3">
-          <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
           <Button onClick={handleImport} disabled={!file || isPending}>
-            {isPending ? "Importing..." : "Import File"}
+            {isPending ? "Importando..." : "Importar Archivo"}
           </Button>
         </div>
       </DialogContent>

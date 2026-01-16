@@ -51,13 +51,13 @@ export function useImportTest() {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [api.tests.list.path] });
       toast({
-        title: "Import Successful",
-        description: `Imported ${data.count} questions successfully.`,
+        title: "Importación Exitosa",
+        description: `Se importaron ${data.count} preguntas correctamente.`,
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Import Failed",
+        title: "Error en la Importación",
         description: error.message,
         variant: "destructive",
       });
@@ -85,9 +85,9 @@ export function useCreateQuestion() {
       // Invalidate both the specific test query and test list
       queryClient.invalidateQueries({ queryKey: [api.tests.get.path, data.testId] });
       queryClient.invalidateQueries({ queryKey: [api.tests.list.path] });
-      toast({ title: "Question Created" });
+      toast({ title: "Pregunta Creada" });
     },
-    onError: () => toast({ title: "Create Failed", variant: "destructive" }),
+    onError: () => toast({ title: "Error al Crear", variant: "destructive" }),
   });
 }
 
@@ -109,9 +109,9 @@ export function useUpdateQuestion() {
     onSuccess: (data) => {
       // Invalidate the specific test query using testId from the response
       queryClient.invalidateQueries({ queryKey: [api.tests.get.path, data.testId] });
-      toast({ title: "Question Updated" });
+      toast({ title: "Pregunta Actualizada" });
     },
-    onError: () => toast({ title: "Update Failed", variant: "destructive" }),
+    onError: () => toast({ title: "Error al Actualizar", variant: "destructive" }),
   });
 }
 
@@ -127,9 +127,9 @@ export function useDeleteQuestion() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [api.tests.get.path] });
-      toast({ title: "Question Deleted" });
+      toast({ title: "Pregunta Eliminada" });
     },
-    onError: () => toast({ title: "Delete Failed", variant: "destructive" }),
+    onError: () => toast({ title: "Error al Eliminar", variant: "destructive" }),
   });
 }
 
@@ -167,10 +167,10 @@ export function useFetchRemoteTest() {
       return importMutation.mutateAsync({ filename, content });
     },
     onSuccess: () => {
-      toast({ title: "Remote Test Downloaded & Imported" });
+      toast({ title: "Test Remoto Descargado e Importado" });
     },
     onError: (err) => {
-      toast({ title: "Failed to download", description: err.message, variant: "destructive" });
+      toast({ title: "Error al descargar", description: err.message, variant: "destructive" });
     },
   });
 }

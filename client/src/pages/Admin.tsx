@@ -37,8 +37,8 @@ export default function Admin() {
             </Button>
           </Link>
           <div className="flex-1">
-            <h1 className="text-xl font-display font-bold">Question Manager</h1>
-            <p className="text-sm text-muted-foreground hidden md:block">Create, edit, and organize your test questions</p>
+            <h1 className="text-xl font-display font-bold">Gestor de Preguntas</h1>
+            <p className="text-sm text-muted-foreground hidden md:block">Crea, edita y organiza las preguntas de tus tests</p>
           </div>
         </div>
       </header>
@@ -50,13 +50,13 @@ export default function Admin() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
                   <FileText className="w-4 h-4" />
-                  Select Test
+                  Seleccionar Test
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <Select value={selectedTestId} onValueChange={setSelectedTestId}>
                   <SelectTrigger data-testid="select-test">
-                    <SelectValue placeholder="Choose a test..." />
+                    <SelectValue placeholder="Elige un test..." />
                   </SelectTrigger>
                   <SelectContent>
                     {tests?.map(test => (
@@ -77,16 +77,16 @@ export default function Admin() {
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base flex items-center gap-2">
                     <BookOpen className="w-4 h-4" />
-                    Test Info
+                    Info del Test
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-muted-foreground">Questions</span>
+                    <span className="text-muted-foreground">Preguntas</span>
                     <span className="font-medium">{selectedTest.count}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-muted-foreground">Category</span>
+                    <span className="text-muted-foreground">Categoría</span>
                     <span className="font-medium">{selectedTest.category || "General"}</span>
                   </div>
                 </CardContent>
@@ -101,9 +101,9 @@ export default function Admin() {
                   <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto">
                     <FileText className="w-8 h-8 text-muted-foreground" />
                   </div>
-                  <h3 className="text-lg font-semibold">No Test Selected</h3>
+                  <h3 className="text-lg font-semibold">Ningún Test Seleccionado</h3>
                   <p className="text-muted-foreground text-sm max-w-xs">
-                    Choose a test from the sidebar to view and manage its questions.
+                    Elige un test de la barra lateral para ver y gestionar sus preguntas.
                   </p>
                 </div>
               </Card>
@@ -113,13 +113,13 @@ export default function Admin() {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                       <CardTitle className="text-lg">{selectedTestId.replace('.json', '')}</CardTitle>
-                      <CardDescription>{filteredQuestions?.length || 0} questions</CardDescription>
+                      <CardDescription>{filteredQuestions?.length || 0} preguntas</CardDescription>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                         <Input 
-                          placeholder="Search questions..." 
+                          placeholder="Buscar preguntas..." 
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                           className="pl-9 w-[200px]"
@@ -132,7 +132,7 @@ export default function Admin() {
                         trigger={
                           <Button size="sm" data-testid="button-add-new-question">
                             <Plus className="w-4 h-4 mr-2" />
-                            Add Question
+                            Añadir Pregunta
                           </Button>
                         }
                       />
@@ -143,12 +143,12 @@ export default function Admin() {
                   {isLoading ? (
                     <div className="p-8 text-center">
                       <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-                      <p className="text-sm text-muted-foreground mt-3">Loading questions...</p>
+                      <p className="text-sm text-muted-foreground mt-3">Cargando preguntas...</p>
                     </div>
                   ) : filteredQuestions?.length === 0 ? (
                     <div className="p-8 text-center">
                       <p className="text-muted-foreground">
-                        {searchQuery ? "No questions match your search." : "No questions in this test yet."}
+                        {searchQuery ? "No hay preguntas que coincidan con tu búsqueda." : "No hay preguntas en este test todavía."}
                       </p>
                     </div>
                   ) : (
@@ -208,19 +208,19 @@ export default function Admin() {
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
                                       <AlertDialogHeader>
-                                        <AlertDialogTitle>Delete Question?</AlertDialogTitle>
+                                        <AlertDialogTitle>¿Eliminar Pregunta?</AlertDialogTitle>
                                         <AlertDialogDescription>
-                                          This action cannot be undone. The question will be permanently removed from this test.
+                                          Esta acción no se puede deshacer. La pregunta será eliminada permanentemente de este test.
                                         </AlertDialogDescription>
                                       </AlertDialogHeader>
                                       <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
                                         <AlertDialogAction 
                                           onClick={() => deleteQuestion(q.id)} 
                                           className="bg-destructive hover:bg-destructive/90"
                                           data-testid={`button-confirm-delete-${q.id}`}
                                         >
-                                          Delete
+                                          Eliminar
                                         </AlertDialogAction>
                                       </AlertDialogFooter>
                                     </AlertDialogContent>

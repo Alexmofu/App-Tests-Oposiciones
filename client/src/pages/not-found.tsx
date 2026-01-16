@@ -10,16 +10,16 @@ export default function NotFound() {
         <CardContent className="pt-6">
           <div className="flex mb-4 gap-2">
             <AlertCircle className="h-8 w-8 text-red-500" />
-            <h1 className="text-2xl font-bold text-gray-900">404 Page Not Found</h1>
+            <h1 className="text-2xl font-bold text-gray-900">404 Página No Encontrada</h1>
           </div>
           
           <p className="mt-4 text-sm text-gray-600">
-            The page you requested does not exist.
+            La página que has solicitado no existe.
           </p>
 
           <div className="mt-8 flex justify-end">
              <Link href="/">
-              <Button>Return Home</Button>
+              <Button>Volver al Inicio</Button>
             </Link>
           </div>
         </CardContent>

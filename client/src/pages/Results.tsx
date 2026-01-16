@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Trophy, Calendar, CheckCircle, Play, Trash2, Clock, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import {
   LineChart,
   Line,
@@ -43,7 +44,7 @@ export default function Results() {
   };
 
   const handleDeleteAttempt = (id: number) => {
-    if (confirm("Are you sure you want to delete this attempt?")) {
+    if (confirm("¿Estás seguro de que quieres eliminar este intento?")) {
       deleteAttempt(id);
     }
   };
@@ -57,7 +58,7 @@ export default function Results() {
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
-          <h1 className="text-3xl font-display font-bold">Your Progress</h1>
+          <h1 className="text-3xl font-display font-bold">Tu Progreso</h1>
         </header>
 
         {isLoading ? (
@@ -69,7 +70,7 @@ export default function Results() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Clock className="w-5 h-5 text-orange-500" />
-                  <h2 className="text-2xl font-semibold">In Progress</h2>
+                  <h2 className="text-2xl font-semibold">En Progreso</h2>
                   <Badge variant="secondary" className="ml-2">{inProgressAttempts.length}</Badge>
                 </div>
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -86,19 +87,19 @@ export default function Results() {
                               <h3 className="font-semibold text-lg">{attempt.testId.replace('.json', '')}</h3>
                               <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
                                 <Calendar className="w-3 h-3" />
-                                {attempt.startedAt && format(new Date(attempt.startedAt), "MMM d, yyyy HH:mm")}
+                                {attempt.startedAt && format(new Date(attempt.startedAt), "d MMM yyyy, HH:mm", { locale: es })}
                               </p>
                             </div>
                             <Badge variant="outline" className="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border-orange-300">
                               <AlertCircle className="w-3 h-3 mr-1" />
-                              In Progress
+                              En Progreso
                             </Badge>
                           </div>
                           
                           <div className="space-y-3">
                             <div className="flex justify-between text-sm">
-                              <span className="text-muted-foreground">Progress</span>
-                              <span className="font-medium">{answered} / {total} questions</span>
+                              <span className="text-muted-foreground">Progreso</span>
+                              <span className="font-medium">{answered} / {total} preguntas</span>
                             </div>
                             <div className="w-full bg-muted rounded-full h-2">
                               <div 
@@ -107,7 +108,7 @@ export default function Results() {
                               />
                             </div>
                             <div className="text-sm text-muted-foreground">
-                              {total - answered} questions remaining
+                              {total - answered} preguntas restantes
                             </div>
                           </div>
                           
@@ -117,7 +118,7 @@ export default function Results() {
                               onClick={() => handleContinue(attempt)}
                               data-testid={`button-continue-${attempt.id}`}
                             >
-                              <Play className="w-4 h-4 mr-2" /> Continue
+                              <Play className="w-4 h-4 mr-2" /> Continuar
                             </Button>
                             <Button 
                               variant="outline" 
@@ -142,7 +143,7 @@ export default function Results() {
                 <CardContent className="pt-6 flex flex-col items-center text-center">
                   <Trophy className="w-10 h-10 text-primary mb-2" />
                   <h3 className="text-4xl font-bold">{results?.length || 0}</h3>
-                  <p className="text-muted-foreground">Tests Completed</p>
+                  <p className="text-muted-foreground">Tests Completados</p>
                 </CardContent>
               </Card>
               
@@ -150,7 +151,7 @@ export default function Results() {
                 <CardContent className="pt-6 flex flex-col items-center text-center">
                   <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 mb-2 font-bold">%</div>
                   <h3 className="text-4xl font-bold">{averageScore}%</h3>
-                  <p className="text-muted-foreground">Average Score</p>
+                  <p className="text-muted-foreground">Puntuación Media</p>
                 </CardContent>
               </Card>
 
@@ -160,7 +161,7 @@ export default function Results() {
                   <h3 className="text-4xl font-bold">
                     {results?.reduce((acc, curr) => acc + curr.correctCount, 0)}
                   </h3>
-                  <p className="text-muted-foreground">Total Correct Answers</p>
+                  <p className="text-muted-foreground">Respuestas Correctas</p>
                 </CardContent>
               </Card>
             </div>
@@ -169,7 +170,7 @@ export default function Results() {
             {results && results.length > 0 && (
               <Card className="p-6">
                 <CardHeader className="px-0 pt-0">
-                  <CardTitle>Score History</CardTitle>
+                  <CardTitle>Historial de Puntuaciones</CardTitle>
                 </CardHeader>
                 <div className="h-[300px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
@@ -200,16 +201,16 @@ export default function Results() {
 
             {/* History Table */}
             <div className="space-y-4">
-              <h2 className="text-2xl font-semibold">Completed Tests</h2>
+              <h2 className="text-2xl font-semibold">Tests Completados</h2>
               {results && results.length > 0 ? (
                 <div className="border rounded-xl overflow-hidden bg-card">
                   <table className="w-full text-sm">
                     <thead className="bg-muted/50 border-b">
                       <tr>
-                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">Test Name</th>
-                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">Date</th>
-                        <th className="px-4 py-3 text-right font-medium text-muted-foreground">Score</th>
-                        <th className="px-4 py-3 text-right font-medium text-muted-foreground hidden sm:table-cell">Correct</th>
+                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">Nombre del Test</th>
+                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">Fecha</th>
+                        <th className="px-4 py-3 text-right font-medium text-muted-foreground">Puntuación</th>
+                        <th className="px-4 py-3 text-right font-medium text-muted-foreground hidden sm:table-cell">Correctas</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y">
@@ -218,7 +219,7 @@ export default function Results() {
                           <td className="px-4 py-3 font-medium">{result.testId.replace('.json', '')}</td>
                           <td className="px-4 py-3 text-muted-foreground flex items-center gap-2">
                             <Calendar className="w-3 h-3" />
-                            {result.completedAt && format(new Date(result.completedAt), "MMM d, yyyy")}
+                            {result.completedAt && format(new Date(result.completedAt), "d MMM yyyy", { locale: es })}
                           </td>
                           <td className="px-4 py-3 text-right font-bold">
                             <span className={result.score >= 50 ? "text-green-600" : "text-red-500"}>
@@ -235,9 +236,9 @@ export default function Results() {
                 </div>
               ) : (
                 <Card className="p-8 text-center">
-                  <p className="text-muted-foreground">No completed tests yet. Start practicing!</p>
+                  <p className="text-muted-foreground">No hay tests completados aún. ¡Empieza a practicar!</p>
                   <Link href="/">
-                    <Button className="mt-4">Start a Test</Button>
+                    <Button className="mt-4">Empezar un Test</Button>
                   </Link>
                 </Card>
               )}
