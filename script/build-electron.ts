@@ -16,9 +16,16 @@ async function buildElectron() {
   execSync("npx vite build --outDir electron-app/renderer", { stdio: "inherit" });
   
   // Verificar que el frontend se generó correctamente
-  if (!fs.existsSync("electron-app/renderer/index.html")) {
+  const indexPath = path.join("electron-app", "renderer", "index.html");
+  if (!fs.existsSync(indexPath)) {
+    console.error("Buscando en:", indexPath);
+    console.error("Contenido de electron-app:", fs.readdirSync("electron-app"));
+    if (fs.existsSync(path.join("electron-app", "renderer"))) {
+      console.error("Contenido de renderer:", fs.readdirSync(path.join("electron-app", "renderer")));
+    }
     throw new Error("Error: No se generó el archivo index.html del frontend");
   }
+  console.log("   ✓ Frontend generado correctamente");
 
   console.log("\n2. Building Electron main process...");
   await esbuild.build({
