@@ -91,3 +91,18 @@ The application is configured as a PWA for installation on Windows, Android, and
 - **Vite**: Frontend bundling and development server
 - **esbuild**: Production server bundling
 - **tsx**: TypeScript execution for development
+
+### Self-Hosting
+- **Guide**: See `SELFHOSTING.md` for complete Ubuntu VPS installation instructions
+- **Configuration**: Copy `.env.example` to `.env` and customize settings
+- **Configurable Options** (via `.env`):
+  - `DATABASE_URL`: PostgreSQL connection string
+  - `PORT`: Server port (default: 5000)
+  - `APP_NAME`: Application name shown in UI
+  - `APP_DESCRIPTION`: Short description
+  - `WELCOME_MESSAGE`: Loading screen message
+  - `SESSION_SECRET`: Secret for session encryption
+
+### Configuration API
+- **Endpoint**: `GET /api/config` returns app configuration
+- **Config file**: `server/config.ts` reads from environment variables with defaults

@@ -5,6 +5,7 @@ import { api } from "@shared/routes";
 import { z } from "zod";
 import { InsertQuestion } from "@shared/schema";
 import fetch from "node-fetch";
+import { config } from "./config";
 
 import fs from "fs";
 import path from "path";
@@ -13,6 +14,11 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  // === App Config (for frontend) ===
+  app.get("/api/config", (req, res) => {
+    res.json(config.app);
+  });
 
   // === Seed Data ===
   (async () => {
