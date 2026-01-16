@@ -6,80 +6,116 @@ if (isElectron) {
   console.log("[Electron] Modo Electron detectado");
 }
 
+function unwrapIpcResult(result: any): any {
+  if (result && typeof result === "object") {
+    if (result.success === false) {
+      const error = new Error(result.error || "IPC Error");
+      (error as any).status = 401;
+      throw error;
+    }
+    if (result.success === true) {
+      return result.user || result.data || result;
+    }
+  }
+  return result;
+}
+
 async function electronRequest(method: string, url: string, data?: unknown): Promise<any> {
   const api = (window as any).electronAPI;
   console.log("[Electron IPC]", method, url, data);
   
+  let result: any;
+  
   if (url === "/api/auth/me" || url.includes("/api/auth/me")) {
-    return api.auth.me();
+    result = await api.auth.me();
+    return unwrapIpcResult(result);
   }
   if (url === "/api/auth/login" && method === "POST") {
-    return api.auth.login(data);
+    result = await api.auth.login(data);
+    return unwrapIpcResult(result);
   }
   if (url === "/api/auth/register" && method === "POST") {
-    return api.auth.register(data);
+    result = await api.auth.register(data);
+    return unwrapIpcResult(result);
   }
   if (url === "/api/auth/logout" && method === "POST") {
     return api.auth.logout();
   }
   if (url === "/api/tests" && method === "GET") {
-    return api.tests.list();
+    result = await api.tests.list();
+    return unwrapIpcResult(result);
   }
   if (url.match(/\/api\/tests\/[^/]+\/questions/) && method === "GET") {
     const testId = url.split("/")[3];
-    return api.tests.questions(testId);
+    result = await api.tests.questions(testId);
+    return unwrapIpcResult(result);
   }
   if (url.match(/\/api\/tests\/[^/]+$/) && method === "DELETE") {
     const testId = url.split("/")[3];
-    return api.tests.delete(testId);
+    result = await api.tests.delete(testId);
+    return unwrapIpcResult(result);
   }
   if (url === "/api/tests/rename" && method === "POST") {
-    return api.tests.rename((data as any).oldTestId, (data as any).newTestId);
+    result = await api.tests.rename((data as any).oldTestId, (data as any).newTestId);
+    return unwrapIpcResult(result);
   }
   if (url === "/api/tests/import" && method === "POST") {
-    return api.tests.import((data as any).testId, (data as any).questions, (data as any).category);
+    result = await api.tests.import((data as any).testId, (data as any).questions, (data as any).category);
+    return unwrapIpcResult(result);
   }
   if (url === "/api/questions" && method === "POST") {
-    return api.questions.create(data);
+    result = await api.questions.create(data);
+    return unwrapIpcResult(result);
   }
   if (url.match(/\/api\/questions\/\d+/) && (method === "PATCH" || method === "PUT")) {
     const id = parseInt(url.split("/")[3]);
-    return api.questions.update(id, data);
+    result = await api.questions.update(id, data);
+    return unwrapIpcResult(result);
   }
   if (url.match(/\/api\/questions\/\d+/) && method === "DELETE") {
     const id = parseInt(url.split("/")[3]);
-    return api.questions.delete(id);
+    result = await api.questions.delete(id);
+    return unwrapIpcResult(result);
   }
   if (url === "/api/results" && method === "GET") {
-    return api.results.list();
+    result = await api.results.list();
+    return unwrapIpcResult(result);
   }
   if (url === "/api/results" && method === "POST") {
-    return api.results.create(data);
+    result = await api.results.create(data);
+    return unwrapIpcResult(result);
   }
   if (url.match(/\/api\/results\/\d+/) && method === "DELETE") {
     const id = parseInt(url.split("/")[3]);
-    return api.results.delete(id);
+    result = await api.results.delete(id);
+    return unwrapIpcResult(result);
   }
   if (url === "/api/attempts" && method === "GET") {
-    return api.attempts.list();
+    result = await api.attempts.list();
+    return unwrapIpcResult(result);
   }
   if (url === "/api/attempts" && method === "POST") {
-    return api.attempts.create(data);
+    result = await api.attempts.create(data);
+    return unwrapIpcResult(result);
   }
   if (url.match(/\/api\/attempts\/\d+$/) && method === "GET") {
     const id = parseInt(url.split("/")[3]);
-    return api.attempts.get(id);
+    result = await api.attempts.get(id);
+    return unwrapIpcResult(result);
   }
   if (url.match(/\/api\/attempts\/\d+/) && method === "PATCH") {
     const id = parseInt(url.split("/")[3]);
-    return api.attempts.update(id, data);
+    result = await api.attempts.update(id, data);
+    return unwrapIpcResult(result);
   }
   if (url.match(/\/api\/attempts\/\d+/) && method === "DELETE") {
     const id = parseInt(url.split("/")[3]);
-    return api.attempts.delete(id);
+    result = await api.attempts.delete(id);
+    return unwrapIpcResult(result);
   }
   if (url === "/api/config" && method === "GET") {
-    return api.config.get();
+    result = await api.config.get();
+    return unwrapIpcResult(result);
   }
   
   console.warn("Unhandled Electron API request:", method, url);
