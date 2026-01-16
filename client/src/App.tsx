@@ -5,6 +5,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ConnectionStatus } from "@/components/ConnectionStatus";
+import { MobileNav } from "@/components/MobileNav";
 import { useServiceWorker } from "@/hooks/use-service-worker";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
@@ -35,7 +36,10 @@ function App() {
           <ConnectionStatus onComplete={() => setShowSplash(false)} />
         )}
         <Toaster />
-        <Router />
+        <div className="pb-16 md:pb-0">
+          <Router />
+        </div>
+        <MobileNav />
       </TooltipProvider>
     </QueryClientProvider>
   );
