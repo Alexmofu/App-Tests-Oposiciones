@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useResults } from "@/hooks/use-results";
 import { useAttempts, useDeleteAttempt } from "@/hooks/use-attempts";
 import { Link, useLocation } from "wouter";
@@ -16,12 +17,24 @@ import {
   ResponsiveContainer
 } from "recharts";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function Results() {
   const { data: results, isLoading: resultsLoading } = useResults();
   const { data: attempts, isLoading: attemptsLoading } = useAttempts();
   const { mutate: deleteAttempt } = useDeleteAttempt();
   const [, setLocation] = useLocation();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [attemptToDelete, setAttemptToDelete] = useState<{ id: number; testId: string } | null>(null);
 
   const inProgressAttempts = attempts?.filter(a => a.status === "in_progress") || [];
   
@@ -43,16 +56,42 @@ export default function Results() {
     setLocation(`/test/${encodeURIComponent(attempt.testId)}?attempt=${attempt.id}`);
   };
 
-  const handleDeleteAttempt = (id: number) => {
-    if (confirm("¿Estás seguro de que quieres eliminar este intento?")) {
-      deleteAttempt(id);
+  const handleDeleteAttempt = (id: number, testId: string) => {
+    setAttemptToDelete({ id, testId });
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (attemptToDelete) {
+      deleteAttempt(attemptToDelete.id);
     }
+    setDeleteDialogOpen(false);
+    setAttemptToDelete(null);
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <header className="flex items-center gap-4">
+    <>
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Eliminar intento</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar este intento de <strong>{attemptToDelete?.testId.replace('.json', '')}</strong>? 
+              Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <div className="min-h-screen bg-background p-4 md:p-8">
+        <div className="max-w-6xl mx-auto space-y-8">
+          <header className="flex items-center gap-4">
           <Link href="/">
             <Button variant="ghost" size="icon" data-testid="button-back">
               <ArrowLeft className="w-5 h-5" />
@@ -156,7 +195,7 @@ export default function Results() {
                               <Button 
                                 variant="outline" 
                                 size="icon"
-                                onClick={() => handleDeleteAttempt(attempt.id)}
+                                onClick={() => handleDeleteAttempt(attempt.id, attempt.testId)}
                                 data-testid={`button-delete-attempt-${attempt.id}`}
                               >
                                 <Trash2 className="w-4 h-4 text-destructive" />
@@ -250,7 +289,8 @@ export default function Results() {
             </div>
           </>
         )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
