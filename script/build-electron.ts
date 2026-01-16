@@ -14,6 +14,11 @@ async function buildElectron() {
 
   console.log("1. Building frontend with Vite...");
   execSync("npx vite build --outDir electron-app/renderer", { stdio: "inherit" });
+  
+  // Verificar que el frontend se generó correctamente
+  if (!fs.existsSync("electron-app/renderer/index.html")) {
+    throw new Error("Error: No se generó el archivo index.html del frontend");
+  }
 
   console.log("\n2. Building Electron main process...");
   await esbuild.build({
