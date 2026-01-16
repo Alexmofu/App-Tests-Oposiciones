@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
-import { useRoute, useLocation } from "wouter";
+import { useEffect, useState, useRef } from "react";
+import { useRoute, useLocation, useSearch } from "wouter";
 import { useTest } from "@/hooks/use-tests";
 import { useCreateResult } from "@/hooks/use-results";
+import { useAttempt, useCreateAttempt, useUpdateAttempt } from "@/hooks/use-attempts";
 import { QuestionCard } from "@/components/QuestionCard";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, ChevronRight, Flag, Shuffle, Home } from "lucide-react";
+import { ChevronLeft, ChevronRight, Flag, Shuffle, Home, Save } from "lucide-react";
 import { type Question } from "@shared/schema";
 import { motion, AnimatePresence } from "framer-motion";
+import { useToast } from "@/hooks/use-toast";
 
 function shuffleArray<T>(array: T[]): T[] {
   const newArr = [...array];
@@ -24,10 +26,18 @@ function shuffleArray<T>(array: T[]): T[] {
 export default function TestView() {
   const [, params] = useRoute("/test/:id");
   const [, setLocation] = useLocation();
+  const searchString = useSearch();
+  const searchParams = new URLSearchParams(searchString);
+  const attemptIdParam = searchParams.get("attempt");
+  
   const testId = decodeURIComponent(params?.id || "");
+  const { toast } = useToast();
   
   const { data: questions, isLoading } = useTest(testId);
   const { mutate: saveResult } = useCreateResult();
+  const { mutateAsync: createAttempt } = useCreateAttempt();
+  const { mutate: updateAttempt } = useUpdateAttempt();
+  const { data: existingAttempt, isLoading: attemptLoading, isError: attemptError } = useAttempt(attemptIdParam ? Number(attemptIdParam) : null);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -35,15 +45,83 @@ export default function TestView() {
   const [activeQuestions, setActiveQuestions] = useState<Question[]>([]);
   const [isStarted, setIsStarted] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const [attemptId, setAttemptId] = useState<number | null>(null);
+  const [attemptLoadFailed, setAttemptLoadFailed] = useState(false);
+  const resumeHandled = useRef(false);
 
-  // Initialize questions
+  // Handle failed attempt load - clear URL param and show error
   useEffect(() => {
-    if (questions) {
+    if (attemptIdParam && !attemptLoading && !existingAttempt && !resumeHandled.current) {
+      if (attemptError || (!attemptLoading && !existingAttempt)) {
+        setAttemptLoadFailed(true);
+        toast({ 
+          title: "Attempt Not Found", 
+          description: "The saved attempt could not be found. Starting fresh.", 
+          variant: "destructive" 
+        });
+        // Clear URL parameter
+        setLocation(`/test/${encodeURIComponent(testId)}`, { replace: true });
+      }
+    }
+  }, [attemptIdParam, attemptLoading, existingAttempt, attemptError, toast, setLocation, testId]);
+
+  // Resume from existing attempt
+  useEffect(() => {
+    if (existingAttempt && questions && !resumeHandled.current) {
+      resumeHandled.current = true;
+      const order = existingAttempt.questionOrder as number[];
+      const orderedQuestions = order
+        .map(qId => questions.find(q => q.id === qId))
+        .filter((q): q is Question => q !== undefined);
+      
+      if (orderedQuestions.length === 0) {
+        toast({ 
+          title: "Questions Missing", 
+          description: "The questions for this test have been deleted. Starting fresh.", 
+          variant: "destructive" 
+        });
+        setLocation(`/test/${encodeURIComponent(testId)}`, { replace: true });
+        return;
+      }
+      
+      // Clamp currentIndex to valid range
+      const clampedIndex = Math.min(existingAttempt.currentIndex, orderedQuestions.length - 1);
+      
+      setActiveQuestions(orderedQuestions);
+      setCurrentIndex(clampedIndex);
+      setAnswers(existingAttempt.answers as Record<number, string> || {});
+      setAttemptId(existingAttempt.id);
+      setIsStarted(true);
+    }
+  }, [existingAttempt, questions, toast, setLocation, testId]);
+
+  // Initialize questions when not resuming
+  useEffect(() => {
+    if (questions && !attemptIdParam && !attemptLoadFailed) {
+      setActiveQuestions(randomize ? shuffleArray(questions) : questions);
+    } else if (questions && attemptLoadFailed) {
+      // Initialize after failed resume attempt
       setActiveQuestions(randomize ? shuffleArray(questions) : questions);
     }
-  }, [questions, randomize]);
+  }, [questions, randomize, attemptIdParam, attemptLoadFailed]);
 
-  if (isLoading) return (
+  // Auto-save progress every time answers or index change
+  useEffect(() => {
+    if (attemptId && isStarted && !isFinished) {
+      const timeout = setTimeout(() => {
+        updateAttempt({
+          id: attemptId,
+          currentIndex,
+          answers: answers as Record<string, string>,
+        });
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, answers, attemptId, isStarted, isFinished, updateAttempt]);
+
+  const isLoadingState = isLoading || (attemptIdParam && attemptLoading && !attemptLoadFailed);
+  
+  if (isLoadingState) return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
@@ -59,14 +137,30 @@ export default function TestView() {
     </div>
   );
 
+  // Safety check - if activeQuestions is empty but we have questions, initialize
+  if (activeQuestions.length === 0 && questions.length > 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-muted-foreground animate-pulse">Preparing questions...</p>
+        </div>
+      </div>
+    );
+  }
+
   const currentQuestion = activeQuestions[currentIndex];
-  const progress = ((currentIndex + 1) / activeQuestions.length) * 100;
+  const progress = activeQuestions.length > 0 ? ((currentIndex + 1) / activeQuestions.length) * 100 : 0;
+  const answeredCount = Object.keys(answers).length;
   
   const handleAnswer = (key: string) => {
-    setAnswers(prev => ({ ...prev, [currentQuestion.id]: key }));
+    if (currentQuestion) {
+      setAnswers(prev => ({ ...prev, [currentQuestion.id]: key }));
+    }
   };
 
   const calculateScore = () => {
+    if (activeQuestions.length === 0) return 0;
     let correct = 0;
     activeQuestions.forEach(q => {
       if (answers[q.id] === q.correctAnswer) correct++;
@@ -74,9 +168,38 @@ export default function TestView() {
     return Math.round((correct / activeQuestions.length) * 100);
   };
 
+  const handleStart = async () => {
+    const questionOrder = activeQuestions.map(q => q.id);
+    try {
+      const attempt = await createAttempt({
+        testId,
+        questionOrder,
+        totalQuestions: activeQuestions.length,
+      });
+      setAttemptId(attempt.id);
+      // Update URL with attempt ID for refresh support
+      setLocation(`/test/${encodeURIComponent(testId)}?attempt=${attempt.id}`, { replace: true });
+      setIsStarted(true);
+    } catch (err) {
+      toast({ title: "Error", description: "Failed to start test", variant: "destructive" });
+    }
+  };
+
   const handleFinish = () => {
     const score = calculateScore();
     const correctCount = activeQuestions.filter(q => answers[q.id] === q.correctAnswer).length;
+    
+    // Mark attempt as completed
+    if (attemptId) {
+      updateAttempt({
+        id: attemptId,
+        status: "completed",
+        correctCount,
+        score,
+        answers: answers as Record<string, string>,
+        currentIndex: activeQuestions.length - 1,
+      });
+    }
     
     saveResult({
       testId,
@@ -86,6 +209,18 @@ export default function TestView() {
     });
     
     setIsFinished(true);
+  };
+
+  const handleSaveAndExit = () => {
+    if (attemptId) {
+      updateAttempt({
+        id: attemptId,
+        currentIndex,
+        answers: answers as Record<string, string>,
+      });
+      toast({ title: "Progress Saved", description: "You can continue this test later from the History page." });
+    }
+    setLocation("/results");
   };
 
   // Intro Screen
@@ -109,14 +244,14 @@ export default function TestView() {
                   <Shuffle className="w-5 h-5 text-primary" />
                   <Label htmlFor="random" className="font-medium cursor-pointer">Randomize Order</Label>
                 </div>
-                <Switch id="random" checked={randomize} onCheckedChange={setRandomize} />
+                <Switch id="random" checked={randomize} onCheckedChange={setRandomize} data-testid="switch-randomize" />
               </div>
 
-              <Button size="lg" className="w-full text-lg h-12" onClick={() => setIsStarted(true)}>
+              <Button size="lg" className="w-full text-lg h-12" onClick={handleStart} data-testid="button-start-test">
                 Start Test
               </Button>
               
-              <Button variant="ghost" className="w-full" onClick={() => setLocation("/")}>
+              <Button variant="ghost" className="w-full" onClick={() => setLocation("/")} data-testid="button-cancel">
                 Cancel
               </Button>
             </div>
@@ -140,7 +275,7 @@ export default function TestView() {
         >
           <Card className="p-8 shadow-xl border-t-8 border-t-primary">
             <div className="mb-6">
-              <div className={`w-24 h-24 mx-auto rounded-full flex items-center justify-center text-3xl font-bold border-4 ${isPass ? 'border-green-500 text-green-600 bg-green-50' : 'border-red-500 text-red-600 bg-red-50'}`}>
+              <div className={`w-24 h-24 mx-auto rounded-full flex items-center justify-center text-3xl font-bold border-4 ${isPass ? 'border-green-500 text-green-600 bg-green-50 dark:bg-green-900/30' : 'border-red-500 text-red-600 bg-red-50 dark:bg-red-900/30'}`}>
                 {score}%
               </div>
             </div>
@@ -151,15 +286,25 @@ export default function TestView() {
             </p>
             
             <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" onClick={() => setLocation("/")}>
+              <Button variant="outline" onClick={() => setLocation("/")} data-testid="button-home">
                 <Home className="w-4 h-4 mr-2" /> Home
               </Button>
-              <Button onClick={() => window.location.reload()}>
-                Try Again
+              <Button onClick={() => setLocation("/results")} data-testid="button-view-history">
+                View History
               </Button>
             </div>
           </Card>
         </motion.div>
+      </div>
+    );
+  }
+
+  // Safety check for currentQuestion
+  if (!currentQuestion) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <h2 className="text-2xl font-bold mb-4">Error Loading Question</h2>
+        <Button onClick={() => setLocation("/")}>Back Home</Button>
       </div>
     );
   }
@@ -169,14 +314,15 @@ export default function TestView() {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Top Bar */}
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b">
-        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Button variant="ghost" size="sm" onClick={() => setLocation("/")}>
-            <ChevronLeft className="w-4 h-4 mr-1" /> Exit
+        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+          <Button variant="ghost" size="sm" onClick={handleSaveAndExit} data-testid="button-save-exit">
+            <Save className="w-4 h-4 mr-1" /> Save & Exit
           </Button>
           <div className="font-mono font-medium text-sm text-muted-foreground">
             {currentIndex + 1} / {activeQuestions.length}
+            <span className="ml-2 text-xs">({answeredCount} answered)</span>
           </div>
-          <Button variant="ghost" size="sm" className="text-muted-foreground">
+          <Button variant="ghost" size="sm" className="text-muted-foreground" data-testid="button-flag">
             <Flag className="w-4 h-4" />
           </Button>
         </div>
@@ -210,12 +356,13 @@ export default function TestView() {
             variant="outline" 
             onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
             disabled={currentIndex === 0}
+            data-testid="button-previous"
           >
             Previous
           </Button>
 
           {currentIndex === activeQuestions.length - 1 ? (
-            <Button size="lg" onClick={handleFinish} className="px-8 bg-green-600 hover:bg-green-700">
+            <Button size="lg" onClick={handleFinish} className="px-8 bg-green-600 hover:bg-green-700" data-testid="button-finish">
               Finish Test
             </Button>
           ) : (
@@ -223,8 +370,7 @@ export default function TestView() {
               size="lg" 
               onClick={() => setCurrentIndex(prev => prev + 1)}
               className="px-8"
-              // Optional: Disable next until answered
-              // disabled={!answers[currentQuestion.id]} 
+              data-testid="button-next"
             >
               Next <ChevronRight className="w-4 h-4 ml-2" />
             </Button>
