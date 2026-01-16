@@ -352,30 +352,35 @@ export default function TestView() {
       </div>
 
       {/* Footer Nav */}
-      <div className="flex-shrink-0 border-t bg-card py-3 md:py-6 safe-area-pb">
-        <div className="max-w-4xl mx-auto px-3 md:px-4 flex justify-between items-center gap-2">
+      <div className="flex-shrink-0 border-t bg-background/95 backdrop-blur-md py-3 md:py-6 safe-area-pb">
+        <div className="max-w-4xl mx-auto px-4 md:px-4 flex justify-between items-center gap-4">
           <Button 
-            variant="outline" 
+            variant="ghost" 
             onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
             disabled={currentIndex === 0}
             data-testid="button-previous"
-            size="sm"
-            className="md:size-default"
+            className="h-12 px-4 md:px-6 rounded-xl disabled:opacity-40 bg-muted/50 hover:bg-muted"
           >
-            <ChevronLeft className="w-4 h-4 md:mr-1" /> <span className="hidden md:inline">Anterior</span>
+            <ChevronLeft className="w-5 h-5 mr-1" /> 
+            <span className="text-sm font-medium">Anterior</span>
           </Button>
 
           {currentIndex === activeQuestions.length - 1 ? (
-            <Button onClick={handleFinish} className="px-4 md:px-8 bg-green-600 hover:bg-green-700" data-testid="button-finish">
+            <Button 
+              onClick={handleFinish} 
+              className="h-12 px-8 md:px-10 rounded-xl bg-green-600 hover:bg-green-700 shadow-lg shadow-green-600/30 text-base font-semibold" 
+              data-testid="button-finish"
+            >
               Finalizar
             </Button>
           ) : (
             <Button 
               onClick={() => setCurrentIndex(prev => prev + 1)}
-              className="px-4 md:px-8"
+              className="h-12 px-6 md:px-10 rounded-xl shadow-lg shadow-primary/30 text-base font-semibold"
               data-testid="button-next"
             >
-              Siguiente <ChevronRight className="w-4 h-4 ml-1 md:ml-2" />
+              <span>Siguiente</span>
+              <ChevronRight className="w-5 h-5 ml-1" />
             </Button>
           )}
         </div>

@@ -7,21 +7,60 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ConnectionStatus } from "@/components/ConnectionStatus";
 import { MobileNav } from "@/components/MobileNav";
 import { useServiceWorker } from "@/hooks/use-service-worker";
+import { motion, AnimatePresence } from "framer-motion";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import TestView from "@/pages/TestView";
 import Results from "@/pages/Results";
 import Admin from "@/pages/Admin";
 
-function Router() {
+const pageVariants = {
+  initial: { opacity: 0, y: 8 },
+  in: { opacity: 1, y: 0 },
+  out: { opacity: 0, y: -8 }
+};
+
+const pageTransition = {
+  type: "tween",
+  ease: "easeInOut",
+  duration: 0.2
+};
+
+function AnimatedPage({ children }: { children: React.ReactNode }) {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/test/:id" component={TestView} />
-      <Route path="/results" component={Results} />
-      <Route path="/admin" component={Admin} />
-      <Route component={NotFound} />
-    </Switch>
+    <motion.div
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={pageTransition}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function Router() {
+  const [location] = useLocation();
+  
+  return (
+    <AnimatePresence mode="wait">
+      <Switch location={location} key={location}>
+        <Route path="/">
+          <AnimatedPage><Home /></AnimatedPage>
+        </Route>
+        <Route path="/test/:id" component={TestView} />
+        <Route path="/results">
+          <AnimatedPage><Results /></AnimatedPage>
+        </Route>
+        <Route path="/admin">
+          <AnimatedPage><Admin /></AnimatedPage>
+        </Route>
+        <Route>
+          <AnimatedPage><NotFound /></AnimatedPage>
+        </Route>
+      </Switch>
+    </AnimatePresence>
   );
 }
 
