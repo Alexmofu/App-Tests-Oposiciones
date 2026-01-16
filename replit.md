@@ -47,6 +47,15 @@ The backend serves both API routes and static files in production. In developmen
 3. **Attempt Persistence**: Tests can be paused and resumed via the `testAttempts` table
 4. **Seed Data**: Initial questions are auto-seeded from `attached_assets/` on first run
 
+### Recent Features
+- **Full Spanish (Spain) UI**: All interface text, toast notifications, and date formatting in Spanish
+- **Context Menu on Tests**: Right-click on test cards in the library to access:
+  - "Editar" - Navigate directly to admin panel for that test
+  - "Cambiar nombre" - Rename the test
+  - "Eliminar" - Delete the test with confirmation dialog
+- **Continue Test**: Save progress mid-test and resume from History page
+- **Dynamic Answer Options**: Admin panel supports 2-8 answer options per question
+
 ## External Dependencies
 
 ### Database
