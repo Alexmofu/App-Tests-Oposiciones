@@ -220,11 +220,19 @@ export async function registerRoutes(
       
       const text = await response.text();
       // Simple regex to find .json links
-      const jsonFiles = [...text.matchAll(/href="([^"]+\.json)"/g)].map(m => m[1]);
-      // Also try single quotes
-      const jsonFiles2 = [...text.matchAll(/href='([^']+\.json)'/g)].map(m => m[1]);
+      const jsonFiles: string[] = [];
+      const regex1 = /href="([^"]+\.json)"/g;
+      const regex2 = /href='([^']+\.json)'/g;
       
-      const allFiles = [...new Set([...jsonFiles, ...jsonFiles2])];
+      let match;
+      while ((match = regex1.exec(text)) !== null) {
+        jsonFiles.push(match[1]);
+      }
+      while ((match = regex2.exec(text)) !== null) {
+        jsonFiles.push(match[1]);
+      }
+      
+      const allFiles = Array.from(new Set(jsonFiles));
       
       res.json(allFiles);
     } catch (err) {
