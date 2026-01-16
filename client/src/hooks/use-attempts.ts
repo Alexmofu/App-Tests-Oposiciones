@@ -1,12 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, buildUrl } from "@shared/routes";
 import { useToast } from "@/hooks/use-toast";
+import { fetchWrapper } from "@/lib/queryClient";
 
 export function useAttempts() {
   return useQuery({
     queryKey: [api.attempts.list.path],
     queryFn: async () => {
-      const res = await fetch(api.attempts.list.path);
+      const res = await fetchWrapper(api.attempts.list.path);
       if (!res.ok) throw new Error("Failed to fetch attempts");
       return api.attempts.list.responses[200].parse(await res.json());
     },
@@ -19,7 +20,7 @@ export function useAttempt(id: number | null) {
     queryFn: async () => {
       if (!id) return null;
       const url = buildUrl(api.attempts.get.path, { id });
-      const res = await fetch(url);
+      const res = await fetchWrapper(url);
       if (!res.ok) throw new Error("Failed to fetch attempt");
       return api.attempts.get.responses[200].parse(await res.json());
     },
@@ -32,7 +33,7 @@ export function useCreateAttempt() {
 
   return useMutation({
     mutationFn: async (data: { testId: string; questionOrder: number[]; totalQuestions: number }) => {
-      const res = await fetch(api.attempts.create.path, {
+      const res = await fetchWrapper(api.attempts.create.path, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -52,7 +53,7 @@ export function useUpdateAttempt() {
   return useMutation({
     mutationFn: async ({ id, ...updates }: { id: number; currentIndex?: number; answers?: Record<string, string>; status?: string; correctCount?: number; score?: number }) => {
       const url = buildUrl(api.attempts.update.path, { id });
-      const res = await fetch(url, {
+      const res = await fetchWrapper(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
@@ -74,7 +75,7 @@ export function useDeleteAttempt() {
   return useMutation({
     mutationFn: async (id: number) => {
       const url = buildUrl(api.attempts.delete.path, { id });
-      const res = await fetch(url, { method: "DELETE" });
+      const res = await fetchWrapper(url, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete attempt");
     },
     onSuccess: () => {

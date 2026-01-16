@@ -39,7 +39,10 @@ async function electronRequest(method: string, url: string, data?: unknown): Pro
   if (url === "/api/tests/import" && method === "POST") {
     return api.tests.import((data as any).testId, (data as any).questions, (data as any).category);
   }
-  if (url.match(/\/api\/questions\/\d+/) && method === "PATCH") {
+  if (url === "/api/questions" && method === "POST") {
+    return api.questions.create(data);
+  }
+  if (url.match(/\/api\/questions\/\d+/) && (method === "PATCH" || method === "PUT")) {
     const id = parseInt(url.split("/")[3]);
     return api.questions.update(id, data);
   }
@@ -88,6 +91,22 @@ async function throwIfResNotOk(res: Response) {
     const text = (await res.text()) || res.statusText;
     throw new Error(`${res.status}: ${text}`);
   }
+}
+
+export async function fetchWrapper(url: string, options?: RequestInit): Promise<Response> {
+  const method = options?.method || "GET";
+  const data = options?.body ? JSON.parse(options.body as string) : undefined;
+  
+  if (isElectron) {
+    console.log("[fetchWrapper] Electron mode:", method, url);
+    const result = await electronRequest(method, url, data);
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+  
+  return fetch(url, options);
 }
 
 export async function apiRequest(

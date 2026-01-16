@@ -1,12 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, type InsertResult } from "@shared/routes";
+import { api } from "@shared/routes";
+import { type InsertResult } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import { fetchWrapper } from "@/lib/queryClient";
 
 export function useResults() {
   return useQuery({
     queryKey: [api.results.list.path],
     queryFn: async () => {
-      const res = await fetch(api.results.list.path);
+      const res = await fetchWrapper(api.results.list.path);
       if (!res.ok) throw new Error("Failed to fetch results");
       return api.results.list.responses[200].parse(await res.json());
     },
@@ -19,7 +21,7 @@ export function useCreateResult() {
 
   return useMutation({
     mutationFn: async (data: InsertResult) => {
-      const res = await fetch(api.results.create.path, {
+      const res = await fetchWrapper(api.results.create.path, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

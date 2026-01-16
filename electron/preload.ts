@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.invoke("tests:import", { testId, questions, category }),
   },
   questions: {
+    create: (question: any) => ipcRenderer.invoke("questions:create", question),
     update: (id: number, update: any) => 
       ipcRenderer.invoke("questions:update", { id, update }),
     delete: (id: number) => ipcRenderer.invoke("questions:delete", id),
@@ -61,6 +62,7 @@ declare global {
         import: (testId: string, questions: any[], category?: string) => Promise<any>;
       };
       questions: {
+        create: (question: any) => Promise<any>;
         update: (id: number, update: any) => Promise<any>;
         delete: (id: number) => Promise<any>;
       };

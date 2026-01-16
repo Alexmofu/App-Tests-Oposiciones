@@ -180,12 +180,20 @@ ipcMain.handle("tests:import", async (_event, { testId, questions: questionsList
   return { success: true };
 });
 
+ipcMain.handle("questions:create", async (_event, question) => {
+  if (!storage || !currentUserId) {
+    return { success: false, error: "No autenticado" };
+  }
+  const created = await storage.createQuestion({ ...question, userId: currentUserId });
+  return created;
+});
+
 ipcMain.handle("questions:update", async (_event, { id, update }) => {
   if (!storage || !currentUserId) {
     return { success: false, error: "No autenticado" };
   }
   const updated = await storage.updateQuestion(id, update);
-  return { success: true, data: updated };
+  return updated;
 });
 
 ipcMain.handle("questions:delete", async (_event, id: number) => {

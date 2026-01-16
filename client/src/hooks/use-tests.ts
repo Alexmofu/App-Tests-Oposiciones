@@ -2,13 +2,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, buildUrl, type errorSchemas } from "@shared/routes";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import { fetchWrapper } from "@/lib/queryClient";
 
 // Fetch list of local tests
 export function useTests() {
   return useQuery({
     queryKey: [api.tests.list.path],
     queryFn: async () => {
-      const res = await fetch(api.tests.list.path);
+      const res = await fetchWrapper(api.tests.list.path);
       if (!res.ok) throw new Error("Failed to fetch tests");
       return api.tests.list.responses[200].parse(await res.json());
     },
@@ -21,7 +22,7 @@ export function useTest(id: string) {
     queryKey: [api.tests.get.path, id],
     queryFn: async () => {
       const url = buildUrl(api.tests.get.path, { id });
-      const res = await fetch(url);
+      const res = await fetchWrapper(url);
       if (!res.ok) throw new Error("Failed to fetch test details");
       return api.tests.get.responses[200].parse(await res.json());
     },
@@ -36,7 +37,7 @@ export function useImportTest() {
 
   return useMutation({
     mutationFn: async ({ filename, content }: { filename: string; content: any[] }) => {
-      const res = await fetch(api.tests.import.path, {
+      const res = await fetchWrapper(api.tests.import.path, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ filename, content }),
@@ -73,7 +74,7 @@ export function useCreateQuestion() {
 
   return useMutation({
     mutationFn: async (question: { testId: string; questionText: string; answers: Record<string, string>; correctAnswer: string; category?: string }) => {
-      const res = await fetch(api.questions.create.path, {
+      const res = await fetchWrapper(api.questions.create.path, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(question),
@@ -82,7 +83,6 @@ export function useCreateQuestion() {
       return api.questions.create.responses[201].parse(await res.json());
     },
     onSuccess: (data) => {
-      // Invalidate both the specific test query and test list
       queryClient.invalidateQueries({ queryKey: [api.tests.get.path, data.testId] });
       queryClient.invalidateQueries({ queryKey: [api.tests.list.path] });
       toast({ title: "Pregunta Creada" });
@@ -98,7 +98,7 @@ export function useUpdateQuestion() {
   return useMutation({
     mutationFn: async ({ id, ...updates }: { id: number } & Record<string, any>) => {
       const url = buildUrl(api.questions.update.path, { id });
-      const res = await fetch(url, {
+      const res = await fetchWrapper(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
@@ -107,7 +107,6 @@ export function useUpdateQuestion() {
       return api.questions.update.responses[200].parse(await res.json());
     },
     onSuccess: (data) => {
-      // Invalidate the specific test query using testId from the response
       queryClient.invalidateQueries({ queryKey: [api.tests.get.path, data.testId] });
       toast({ title: "Pregunta Actualizada" });
     },
@@ -122,7 +121,7 @@ export function useDeleteQuestion() {
   return useMutation({
     mutationFn: async (id: number) => {
       const url = buildUrl(api.questions.delete.path, { id });
-      const res = await fetch(url, { method: "DELETE" });
+      const res = await fetchWrapper(url, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete question");
     },
     onSuccess: () => {
@@ -141,14 +140,12 @@ export function useDeleteTest() {
   return useMutation({
     mutationFn: async (testId: string) => {
       const url = buildUrl(api.tests.delete.path, { id: testId });
-      const res = await fetch(url, { method: "DELETE" });
+      const res = await fetchWrapper(url, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete test");
       return testId;
     },
     onSuccess: (deletedTestId) => {
-      // Invalidate the test list
       queryClient.invalidateQueries({ queryKey: [api.tests.list.path] });
-      // Also invalidate the specific test query if it was cached
       queryClient.invalidateQueries({ queryKey: [api.tests.get.path, deletedTestId] });
       toast({ title: "Test Eliminado" });
     },
@@ -163,7 +160,7 @@ export function useRenameTest() {
   return useMutation({
     mutationFn: async ({ testId, newName }: { testId: string; newName: string }) => {
       const url = buildUrl(api.tests.rename.path, { id: testId });
-      const res = await fetch(url, {
+      const res = await fetchWrapper(url, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ newName }),
@@ -173,11 +170,8 @@ export function useRenameTest() {
       return { oldTestId: testId, ...result };
     },
     onSuccess: (data) => {
-      // Invalidate the test list to show the new name
       queryClient.invalidateQueries({ queryKey: [api.tests.list.path] });
-      // Invalidate the old test ID query
       queryClient.invalidateQueries({ queryKey: [api.tests.get.path, data.oldTestId] });
-      // Also invalidate any query for the new test ID
       queryClient.invalidateQueries({ queryKey: [api.tests.get.path, data.newId] });
       toast({ title: "Test Renombrado" });
     },
@@ -185,19 +179,21 @@ export function useRenameTest() {
   });
 }
 
-// === REMOTE ===
+// === REMOTE === (disabled in Electron - requires server)
 
 export function useRemoteTests(url: string | null) {
+  const isElectron = typeof window !== "undefined" && !!(window as any).electronAPI;
+  
   return useQuery({
     queryKey: [api.remote.list.path, url],
     queryFn: async () => {
-      if (!url) return [];
+      if (!url || isElectron) return [];
       const fetchUrl = `${api.remote.list.path}?url=${encodeURIComponent(url)}`;
       const res = await fetch(fetchUrl);
       if (!res.ok) throw new Error("Failed to connect to remote server");
       return api.remote.list.responses[200].parse(await res.json());
     },
-    enabled: !!url,
+    enabled: !!url && !isElectron,
     retry: false,
   });
 }
@@ -206,16 +202,18 @@ export function useFetchRemoteTest() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const importMutation = useImportTest();
+  const isElectron = typeof window !== "undefined" && !!(window as any).electronAPI;
 
   return useMutation({
     mutationFn: async ({ url, filename }: { url: string; filename: string }) => {
-      // First fetch the content
+      if (isElectron) {
+        throw new Error("Descarga remota no disponible en modo offline");
+      }
       const fetchUrl = `${api.remote.fetch.path}?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(filename)}`;
       const res = await fetch(fetchUrl);
       if (!res.ok) throw new Error("Failed to fetch remote file");
       const content = await res.json();
       
-      // Then import it locally
       return importMutation.mutateAsync({ filename, content });
     },
     onSuccess: () => {
