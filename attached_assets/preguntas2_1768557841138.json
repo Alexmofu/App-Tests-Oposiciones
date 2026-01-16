@@ -1,0 +1,1057 @@
+[
+  {
+    "pregunta": "¿Cuál de las siguientes comarcas NO es limítrofe con otra comunidad autónoma?",
+    "respuestas": {
+      "A": "Ribera Alta del Ebro",
+      "B": "Sierra de Albarracín",
+      "C": "La Ribagorza",
+      "D": "Comunidad de Calatayud"
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Según la Ley 55/2003 del Estatuto Marco del Personal Estatuario de los Servicios de Salud, es personal estatutario de gestión y servicios quien ostenta tal condición en virtud de nombramiento expedido para:",
+    "respuestas": {
+      "A": "El desempeño de funciones administrativas u oficios que no tengan carácter sanitario.",
+      "B": "El desempeño de funciones administrativas que no tengan carácter sanitario.",
+      "C": "El desempeño de funciones de gestión o para el desarrollo de profesiones u oficios que no tengan carácter sanitario.",
+      "D": "El desempeño de funciones de gestión profesional u oficios que no tengan carácter sanitario."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Según el Estatuto de Autonomía de Aragón en su artículo 58, el supremo órgano consultivo del Gobierno y la Administración de la Comunidad Autónoma es:",
+    "respuestas": {
+      "A": "Consejo económico y Social.",
+      "B": "El Tribunal de Cuentas.",
+      "C": "El Consejo Consultivo de Aragón.",
+      "D": "Dependiendo, los tres."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Según la Ley Orgánica de Protección de Datos Personales y Garantía de los Derechos Digitales, y las categorías especiales de datos: a los efectos del artículo 9.2.a) del Reglamento (UE) 2016/679, a fin de evitar situaciones discriminatorias, levantar la prohibición del tratamiento de datos cuya finalidad principal sea identificar su ideología, afiliación sindical, religión, orientación sexual, creencias u origen racial o étnico:",
+    "respuestas": {
+      "A": "Será posible con el solo consentimiento del afectado.",
+      "B": "No será posible con el solo consentimiento del afectado.",
+      "C": "No será posible en ningún caso.",
+      "D": "Es posible, en cualquier caso."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "De acuerdo con el artículo 2 del Decreto 105/2009, de 9 de junio, del Gobierno de Aragón, por el que se crean nuevas categorías estatutarias del área de sistemas y tecnologías de la información en el ámbito del Servicio Aragonés de Salud, señale cuál de las siguientes es una función correspondiente a la categoría de Técnico Especialista de Sistemas y Tecnologías de la Información:",
+    "respuestas": {
+      "A": "Ocuparse y responsabilizarse del buen funcionamiento de los equipamientos de los Centros.",
+      "B": "El análisis técnico de las aplicaciones y control de los desarrollos informáticos.",
+      "C": "Programación para el soporte de la implantación y mantenimiento operativos de las aplicaciones informáticas.",
+      "D": "Ser responsable de la explotación, administración, gestión y disponibilidad de los sistemas informáticos de los Centros que le estén encomendados."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "El Estado Español propugna como valores superiores de su ordenamiento jurídico:",
+    "respuestas": {
+      "A": "Justicia y pluralismo político.",
+      "B": "Justicia e igualdad.",
+      "C": "Libertad, justicia, igualdad y pluralismo político.",
+      "D": "Libertad, igualdad y pluralismo político."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "De conformidad con el Art.3 de la Ley 7/2018, de 28 de junio, de igualdad de oportunidades entre mujeres y hombres en Aragón, NO es uno de los principios generales de la actuación de los poderes públicos de Aragón:",
+    "respuestas": {
+      "A": "La integración de la igualdad de trato y de oportunidades entre mujeres y hombres en el conjunto de las políticas de Aragón.",
+      "B": "La protección de la maternidad, con independencia del modelo de familia.",
+      "C": "La garantía de los derechos sexuales y reproductivos.",
+      "D": "La implantación del uso integrador y sexista de los lenguajes y de las imágenes en el ámbito administrativo y su fomento en la totalidad de las relaciones sociales, culturales y artísticas"
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "De conformidad con el art. 72 de la Ley 55/2003, de 16 de diciembre, del Estatuto Marco del personal estatutario de los servicios de salud, se considera falta muy grave:",
+    "respuestas": {
+      "A": "El incumplimiento injustificado de la jornada de trabajo que, acumulado, suponga más de 20 horas al mes.",
+      "B": "Las acciones u omisiones dirigidas a evadir los sistemas de control de horarios.",
+      "C": "Las acciones u omisiones dirigidas a impedir que sean detectados los incumplimientos injustificados de la jornada de trabajo.",
+      "D": "El abandono del servicio."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Según el art. 25 del Decreto 23/2016, de 9 de febrero del Gobierno de Aragón, por el que se aprueba la estructura orgánica del Departamento de Sanidad y del Servicio Aragonés de Salud, la aprobación de las plantillas, así como la ordenación y gestión del personal adscrito al Servicio Aragonés de Salud, corresponde a:",
+    "respuestas": {
+      "A": "Director Gerente del Servicio Aragonés de Salud.",
+      "B": "Secretario General Técnico del Departamento de Sanidad.",
+      "C": "Director de Recursos Humanos del Servicio Aragonés de Salud.",
+      "D": "Director General de Asistencia Sanitaria."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Según la Ley Orgánica de Protección de Datos Personales y Garantía de los Derechos Digitales, podrán dirigirse al responsable o encargado del tratamiento al objeto de solicitar el acceso a los datos personales del fallecido y, en su caso, su rectificación o supresión:",
+    "respuestas": {
+      "A": "Sólo las personas vinculadas al fallecido por razones familiares.",
+      "B": "Sólo las personas vinculadas al fallecido por razones de hecho.",
+      "C": "Únicamente sus herederos.",
+      "D": "Las personas vinculadas al fallecido por razones familiares o de hecho, así como sus herederos."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Aunque se pueden utilizar otras herramientas, al clonar un equipo con un sistema operativo Windows para instalarlo en varios equipos, ¿qué herramienta recomienda utilizar Microsoft para evitar problemas con el SID asociado al equipo en la instalación?",
+    "respuestas": {
+      "A": "Norton Ghost.",
+      "B": "Sysprep.",
+      "C": "CloneWin.",
+      "D": "Filezilla."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Referente a los protocolos de escritorio remoto, señale la respuesta correcta:",
+    "respuestas": {
+      "A": "RDP (Remote Desktop Protocol) es un protocolo abierto desarrollado por Microsoft que provee capacidades remotas de visualización y entrada a través de red para aplicaciones basadas en Windows corriendo en un servidor.",
+      "B": "RDP no soporta conexión cifrada.",
+      "C": "RDP posee mecanismos para reducir el ancho de banda necesario en la conexión.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Cuál de los siguientes términos NO tiene relación con el cifrado en una red WI-FI?",
+    "respuestas": {
+      "A": "WPA2",
+      "B": "FTTH",
+      "C": "WEP",
+      "D": "TKIP"
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Un Servidor de Aplicaciones:",
+    "respuestas": {
+      "A": "Se compone de un Java Virtual Machine (JVM) que ejecuta aplicaciones de usuario en un servidor y colabora con un servidor web para responder a las peticiones de los clientes.",
+      "B": "Utiliza un modelo monolítico en el que se funden la lógica de negocio y la presentación de los datos.",
+      "C": "Es un tipo de software que se encuentra en la capa back-end dentro del modelo de aplicación distribuido en varias capas.",
+      "D": "Eclipse y JBoss son ejemplos de Servidores de Aplicaciones."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indicar la afirmación INCORRECTA sobre los grupos de seguridad de un Active Directory:",
+    "respuestas": {
+      "A": "Los grupos de seguridad se caracterizan por un alcance, que define dónde se le pueden otorgar permisos al grupo.",
+      "B": "Los ámbitos de grupo son: Universal y General.",
+      "C": "Al igual que los grupos de distribución, los grupos de seguridad pueden usarse como una entidad de correo electrónico. Enviar un mensaje de correo electrónico al grupo envía el mensaje a todos los miembros del grupo.",
+      "D": "Sus miembros pueden ser usuarios, equipos y otros grupos."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indique la respuesta INCORRECTA. Las ventajas que incluye un firewall de última generación son:",
+    "respuestas": {
+      "A": "Prevención de intrusión integrada.",
+      "B": "Actualización de rutas para añadir futuras fuentes de información.",
+      "C": "Visualización y bloqueo de aplicaciones que puedan generar riesgos.",
+      "D": "Establece canales de integración entre aplicaciones."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Entre los subsistemas genéricos de un sistema operativo se encuentran los siguientes, señale el INCORRECTO:",
+    "respuestas": {
+      "A": "Subsistema de control de procesos.",
+      "B": "Subsistema de administración de memoria principal.",
+      "C": "Subsistema de E/S.",
+      "D": "Subsistema de registro."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indique cuál de las siguientes NO es una solución utilizada como antivirus corporativo:",
+    "respuestas": {
+      "A": "ESET Endpoint.",
+      "B": "Bitdefender GravityZone Business Security",
+      "C": "Symantec Endpoint Security.",
+      "D": "Windows Defender Secure."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Tenemos un recurso publicado en un DFS y agregamos un nuevo destino de carpeta. ¿Qué ocurre con la replicación?:",
+    "respuestas": {
+      "A": "Los permisos que tenga el usuario en la carpeta permitirán su replicación o no.",
+      "B": "Se replica automáticamente.",
+      "C": "Debemos especificar si se agrega al grupo de replicación o no.",
+      "D": "Si el recurso se crea después de instalar el DFS de replicación y queremos replicarlo, deberemos desinstalarlo completamente y volver a instalarlo para que se pueda añadir esta replicación."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "La frecuencia en la que funciona la tecnología bluetooth es:",
+    "respuestas": {
+      "A": "5 GHz.",
+      "B": "2.4 GHz.",
+      "C": "6 GHz.",
+      "D": "1.2 GHz."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Entre las ventajas de la virtualización de servidores se encuentra la de:",
+    "respuestas": {
+      "A": "Ofrecer a los programadores sistemas aislados e independientes sin preocuparse de afectar a otras aplicaciones.",
+      "B": "Ofrecer un sistema que conlleva un consumo de recursos superior al que tendría en un servidor físico dedicado.",
+      "C": "Ofrecer un sistema en él que modificando la configuración de uno de los sistemas virtualizados, la replicaría a todos los demás servidores.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "\"Sink\" es un tipo de punto de comunicación en Rhapsody que:",
+    "respuestas": {
+      "A": "Agrupa los mensajes en un conjunto o \"Sink\" antes de enviarlos por la ruta correspondiente.",
+      "B": "Reenvía los mensajes a la ruta que le indiquemos en la configuración.",
+      "C": "Inmediatamente descarta los mensajes recibidos, similar a la papelera de reciclaje, pero permanente.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indique cuál de las siguientes NO es una ventaja de la virtualización de servidores:",
+    "respuestas": {
+      "A": "Máxima utilización de los recursos del servidor.",
+      "B": "Distribución de los medios de almacenamiento más efectiva.",
+      "C": "Se necesita menos energía en el funcionamiento y en la refrigeración.",
+      "D": "Ahorro considerable en licencias de software."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Cuál de los siguientes NO es un factor de autenticación?",
+    "respuestas": {
+      "A": "Algo que se sabe.",
+      "B": "Algo que se es.",
+      "C": "Algo que se sincroniza.",
+      "D": "Algo que se tiene."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indique qué campo NO aparece en la actual tarjeta sanitaria de Aragón:",
+    "respuestas": {
+      "A": "Nombre del facultativo de atención primaria al que se adscribe el titular de la tarjeta.",
+      "B": "Número de identificación (NIF/NIE/Pasaporte) del titular de la tarjeta.",
+      "C": "Domicilio del titular de la tarjeta.",
+      "D": "Fecha de Nacimiento del titular de la tarjeta (día/mes/año)."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Respecto a una terminal gregaria, indicar la afirmación INCORRECTA:",
+    "respuestas": {
+      "A": "El almacenamiento y procesamiento de la información se realiza en el servidor y no en el cliente.",
+      "B": "Tiene capacidad de procesamiento.",
+      "C": "Un emulador de terminal es un ejemplo de terminal gregaria.",
+      "D": "Requieren de un servidor al que conectarse."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Cuál de los siguientes es un requisito para el servidor de aplicaciones JBoss?",
+    "respuestas": {
+      "A": "PHP.",
+      "B": "JDK.",
+      "C": "Motor de base de datos.",
+      "D": "C++"
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indicar cuál de las siguientes consultas SQL es correcta:",
+    "respuestas": {
+      "A": "SELECT nif, COUNT(*) total FROM empleados WHERE coddepartamento = 123;",
+      "B": "SELECT nif, nombre, apellidos, codpuesto FROM empresa1 UNION ALL SELECT nif, nombre, apellidos FROM empresa2;",
+      "C": "UPDATE empleados SET codpuesto=1 WHERE nif='19255553W';",
+      "D": "SELECT* FROM empleados WHERE nif IN;"
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indique cómo se llama la característica de Windows 10 que nos permite ver una vista en miniatura de las ventanas abiertas al colocar el ratón sobre el icono en la barra de tareas:",
+    "respuestas": {
+      "A": "Aero Peek.",
+      "B": "Aero Shake",
+      "C": "Aero Snap.",
+      "D": "Aero Glass."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indique la respuesta INCORRECTA. Respecto a los DGP (Datos Generales del Paciente) en la aplicación OMI-AP para centros de salud en Atención Primaria:",
+    "respuestas": {
+      "A": "Son una unidad de registro en OMI de la información clínica del paciente.",
+      "B": "Trabajar con DGPs permite la introducción de datos desde diferentes apartados de la aplicación.",
+      "C": "Se pueden crear nuevos DGPs desde el módulo OMI-GUR de la aplicación.",
+      "D": "OMI contiene algunos DGPs precargados como peso, talla, etc."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indicar cuál de las siguientes aplicaciones NO son ejemplo de escritorio remoto:",
+    "respuestas": {
+      "A": "VNC.",
+      "B": "Teamviewer.",
+      "C": "Microsoft Terminal Services.",
+      "D": "Telnet."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Un sistema operativo que es capaz de coordinar la actividad de varios procesadores, se denomina:",
+    "respuestas": {
+      "A": "Sistema operativo con multiprocesamiento.",
+      "B": "Sistema operativo con multiprogramación.",
+      "C": "Sistema operativo con monoprogramación.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En SQL, las sentencias Insert, Update, Delete, pertenecen a:",
+    "respuestas": {
+      "A": "Lenguaje de definición de datos (DDL).",
+      "B": "Lenguaje de manipulación de datos (DML).",
+      "C": "Sentencias de control de transacciones.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Qué es AGDLP?:",
+    "respuestas": {
+      "A": "El nuevo formato de impresión 3d para tema médico.",
+      "B": "La asignación de recursos en los servidores virtuales.",
+      "C": "El acelerador de bases de datos.",
+      "D": "Recomendaciones para implementar controles de acceso basados en roles."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En entornos corporativos basados en Microsoft, indique cuál de las siguientes afirmaciones es INCORRECTA en relación al identificador único global (GUID) de Active Directory:",
+    "respuestas": {
+      "A": "Este número es único.",
+      "B": "La base de datos del directorio no lo cambia nunca.",
+      "C": "Se genera al crear el nombre completo (DN) del usuario por primera vez en el Active Directory (AD)",
+      "D": "Es un entero de 64 bits (8 bytes)."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Los dispositivos o sistemas que están diseñados para filtrar el acceso autorizado del no autorizado de las comunicaciones entre dos o más redes se denominan:",
+    "respuestas": {
+      "A": "Switch.",
+      "B": "Router.",
+      "C": "Cortafuegos.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En función del destinatario de un certificado, indique cuál de los siguientes NO es un tipo de certificado digital que emite la FNMT-RCM:",
+    "respuestas": {
+      "A": "Persona física.",
+      "B": "Certificado de representante.",
+      "C": "Certificado de componente.",
+      "D": "Certificado SIAEN."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En Windows Server, en el contexto de Active Directory, indique cuál de las siguientes afirmaciones es INCORRECTA:",
+    "respuestas": {
+      "A": "El servidor WINS resuelve los nombres NetBIOS a direcciones IP en una red de Windows.",
+      "B": "Dinámicamente los clientes en una red habilitada para WINS pueden registrar, actualizar y eliminar sus nombres de la base de datos mantenida por WINS.",
+      "C": "Si ya se ha implementado WINS en la red, no es necesario DNS.",
+      "D": "Para las direcciones que están fuera de la red local, se puede habilitar el servidor WINS para hacer referencia a un archivo LMHosts configurado estáticamente."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En referencia a motores de integración entre aplicaciones (EAI), indicar la afirmación INCORRECTA sobre HL7:",
+    "respuestas": {
+      "A": "Se trata de un protocolo estándar de interoperabilidad.",
+      "B": "Se trata de un protocolo propietario que es utilizado en entornos sanitarios.",
+      "C": "Proporcionan un marco (y estándares relacionados) para el intercambio, integración y recuperación de información electrónica de salud.",
+      "D": "Orion Rhapsody utiliza mensajería HL7."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Respecto a la arquitectura de la aplicación OMI-AP para centros de salud de Atención Primaria:",
+    "respuestas": {
+      "A": "Consta de un BBDD distribuida en cada Centro de Salud, además de una centralizada y común para los Consultorios Rurales.",
+      "B": "Consta de una BBDD única y centralizada para todos los Centros de Atención Primaria.",
+      "C": "Consta de una BBDD centralizada por Sector y los Servidores de Aplicaciones necesarios para proveer a los sistemas de información de los Centros de Salud.",
+      "D": "Consta de una BBDD distribuida en cada Centro de Salud al que se conectan los equipos pertenecientes al mismo."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Respecto a los requisitos y estructura básica de los procesos del Sistema de Información de atención sanitaria, CMA (Cirugía Mayor Ambulatoria) realiza:",
+    "respuestas": {
+      "A": "Procedimientos quirúrgicos realizados con anestesia general, locoregional o local, con o sin sedación, que requieren cuidados postoperatorios de corta duración, por lo que no necesitan ingreso hospitalario.",
+      "B": "Procedimientos quirúrgicos que debido a su escaso nivel de complejidad se puede realizar de forma ambulante en un Centro de Salud.",
+      "C": "Procedimientos quirúrgicos que se realizan ambulatoriamente en un Centro de Salud y posteriormente conlleva el ingreso hospitalario del paciente.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Si desde un equipo perteneciente a un dominio, deseamos actualizar de manera inmediata la política de directiva que se le ha aplicado, ejecutaremos:",
+    "respuestas": {
+      "A": "Gpupdate /force /i",
+      "B": "Gpupdate /force",
+      "C": "Gpupdate /force /t",
+      "D": "Gpupdate /force /w"
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Respecto al procesamiento de los GPOs (Group Policy Objects) en AD (Active Directory) de Windows, indique cuál de las siguientes afirmaciones es INCORRECTA:",
+    "respuestas": {
+      "A": "El orden en que se aplican los GPOs es: GPO local, GPOs de sitio, GPOs de dominio y GPOs de unidad organizativa.",
+      "B": "Un equipo que es miembro de un grupo de trabajo solo procesa su GPO local",
+      "C": "Los GPOs son heredables y acumulativos, salvo que se produzca algún conflicto.",
+      "D": "La herencia de GPO se puede bloquear a nivel de sitio o de unidad organizativa."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Cuál de los siguientes elementos hace las funciones de bridge?:",
+    "respuestas": {
+      "A": "Impresora.",
+      "B": "Punto de acceso.",
+      "C": "Escáner.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indique cuál de los siguientes es un tipo de malware que tiene como objetivo infectar el ordenador, cifrar los datos confidenciales y exigir un rescate para su devolución:",
+    "respuestas": {
+      "A": "Ransomware.",
+      "B": "Spyware.",
+      "C": "Bots.",
+      "D": "Rootkits."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "El pilar básico de Historia Clínica Electrónica de Aragón, en el que se identifican los pacientes de manera univoca, se denomina:",
+    "respuestas": {
+      "A": "HPHIS",
+      "B": "BDU",
+      "C": "PCH",
+      "D": "CPD"
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En la implementación de varios Servidores de Actualizaciones de Microsoft (WSUS) en una organización ¿qué profundidad máxima de jerarquía de servidores se recomienda?",
+    "respuestas": {
+      "A": "Una profundidad máxima de cuatro niveles.",
+      "B": "Una profundidad de al menos cuatro niveles.",
+      "C": "Una profundidad máxima de cinco niveles.",
+      "D": "Una profundidad máxima de tres niveles."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "La Base de Datos de Usuarios (BDU) de Aragón es una aplicación desarrollada en J2EE:",
+    "respuestas": {
+      "A": "Utilizando Hibernate y con un patrón DAO (Data Access Object).",
+      "B": "Utilizando Struts y con un patrón DAO (Data Access Object).",
+      "C": "Utilizando Hibernate y con un patrón MVC (Model View Control).",
+      "D": "Utilizando Struts y con un patrón MVC (Model View Control)."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "BuscarV en Excel se utiliza para:",
+    "respuestas": {
+      "A": "Buscar elementos en una base de datos vinculada.",
+      "B": "Buscar elementos en una tabla o en un rango por fila.",
+      "C": "Buscar la posición vertical de una función.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En el contexto de virtualización de servidores, un hipervisor de tipo 1 o bare metal es:",
+    "respuestas": {
+      "A": "El que se ejecuta directamente sobre el hardware del sistema anfitrión.",
+      "B": "El que se ejecuta sobre el sistema operativo del anfitrión y utiliza el controlador del dispositivo facilitado por el sistema para acceder al hardware.",
+      "C": "El que se ejecuta al iniciar el equipo cuando utilizamos programas de emulación.",
+      "D": "El que nos permite activar las herramientas de copias de seguridad en un sistema operativo invitado."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Para conectar un disco duro Serial ATA a la placa base, utilizaremos:",
+    "respuestas": {
+      "A": "Un conector IDE de 40 pines",
+      "B": "Un conector SATA de 7 pines y un cable de alimentación SATA de 15 pines.",
+      "C": "Un conector SATA de 7 pines que, además, proporciona alimentación eléctrica.",
+      "D": "Ninguna respuesta es correcta"
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Cuáles son las licencias de Windows 10 que están asociadas al dispositivo con el que se adquieren y no se pueden reinstalar en un dispositivo distinto?",
+    "respuestas": {
+      "A": "Licencias de Retail",
+      "B": "Licencias por Volumen",
+      "C": "Licencias Windows OEM",
+      "D": "Licencias FPP (Full Packed Product)"
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indique la respuesta INCORRECTA. Tener implementado un antivirus corporativo nos proporciona unas ventajas, entre las que se encuentran las siguientes:",
+    "respuestas": {
+      "A": "Aumenta la sobrecarga de gestionar un sistema de inventario de hardware y software.",
+      "B": "Administración centralizada de configuraciones e instalaciones.",
+      "C": "Ahorro del ancho de banda de la WAN.",
+      "D": "Informes de software malintencionado en la red."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "El interfaz manager de Historia Clínica Electrónica de Aragón está basado en el uso del estándar:",
+    "respuestas": {
+      "A": "ACK",
+      "B": "ORACLE",
+      "C": "RMC",
+      "D": "HL7"
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Nos dan una red 172.18.123.0 / 26 para nuestros servidores. Esta información nos indica que:",
+    "respuestas": {
+      "A": "Es una red pública con capacidad para 62 maquinas",
+      "B": "Es una red pública con capacidad para 4094 maquinas",
+      "C": "Es una red privada con capacidad para 62 maquinas",
+      "D": "Es una red privada con capacidad para 4094 maquinas"
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En relación a un firewall, indique la respuesta INCORRECTA:",
+    "respuestas": {
+      "A": "Son dispositivos que interconectan dos o más redes, de forma que todas las comunicaciones que se establezcan entre dichas redes pasen a través de él.",
+      "B": "Proporcionan protección frente al tráfico de red externo a la red que protege.",
+      "C": "Restringen el acceso al exterior a elementos de la red interna.",
+      "D": "Protegen a nivel de la capa 2 del modelo OSI."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "La aplicación de receta electrónica está formada por varios esquemas de Bases de Datos. ¿Cuál de los siguientes contiene información del Vademécum?",
+    "respuestas": {
+      "A": "MAPRES",
+      "B": "REDISP",
+      "C": "NOMEN",
+      "D": "CAMPA"
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "La conexión a Windows update para la descarga de actualizaciones de los servidores WSUS:",
+    "respuestas": {
+      "A": "Se puede realizar offline mediante discos, con los parches que se van a aplicar en la organización.",
+      "B": "Solo se descargan los service pack.",
+      "C": "No puede distribuir los parches de Windows Defender.",
+      "D": "Un servidor WSUS en la organización debe tener conexión a Windows Update."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿En cuál de los siguientes casos sería de utilidad utilizar una imagen de un disco creada con una herramienta de clonación de imágenes?",
+    "respuestas": {
+      "A": "Al instalar en varios ordenadores ya configurados, la misma impresora.",
+      "B": "Al instalar varios ordenadores con la configuración distinta.",
+      "C": "Al sustituir un disco duro mecánico por un disco SSD, en un ordenador ya instalado.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "De las siguientes afirmaciones, ¿cuál NO sería una función de un conmutador o switch?",
+    "respuestas": {
+      "A": "Segmentar el dominio de colisión.",
+      "B": "Segmentar lógicamente la red con VLANs.",
+      "C": "Tomar decisiones de filtrado basadas en la dirección MAC de la trama recibida.",
+      "D": "Encontrar la mejor ruta a una red externa."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Una dirección broadcast:",
+    "respuestas": {
+      "A": "Permite enviar paquetes a todos los hosts de una red, sin necesidad de especificar ningún receptor en concreto.",
+      "B": "Tiene todos los bits menos significativos a 0",
+      "C": "Algunas subredes no tienen dirección broadcast.",
+      "D": "La dirección broadcast para enviar paquetes a todos los equipos de otra red es 255.255.255.255"
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "El sistema de identificación electrónica de la plataforma CL@VE está basado en el uso de un código elegido por el usuario y un PIN comunicado al teléfono mediante la app Cl@ve PIN o con un mensaje SMS. ¿Cómo se denomina este tipo de validación?:",
+    "respuestas": {
+      "A": "Factor de autenticación de usuarios.",
+      "B": "Autenticación electrónica de usuarios.",
+      "C": "Factor electrónico de autenticación.",
+      "D": "Doble factor de autenticación."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Cómo se llama la historia clínica de atención primaria?:",
+    "respuestas": {
+      "A": "OMI-AC",
+      "B": "OMI-DC",
+      "C": "OMI-PP",
+      "D": "OMI-AP"
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "OpenGL es:",
+    "respuestas": {
+      "A": "El estándar abierto de programación Global Link.",
+      "B": "El nuevo estándar de comunicaciones que sustituye a OpenVPN.",
+      "C": "Una marca de teclados mecánicos.",
+      "D": "Una API de manejo de gráficos."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En AD (Active Directory) de Windows, las directivas son el componente básico de los GPOs (Group Policy Objects). El estado de una directiva puede ser:",
+    "respuestas": {
+      "A": "Configurada.",
+      "B": "Desactivada.",
+      "C": "No configurada.",
+      "D": "Activada."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "La mayoría de antivirus corporativos en la actualidad permiten reglas por usuario. Esto significa que:",
+    "respuestas": {
+      "A": "Independientemente de donde inicie sesión un usuario, dentro o fuera de la red corporativa, se le aplicaría la política que tuviera asignada.",
+      "B": "Independientemente de donde inicie sesión un usuario, dentro de la red corporativa, se le aplicaría la política que tuviera asignada.",
+      "C": "Si el usuario inicia sesión fuera de la red corporativa, se le aplicaría la política que tuviera asignada.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En relación a la Tarjeta Sanitaria en Aragón, indique cuál de las siguientes afirmaciones es INCORRECTA:",
+    "respuestas": {
+      "A": "Constituye el documento identificativo y acreditativo del derecho de los usuarios del Sistema de Salud de Aragón a la protección de la salud.",
+      "B": "Es título necesario y suficiente para el acceso a los servicios sanitarios prestados por el Sistema de Salud de Aragón.",
+      "C": "Cada persona tiene su propia Tarjeta Sanitaria, independientemente de su edad, y le identifica como usuario del Sistema de Salud de Aragón.",
+      "D": "Su emisión corresponde al Departamento de Ciudadanía y Bienestar Social."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indique la respuesta INCORRECTA. Las ventajas de la certificación de tomas de red son:",
+    "respuestas": {
+      "A": "Reduce la probabilidad de fallo de la red.",
+      "B": "Identifican fallos de cableado.",
+      "C": "Se realiza sobre cable ethernet exclusivamente.",
+      "D": "Indican que la instalación cumple el estándar de certificación."
+    },
+    "respuesta_correcta": "C",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Se pueden conectar varios monitores a un ordenador?",
+    "respuestas": {
+      "A": "Sí, pero siempre serán de la misma marca y mismo modelo de monitor.",
+      "B": "Sí, siempre que el ordenador tenga varios puertos para monitor.",
+      "C": "No, ya que en los casos que se conecta un proyector, es el proyector el que duplica la imagen.",
+      "D": "No, esa operación no se puede realizar."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En un sistema de cableado estructurado, indique cómo se llama el cableado que va desde el armario de telecomunicaciones a la toma de red de usuario:",
+    "respuestas": {
+      "A": "Cableado vertical.",
+      "B": "Cableado horizontal.",
+      "C": "Cableado asimétrico.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En relación a los dispositivos de red, indique cuál de los siguientes elementos NO es un protocolo de enrutamiento:",
+    "respuestas": {
+      "A": "RIP",
+      "B": "OSAA",
+      "C": "OSPF",
+      "D": "BGP"
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Señale la respuesta INCORRECTA sobre la situación en la que puede encontrarse un usuario de la Red Sanitaria Pública Aragonesa en BDU (Base de Datos de Usuarios):",
+    "respuestas": {
+      "A": "Residente.",
+      "B": "Usuario temporal.",
+      "C": "Usuario limítrofe.",
+      "D": "Desplazado de otra C.A./País."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Indique la opción INCORRECTA sobre Bitlocker en sistemas Windows 10:",
+    "respuestas": {
+      "A": "Está disponible en todas las versiones de Windows 10.",
+      "B": "Es capaz de cifrar unidades de disco duro completas.",
+      "C": "Proporciona el cifrado de unidades portátiles.",
+      "D": "Ofrece la opción de bloquear el proceso de inicio normal hasta que el usuario proporcione un número de identificación personal (PIN) o inserte un dispositivo extraíble, como una unidad flash USB, que contenga una clave de inicio."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Cuál es la definición de autoridades de certificación?:",
+    "respuestas": {
+      "A": "Son entidades exclusivamente públicas que validan y garantizan la validez de los certificados que emite.",
+      "B": "Son entidades de confianza responsables de emitir y revocar los certificados digitales.",
+      "C": "Son entidades que exclusivamente aportan su clave privada.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Un motor de integración entre aplicaciones:",
+    "respuestas": {
+      "A": "Es el hardware que una vez implantado permite utilizar software de distintas plataformas.",
+      "B": "Es un software diseñado para simplificar la creación de interfaces entre sistemas y aplicaciones distintas en una organización.",
+      "C": "Utiliza aplicaciones estandarizadas que de manera nativa se comunican entre ellas.",
+      "D": "Ninguna respuesta es correcta."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En relación con un Dynamic Host Configuration Protocol (DHCP), indique cuál de las siguientes afirmaciones es INCORRECTA:",
+    "respuestas": {
+      "A": "DHCP asigna automáticamente direcciones de protocolo de Internet (IP) a los equipos de la red que lo requieran.",
+      "B": "El servidor DHCP responde al equipo cliente enviando un paquete DHCPDISCOVER.",
+      "C": "Si se usa DHCP, no hay que cambiar la configuración de TCP/IP si se traslada el equipo a otra ubicación.",
+      "D": "DHCP no requiere definir manualmente la configuración de TCP/IP."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "El sistema responsable de la gestión unificada de la información no estructurada, procedente de los evolutivos en general de un paciente, con independencia del nivel asistencial de origen y del agente implicado en la asistencia, se denomina:",
+    "respuestas": {
+      "A": "Curso clínico.",
+      "B": "Capacitación de paciente.",
+      "C": "Gestor de peticiones.",
+      "D": "Módulo prescriptor."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "El sistema de Receta Electrónica se compone de diferentes secciones diferenciadas que se encuentran comunicadas entre sí. Señale la INCORRECTA:",
+    "respuestas": {
+      "A": "El Módulo de Prescripción.",
+      "B": "El Módulo de Citación.",
+      "C": "El Módulo de Dispensación.",
+      "D": "El Módulo de Administración y Visados."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Un grupo Global de Active Directory puede contener:",
+    "respuestas": {
+      "A": "Cuentas y grupos globales del mismo dominio.",
+      "B": "Cuentas y grupos globales de cualquier dominio del mismo bosque.",
+      "C": "Cuentas y grupos globales de cualquier dominio.",
+      "D": "Cuentas, grupos globales y grupos universales de otros bosques."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En un sistema operativo, los hilos de ejecución se diferencian de los procesos en:",
+    "respuestas": {
+      "A": "Pueden estar en un solo estado a la vez. Principalmente ejecutando, listo y bloqueado.",
+      "B": "No son independientes unos de otros, pues pueden acceder a cualquier variable dentro del proceso.",
+      "C": "Se ejecutan secuencialmente y cada uno tiene su propio contador de programa, pila y registros.",
+      "D": "Pueden crear otros hilos/procesos \"hijos\"."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Sobre las siguientes afirmaciones sobre RIS y PACS, indique la INCORRECTA:",
+    "respuestas": {
+      "A": "RIS y PACS no interoperan mediante el protocolo DICOM.",
+      "B": "RIS gestiona las tareas administrativas del departamento de Radiología (citaciones, gestión de salas, registro de actividad e informes), mientras que PACS almacena y distribuye las imágenes radiológicas obtenidas de las modalidades.",
+      "C": "Un PACS trabaja conjuntamente con un RIS.",
+      "D": "Las imágenes gestionadas a través del RIS se pueden agrupar en series y estas, a su vez, en estudios."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "La infección de un servidor por software malintencionado puede clasificarse como:",
+    "respuestas": {
+      "A": "Incidente de seguridad.",
+      "B": "Vulnerabilidad.",
+      "C": "Agujero de seguridad.",
+      "D": "Denegación de servicio."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Cuál de estos productos NO es un Servidor de aplicaciones?",
+    "respuestas": {
+      "A": "Eclipse.",
+      "B": "JBoss.",
+      "C": "OAS.",
+      "D": "WebSphere."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Los dispositivos WIFI 6 son aquellos que soportan el estándar:",
+    "respuestas": {
+      "A": "802.11b",
+      "B": "802.11 ac",
+      "C": "802.11 n",
+      "D": "802.11 ax"
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Qué dispositivo de electrónica de red permite la interconexión de redes que trabajan con distintos protocolos?",
+    "respuestas": {
+      "A": "Un conmutador o switch.",
+      "B": "Una pasarela o gateway.",
+      "C": "Un concentrador o hub.",
+      "D": "No es necesario ningún dispositivo específico para este fin."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Respecto a la autenticación de doble factor en la gestión unificada de usuarios y sus accesos a aplicaciones:",
+    "respuestas": {
+      "A": "Los dos factores de autenticación que el usuario proporcione deben fundamentarse en dos de estas tres características: algo que el usuario conozca, algo que el usuario tenga o algo que el usuario es.",
+      "B": "El proceso de requerir al usuario la autenticación de su identidad de dos formas diferentes y permitiendo su acceso si verifica alguna de ellas.",
+      "C": "El acceso a la aplicación requiere certificado electrónico.",
+      "D": "Es un término sinónimo de Single Sign-On (SSO)."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En un sistema de gestión de identidades y acceso, a la posibilidad de que los usuarios puedan realizar ciertas gestiones sin depender del Helpdesk, como por ejemplo la recuperación de contraseña en caso de olvido o bloqueo, se denomina:",
+    "respuestas": {
+      "A": "Aprovisionamiento.",
+      "B": "Integración.",
+      "C": "Sincronización.",
+      "D": "Autoservicio."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En SQL, qué modificador incluiremos en una sentencia SELECT para que se muestren los registros resultantes de los campos seleccionados sin repeticiones:",
+    "respuestas": {
+      "A": "EXCEPT",
+      "B": "DISTINCT",
+      "C": "JOIN",
+      "D": "ONLY"
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Un Servidor de Aplicaciones:",
+    "respuestas": {
+      "A": "Implementa aplicaciones conforme a un modelo de una capa.",
+      "B": "Implementa aplicaciones conforme a un modelo de tres capas.",
+      "C": "También se denomina servidor de virtualización.",
+      "D": "También se denomina servidor de sesiones."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "¿Qué información almacena la Base de Datos de un servidor de actualizaciones de Microsoft (WSUS)? Indique la respuesta INCORRECTA.",
+    "respuestas": {
+      "A": "Metadatos que describen cada actualización.",
+      "B": "Información sobre equipos cliente, actualizaciones e interacciones.",
+      "C": "Los archivos de actualización.",
+      "D": "Información de configuración de servidores WSUS."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En referencia a los requisitos y estructura básica de los procesos del Sistema de Información de atención sanitaria, indicar la respuesta INCORRECTA sobre el Sistema Español de Triaje:",
+    "respuestas": {
+      "A": "Se trata de una aplicación informática que sirve para evaluar el estado de salud de un paciente, una vez que es hospitalizado.",
+      "B": "Proceso de valoración clínica preliminar utilizado en Urgencias que ordena los pacientes en base al grado de urgencia de los síntomas y signos que presentan, priorizando la asistencia de los más urgentes.",
+      "C": "Clasifica los pacientes en cinco niveles de urgencia: Nivel 1 (más urgente), Nivel II, Nivel III, Nivel IV y Nivel V (menos urgente).",
+      "D": "El proceso de triaje lo realiza normalmente el personal de Enfermería."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Ante incidentes de seguridad, ¿cuál es el organismo de referencia del Gobierno de España con ámbito competencial en el Sector Público local, autonómico y nacional?:",
+    "respuestas": {
+      "A": "INCIBE-CERT; del Instituto Nacional de Ciberseguridad de España.",
+      "B": "CCN-CERT, del Centro Criptológico Nacional del Centro Nacional de Inteligencia.",
+      "C": "Centro Nacional de Protección de Infraestructuras y Ciberseguridad (CNPIC).",
+      "D": "ESPDEF-CERT del Mando Conjunto de Ciberdefensa."
+    },
+    "respuesta_correcta": "A",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En SQL, un valor nulo se especifica con la palabra predefinida NULL y se interpreta como:",
+    "respuestas": {
+      "A": "Valor cero.",
+      "B": "Cadena vacía.",
+      "C": "Valor booleano igual a FALSE.",
+      "D": "Valor desconocido."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "En una hoja de cálculo Excel o Calc ¿qué sucede si pulsamos las teclas Ctrl + E?",
+    "respuestas": {
+      "A": "Muestra el cuadro de dialogo Buscar y reemplazar, con la pestaña buscar seleccionada.",
+      "B": "Selecciona toda la hoja de cálculo.",
+      "C": "Aplica o quita el formato negrita a las celdas seleccionadas.",
+      "D": "Imprime las celdas seleccionadas."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "A la hora de definir la política de copias de seguridad de una organización, el periodo de tiempo máximo en el que la organización asume la pérdida de datos se denomina:",
+    "respuestas": {
+      "A": "RTO (Recovery Time Objective).",
+      "B": "MTD (Maximum Tolerable Downtime).",
+      "C": "ROL (Revised Operating Level).",
+      "D": "RPO (Recovery Point Objective)."
+    },
+    "respuesta_correcta": "D",
+    "oposicion": "Aragón"
+  },
+  {
+    "pregunta": "Las direcciones IP en la que la parte correspondiente al host son ceros:",
+    "respuestas": {
+      "A": "Son direcciones broadcast.",
+      "B": "Son direcciones de red.",
+      "C": "Son direcciones de multicast.",
+      "D": "No son direcciones válidas."
+    },
+    "respuesta_correcta": "B",
+    "oposicion": "Aragón"
+}]
