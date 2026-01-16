@@ -2,6 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "com.opostest.pro",
   "productName": "OposTest Pro",
+  "asar": false,
   "directories": {
     "output": "release",
     "buildResources": "build-resources"
@@ -9,9 +10,6 @@
   "files": [
     "dist-electron/**/*",
     "electron-dist/**/*"
-  ],
-  "asarUnpack": [
-    "dist-electron/**/*"
   ],
   "extraResources": [
     {
