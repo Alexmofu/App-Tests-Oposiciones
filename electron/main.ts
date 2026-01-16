@@ -8,7 +8,25 @@ import bcrypt from "bcryptjs";
 
 let mainWindow: BrowserWindow | null = null;
 let storage: SqliteStorage | null = null;
-let currentUserId: number | null = null;
+let currentUserId: number = 1; // Usuario por defecto siempre activo
+
+async function ensureDefaultUser() {
+  if (!storage) return;
+  
+  try {
+    const user = await storage.getUserById(1);
+    if (!user) {
+      // Crear usuario por defecto con contraseña aleatoria (no se usa)
+      const randomPass = Math.random().toString(36).slice(2);
+      await storage.createUser({ username: "usuario", password: randomPass });
+      console.log("Usuario por defecto creado");
+    }
+  } catch (error) {
+    console.log("Creando usuario por defecto...");
+    const randomPass = Math.random().toString(36).slice(2);
+    await storage.createUser({ username: "usuario", password: randomPass });
+  }
+}
 
 function createWindow() {
   const appPath = app.getAppPath();
@@ -52,11 +70,15 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   const dbPath = path.join(app.getPath("userData"), "opostest.db");
   setDbPath(dbPath);
   initializeSqliteDatabase();
   storage = new SqliteStorage();
+  
+  // Crear usuario por defecto automáticamente
+  await ensureDefaultUser();
+  
   createWindow();
 
   app.on("activate", () => {
@@ -114,58 +136,39 @@ ipcMain.handle("auth:login", async (_event, { username, password }) => {
 });
 
 ipcMain.handle("auth:logout", async () => {
-  currentUserId = null;
+  // No hace nada en Electron (usuario siempre activo)
   return { success: true };
 });
 
 ipcMain.handle("auth:me", async () => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  
-  const user = await storage.getUserById(currentUserId);
-  if (!user) {
-    currentUserId = null;
-    return { success: false, error: "Usuario no encontrado" };
-  }
-  
-  return { success: true, user: { id: user.id, username: user.username } };
+  // Siempre devolver usuario por defecto en Electron (sin login requerido)
+  return { success: true, user: { id: 1, username: "usuario" } };
 });
 
 ipcMain.handle("tests:list", async () => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  return { success: true, data: await storage.getTests(currentUserId) };
+  if (!storage) return [];
+  return await storage.getTests(currentUserId);
 });
 
 ipcMain.handle("tests:questions", async (_event, testId: string) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  return { success: true, data: await storage.getQuestionsByTestId(testId, currentUserId) };
+  if (!storage) return [];
+  return await storage.getQuestionsByTestId(testId, currentUserId);
 });
 
 ipcMain.handle("tests:delete", async (_event, testId: string) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
+  if (!storage) return { success: false };
   await storage.deleteTest(testId, currentUserId);
   return { success: true };
 });
 
 ipcMain.handle("tests:rename", async (_event, { oldTestId, newTestId }) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
+  if (!storage) return { success: false };
   await storage.renameTest(oldTestId, newTestId, currentUserId);
   return { success: true };
 });
 
 ipcMain.handle("tests:import", async (_event, { testId, questions: questionsList, category }) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
+  if (!storage) return { success: false };
   
   const questionsToInsert = questionsList.map((q: any) => ({
     testId,
@@ -181,86 +184,59 @@ ipcMain.handle("tests:import", async (_event, { testId, questions: questionsList
 });
 
 ipcMain.handle("questions:create", async (_event, question) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  const created = await storage.createQuestion({ ...question, userId: currentUserId });
-  return created;
+  if (!storage) return null;
+  return await storage.createQuestion({ ...question, userId: currentUserId });
 });
 
 ipcMain.handle("questions:update", async (_event, { id, update }) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  const updated = await storage.updateQuestion(id, update);
-  return updated;
+  if (!storage) return null;
+  return await storage.updateQuestion(id, update);
 });
 
 ipcMain.handle("questions:delete", async (_event, id: number) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
+  if (!storage) return { success: false };
   await storage.deleteQuestion(id);
   return { success: true };
 });
 
 ipcMain.handle("results:list", async () => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  return { success: true, data: await storage.getResults(currentUserId) };
+  if (!storage) return [];
+  return await storage.getResults(currentUserId);
 });
 
 ipcMain.handle("results:create", async (_event, result) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  const created = await storage.createResult({ ...result, userId: currentUserId });
-  return { success: true, data: created };
+  if (!storage) return null;
+  return await storage.createResult({ ...result, userId: currentUserId });
 });
 
 ipcMain.handle("results:delete", async (_event, id: number) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
+  if (!storage) return { success: false };
   await storage.deleteResult(id);
   return { success: true };
 });
 
 ipcMain.handle("attempts:list", async () => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  return { success: true, data: await storage.getAttempts(currentUserId) };
+  if (!storage) return [];
+  return await storage.getAttempts(currentUserId);
 });
 
 ipcMain.handle("attempts:get", async (_event, id: number) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  return { success: true, data: await storage.getAttempt(id) };
+  if (!storage) return null;
+  return await storage.getAttempt(id);
 });
 
 ipcMain.handle("attempts:create", async (_event, attempt) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  const created = await storage.createAttempt({ ...attempt, userId: currentUserId });
-  return { success: true, data: created };
+  if (!storage) return null;
+  return await storage.createAttempt({ ...attempt, userId: currentUserId });
 });
 
 ipcMain.handle("attempts:update", async (_event, { id, update }) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
-  const updated = await storage.updateAttempt(id, update);
-  return { success: true, data: updated };
+  if (!storage) return null;
+  return await storage.updateAttempt(id, update);
 });
 
 ipcMain.handle("attempts:delete", async (_event, id: number) => {
-  if (!storage || !currentUserId) {
-    return { success: false, error: "No autenticado" };
-  }
+  if (!storage) return { success: false };
   await storage.deleteAttempt(id);
   return { success: true };
 });

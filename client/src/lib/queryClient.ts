@@ -7,16 +7,24 @@ if (isElectron) {
 }
 
 function unwrapIpcResult(result: any): any {
-  if (result && typeof result === "object") {
+  // Si es null o undefined, devolver tal cual
+  if (result === null || result === undefined) {
+    return result;
+  }
+  
+  // Si tiene estructura de respuesta envuelta
+  if (typeof result === "object" && "success" in result) {
     if (result.success === false) {
       const error = new Error(result.error || "IPC Error");
       (error as any).status = 401;
       throw error;
     }
-    if (result.success === true) {
-      return result.user || result.data || result;
-    }
+    // Extraer datos de la envoltura
+    if (result.user !== undefined) return result.user;
+    if (result.data !== undefined) return result.data;
   }
+  
+  // Datos directos (sin envoltura)
   return result;
 }
 
