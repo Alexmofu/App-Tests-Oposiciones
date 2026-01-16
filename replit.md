@@ -56,6 +56,19 @@ The backend serves both API routes and static files in production. In developmen
 - **Continue Test**: Save progress mid-test and resume from History page
 - **Dynamic Answer Options**: Admin panel supports 2-8 answer options per question
 
+### PWA (Progressive Web App)
+The application is configured as a PWA for installation on Windows, Android, and other platforms:
+- **Manifest**: `client/public/manifest.json` with app metadata and icons
+- **Service Worker**: `client/public/sw.js` with offline caching strategies
+  - Network-first for API calls (caches responses for offline use)
+  - Stale-while-revalidate for static assets
+  - Offline fallback page for navigation when fully offline
+- **Connection Status**: Startup animation showing online/offline status
+- **Mobile Navigation**: Bottom navigation bar for mobile devices with:
+  - Navigation to Inicio, Historial, Admin
+  - Online/Offline indicator
+- **Safe Area Support**: CSS support for notched phones (iOS/Android)
+
 ## External Dependencies
 
 ### Database
