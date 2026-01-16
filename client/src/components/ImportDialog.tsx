@@ -42,8 +42,10 @@ export function ImportDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full gap-2 bg-gradient-to-r from-primary to-primary/90 shadow-lg shadow-primary/20">
-          <UploadCloud className="w-4 h-4" /> Importar JSON Local
+        <Button className="gap-2 bg-gradient-to-r from-primary to-primary/90 shadow-lg shadow-primary/20 shrink-0">
+          <UploadCloud className="w-4 h-4" />
+          <span className="hidden sm:inline">Importar JSON Local</span>
+          <span className="sm:hidden">Importar</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">

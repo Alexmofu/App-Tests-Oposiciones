@@ -124,9 +124,9 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Main Content: Local Tests */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold tracking-tight">Tu Biblioteca</h2>
+          <div className="lg:col-span-2 space-y-6 max-h-[60vh] md:max-h-none overflow-y-auto md:overflow-visible">
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="text-2xl font-semibold tracking-tight shrink-0">Tu Biblioteca</h2>
               <ImportDialog />
             </div>
 
@@ -228,7 +228,7 @@ export default function Home() {
           </div>
 
           {/* Sidebar: Remote Connection */}
-          <div className="space-y-6">
+          <div className="space-y-6 max-h-[50vh] md:max-h-none overflow-y-auto md:overflow-visible">
             <h2 className="text-2xl font-semibold tracking-tight">Servidor Remoto</h2>
             <Card className="border-muted bg-card shadow-sm">
               <CardHeader className="pb-4">
@@ -294,7 +294,7 @@ export default function Home() {
               </CardContent>
             </Card>
             
-            <Link href="/admin">
+            <Link href="/admin" className="hidden md:block">
               <Button variant="ghost" className="w-full text-muted-foreground hover:text-foreground" data-testid="link-admin">
                 Ir al Panel de Administración
               </Button>
