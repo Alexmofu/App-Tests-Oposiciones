@@ -4,6 +4,14 @@ import { z } from "zod";
 
 // === TABLE DEFINITIONS ===
 
+// Users table for authentication
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  password: text("password").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Stores questions imported from JSONs
 export const questions = pgTable("questions", {
   id: serial("id").primaryKey(),
@@ -12,6 +20,7 @@ export const questions = pgTable("questions", {
   answers: jsonb("answers").notNull(),
   correctAnswer: text("correct_answer").notNull(),
   category: text("category"),
+  userId: integer("user_id"),
 });
 
 // Stores historical results (completed tests)
@@ -22,31 +31,54 @@ export const results = pgTable("results", {
   correctCount: integer("correct_count").notNull(),
   totalQuestions: integer("total_questions").notNull(),
   completedAt: timestamp("completed_at").defaultNow(),
+  userId: integer("user_id"),
 });
 
 // Stores test attempts (in-progress or completed)
 export const testAttempts = pgTable("test_attempts", {
   id: serial("id").primaryKey(),
   testId: text("test_id").notNull(),
-  status: text("status").notNull().default("in_progress"), // "in_progress" | "completed"
+  status: text("status").notNull().default("in_progress"),
   currentIndex: integer("current_index").notNull().default(0),
-  answers: jsonb("answers").notNull().default({}), // { questionId: selectedAnswer }
-  questionOrder: jsonb("question_order").notNull(), // Array of question IDs in order (for randomization)
+  answers: jsonb("answers").notNull().default({}),
+  questionOrder: jsonb("question_order").notNull(),
   totalQuestions: integer("total_questions").notNull(),
   correctCount: integer("correct_count").default(0),
   score: integer("score").default(0),
   startedAt: timestamp("started_at").defaultNow(),
   completedAt: timestamp("completed_at"),
+  userId: integer("user_id"),
+});
+
+// Session table for connect-pg-simple
+export const sessions = pgTable("session", {
+  sid: text("sid").primaryKey(),
+  sess: jsonb("sess").notNull(),
+  expire: timestamp("expire", { precision: 6 }).notNull(),
 });
 
 // === SCHEMAS ===
 
+export const insertUserSchema = createInsertSchema(users).omit({ id: true, createdAt: true });
 export const insertQuestionSchema = createInsertSchema(questions).omit({ id: true });
 export const insertResultSchema = createInsertSchema(results).omit({ id: true, completedAt: true });
 export const insertAttemptSchema = createInsertSchema(testAttempts).omit({ id: true, startedAt: true, completedAt: true });
 
+// Login schema (same as insert but for clarity)
+export const loginSchema = z.object({
+  username: z.string().min(3, "El usuario debe tener al menos 3 caracteres"),
+  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+});
+
+export const registerSchema = z.object({
+  username: z.string().min(3, "El usuario debe tener al menos 3 caracteres"),
+  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+});
+
 // === TYPES ===
 
+export type User = typeof users.$inferSelect;
+export type InsertUser = z.infer<typeof insertUserSchema>;
 export type Question = typeof questions.$inferSelect;
 export type InsertQuestion = z.infer<typeof insertQuestionSchema>;
 export type Result = typeof results.$inferSelect;

@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { EditQuestionDialog } from "@/components/EditQuestionDialog";
-import { ArrowLeft, Trash2, Plus, FileText, Search, BookOpen, Check, X } from "lucide-react";
+import { ArrowLeft, Trash2, Plus, FileText, Search, BookOpen, Check, X, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function Admin() {
   const { data: tests } = useTests();
+  const { logout, isLoggingOut } = useAuth();
   const [selectedTestId, setSelectedTestId] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -40,6 +42,17 @@ export default function Admin() {
             <h1 className="text-xl font-display font-bold">Gestor de Preguntas</h1>
             <p className="text-sm text-muted-foreground hidden md:block">Crea, edita y organiza las preguntas de tus tests</p>
           </div>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={() => logout()}
+            disabled={isLoggingOut}
+            title="Cerrar sesión"
+            data-testid="button-logout-admin"
+            className="hidden md:flex"
+          >
+            <LogOut className="w-5 h-5" />
+          </Button>
         </div>
       </header>
 

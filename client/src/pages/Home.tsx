@@ -33,11 +33,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { FileText, Globe, RefreshCw, BarChart3, ChevronRight, Server, Trash2, Pencil, Edit3 } from "lucide-react";
+import { FileText, Globe, RefreshCw, BarChart3, ChevronRight, Server, Trash2, Pencil, Edit3, LogOut, User } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Home() {
   const { data: tests, isLoading: loadingTests } = useTests();
+  const { user, logout, isLoggingOut } = useAuth();
   const [remoteUrl, setRemoteUrl] = useState("");
   const [connectUrl, setConnectUrl] = useState("");
   const [, navigate] = useLocation();
@@ -111,13 +113,29 @@ export default function Home() {
             </h1>
             <p className="text-muted-foreground font-medium">Plataforma de Preparación de Oposiciones</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
+            {user && (
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted">
+                <User className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm font-medium">{user.username}</span>
+              </div>
+            )}
             <Link href="/results">
               <Button variant="outline" className="gap-2 hidden sm:flex">
                 <BarChart3 className="w-4 h-4" /> Historial
               </Button>
             </Link>
             <ThemeToggle />
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => logout()}
+              disabled={isLoggingOut}
+              title="Cerrar sesión"
+              data-testid="button-logout"
+            >
+              <LogOut className="w-5 h-5" />
+            </Button>
           </div>
         </header>
 

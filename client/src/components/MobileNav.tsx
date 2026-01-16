@@ -1,9 +1,10 @@
 import { Link, useLocation } from "wouter";
-import { Home, BarChart3, Settings, Plus, Play } from "lucide-react";
+import { Home, BarChart3, Settings, Plus, Play, LogOut } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { ImportDialog } from "@/components/ImportDialog";
 import { useAttempts } from "@/hooks/use-attempts";
+import { useAuth } from "@/hooks/use-auth";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,6 +31,7 @@ export function MobileNav() {
   const [location, setLocation] = useLocation();
   const [showResumeDialog, setShowResumeDialog] = useState(false);
   const { data: attempts } = useAttempts();
+  const { logout, isLoggingOut } = useAuth();
 
   const inProgressAttempts = attempts?.filter(a => a.status === "in_progress") || [];
   const latestAttempt = inProgressAttempts.length > 0 
@@ -135,16 +137,16 @@ export function MobileNav() {
             </button>
           </Link>
 
-          {/* Add test button (replaces Online indicator) */}
-          <ImportDialog trigger={
-            <button
-              className="flex flex-col items-center justify-center gap-1 px-4 py-2 rounded-lg transition-colors text-muted-foreground hover:text-foreground hover:bg-muted/50 min-w-[64px]"
-              data-testid="nav-add-test"
-            >
-              <Plus className="h-5 w-5" />
-              <span className="text-xs font-medium">Añadir</span>
-            </button>
-          } />
+          {/* Logout button */}
+          <button
+            onClick={() => logout()}
+            disabled={isLoggingOut}
+            className="flex flex-col items-center justify-center gap-1 px-4 py-2 rounded-lg transition-colors text-muted-foreground hover:text-foreground hover:bg-muted/50 min-w-[64px]"
+            data-testid="nav-logout"
+          >
+            <LogOut className="h-5 w-5" />
+            <span className="text-xs font-medium">Salir</span>
+          </button>
         </div>
       </nav>
     </>
