@@ -49,6 +49,15 @@ export const api = {
     },
   },
   questions: {
+    create: {
+      method: 'POST' as const,
+      path: '/api/questions',
+      input: insertQuestionSchema,
+      responses: {
+        201: z.custom<typeof questions.$inferSelect>(),
+        400: errorSchemas.validation,
+      },
+    },
     update: {
       method: 'PUT' as const,
       path: '/api/questions/:id',

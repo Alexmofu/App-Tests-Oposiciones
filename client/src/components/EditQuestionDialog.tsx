@@ -1,89 +1,244 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { type Question, type AnswerMap } from "@shared/schema";
-import { useUpdateQuestion } from "@/hooks/use-tests";
-import { useState } from "react";
-import { Edit2 } from "lucide-react";
+import { useUpdateQuestion, useCreateQuestion } from "@/hooks/use-tests";
+import { useState, useEffect } from "react";
+import { Edit2, Plus, Trash2, Check, GripVertical, AlertCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface EditQuestionDialogProps {
-  question: Question;
+  question?: Question;
+  testId?: string;
+  mode?: "edit" | "create";
+  trigger?: React.ReactNode;
+  onSuccess?: () => void;
 }
 
-export function EditQuestionDialog({ question }: EditQuestionDialogProps) {
+const ANSWER_KEYS = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+export function EditQuestionDialog({ 
+  question, 
+  testId,
+  mode = "edit", 
+  trigger,
+  onSuccess 
+}: EditQuestionDialogProps) {
   const [open, setOpen] = useState(false);
-  const [text, setText] = useState(question.questionText);
-  const [answers, setAnswers] = useState<AnswerMap>(question.answers as AnswerMap);
-  const [correct, setCorrect] = useState(question.correctAnswer);
+  const [text, setText] = useState("");
+  const [answers, setAnswers] = useState<AnswerMap>({});
+  const [correct, setCorrect] = useState("");
   
-  const { mutate, isPending } = useUpdateQuestion();
+  const { mutate: updateQuestion, isPending: isUpdating } = useUpdateQuestion();
+  const { mutate: createQuestion, isPending: isCreating } = useCreateQuestion();
+  
+  const isPending = isUpdating || isCreating;
+
+  useEffect(() => {
+    if (open) {
+      if (mode === "edit" && question) {
+        setText(question.questionText);
+        setAnswers(question.answers as AnswerMap);
+        setCorrect(question.correctAnswer);
+      } else {
+        setText("");
+        setAnswers({ A: "", B: "", C: "", D: "" });
+        setCorrect("A");
+      }
+    }
+  }, [open, question, mode]);
+
+  const answerKeys = Object.keys(answers).sort();
+  const canAddMore = answerKeys.length < ANSWER_KEYS.length;
+  const canRemove = answerKeys.length > 2;
+
+  const handleAddAnswer = () => {
+    if (!canAddMore) return;
+    const nextKey = ANSWER_KEYS.find(k => !answerKeys.includes(k));
+    if (nextKey) {
+      setAnswers(prev => ({ ...prev, [nextKey]: "" }));
+    }
+  };
+
+  const handleRemoveAnswer = (key: string) => {
+    if (!canRemove) return;
+    const newAnswers = { ...answers };
+    delete newAnswers[key];
+    setAnswers(newAnswers);
+    if (correct === key) {
+      setCorrect(Object.keys(newAnswers).sort()[0] || "A");
+    }
+  };
 
   const handleSave = () => {
-    mutate({
-      id: question.id,
-      questionText: text,
-      answers,
-      correctAnswer: correct
-    }, {
-      onSuccess: () => setOpen(false)
-    });
+    const hasEmptyAnswers = Object.values(answers).some(v => !v.trim());
+    if (!text.trim() || hasEmptyAnswers) return;
+
+    if (mode === "edit" && question) {
+      updateQuestion({
+        id: question.id,
+        questionText: text,
+        answers,
+        correctAnswer: correct
+      }, {
+        onSuccess: () => {
+          setOpen(false);
+          onSuccess?.();
+        }
+      });
+    } else if (mode === "create" && testId) {
+      createQuestion({
+        testId,
+        questionText: text,
+        answers,
+        correctAnswer: correct,
+      }, {
+        onSuccess: () => {
+          setOpen(false);
+          onSuccess?.();
+        }
+      });
+    }
   };
+
+  const isValid = text.trim() && Object.values(answers).every(v => v.trim()) && correct;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <Edit2 className="h-4 w-4" />
-        </Button>
+        {trigger || (
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0" data-testid={mode === "edit" ? "button-edit-question" : "button-add-question"}>
+            {mode === "edit" ? <Edit2 className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Question</DialogTitle>
+          <DialogTitle className="text-xl">
+            {mode === "edit" ? "Edit Question" : "Add New Question"}
+          </DialogTitle>
+          <DialogDescription>
+            {mode === "edit" 
+              ? "Modify the question text, answers, and correct answer."
+              : "Create a new question with multiple choice answers."}
+          </DialogDescription>
         </DialogHeader>
+        
         <div className="space-y-6 py-4">
-          <div className="space-y-2">
-            <Label>Question Text</Label>
+          <div className="space-y-3">
+            <Label className="text-base font-semibold">Question Text</Label>
             <Textarea 
               value={text} 
               onChange={(e) => setText(e.target.value)} 
-              className="min-h-[100px]"
+              placeholder="Enter the question..."
+              className="min-h-[120px] text-base resize-none"
+              data-testid="input-question-text"
             />
           </div>
 
           <div className="space-y-4">
-            <Label>Answers</Label>
-            {Object.keys(answers).sort().map((key) => (
-              <div key={key} className="flex gap-4 items-center">
-                <div className="w-8 font-bold text-center">{key}</div>
-                <Input 
-                  value={answers[key]} 
-                  onChange={(e) => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
-                />
-              </div>
-            ))}
+            <div className="flex items-center justify-between">
+              <Label className="text-base font-semibold">Answer Options</Label>
+              <Badge variant="secondary" className="text-xs">
+                {answerKeys.length} options
+              </Badge>
+            </div>
+            
+            <div className="space-y-3">
+              {answerKeys.map((key) => (
+                <Card 
+                  key={key} 
+                  className={cn(
+                    "p-3 transition-all",
+                    correct === key && "ring-2 ring-green-500 bg-green-50/50 dark:bg-green-900/20"
+                  )}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-2 pt-2">
+                      <GripVertical className="w-4 h-4 text-muted-foreground/40" />
+                      <div 
+                        className={cn(
+                          "w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all cursor-pointer",
+                          correct === key 
+                            ? "bg-green-500 text-white border-green-500" 
+                            : "border-muted-foreground/30 text-muted-foreground hover:border-green-500 hover:text-green-500"
+                        )}
+                        onClick={() => setCorrect(key)}
+                        title="Click to set as correct answer"
+                        data-testid={`button-correct-${key}`}
+                      >
+                        {correct === key ? <Check className="w-4 h-4" /> : key}
+                      </div>
+                    </div>
+                    
+                    <div className="flex-1">
+                      <Input 
+                        value={answers[key]} 
+                        onChange={(e) => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
+                        placeholder={`Answer option ${key}...`}
+                        className="text-base"
+                        data-testid={`input-answer-${key}`}
+                      />
+                    </div>
+                    
+                    {canRemove && (
+                      <Button 
+                        variant="ghost" 
+                        size="icon"
+                        className="h-9 w-9 text-muted-foreground hover:text-destructive"
+                        onClick={() => handleRemoveAnswer(key)}
+                        data-testid={`button-remove-${key}`}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
+                  
+                  {correct === key && (
+                    <div className="mt-2 ml-14 text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                      <Check className="w-3 h-3" /> Correct Answer
+                    </div>
+                  )}
+                </Card>
+              ))}
+            </div>
+
+            {canAddMore && (
+              <Button 
+                variant="outline" 
+                className="w-full border-dashed"
+                onClick={handleAddAnswer}
+                data-testid="button-add-answer"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Answer Option
+              </Button>
+            )}
           </div>
 
-          <div className="space-y-2">
-            <Label>Correct Answer</Label>
-            <Select value={correct} onValueChange={setCorrect}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.keys(answers).sort().map((key) => (
-                  <SelectItem key={key} value={key}>{key}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {!isValid && (
+            <div className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg">
+              <AlertCircle className="w-4 h-4" />
+              <span>Fill in the question and all answer options to save.</span>
+            </div>
+          )}
         </div>
-        <div className="flex justify-end gap-3">
-          <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={handleSave} disabled={isPending}>
-            {isPending ? "Saving..." : "Save Changes"}
+        
+        <div className="flex justify-end gap-3 pt-4 border-t">
+          <Button variant="outline" onClick={() => setOpen(false)} data-testid="button-cancel-edit">
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleSave} 
+            disabled={isPending || !isValid}
+            className="min-w-[120px]"
+            data-testid="button-save-question"
+          >
+            {isPending ? "Saving..." : mode === "edit" ? "Save Changes" : "Create Question"}
           </Button>
         </div>
       </DialogContent>

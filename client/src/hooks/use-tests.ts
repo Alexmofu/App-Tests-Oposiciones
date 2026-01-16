@@ -67,6 +67,29 @@ export function useImportTest() {
 
 // === QUESTIONS ===
 
+export function useCreateQuestion() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (question: { testId: string; questionText: string; answers: Record<string, string>; correctAnswer: string; category?: string }) => {
+      const res = await fetch(api.questions.create.path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(question),
+      });
+      if (!res.ok) throw new Error("Failed to create question");
+      return api.questions.create.responses[201].parse(await res.json());
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [api.tests.get.path] });
+      queryClient.invalidateQueries({ queryKey: [api.tests.list.path] });
+      toast({ title: "Question Created" });
+    },
+    onError: () => toast({ title: "Create Failed", variant: "destructive" }),
+  });
+}
+
 export function useUpdateQuestion() {
   const queryClient = useQueryClient();
   const { toast } = useToast();

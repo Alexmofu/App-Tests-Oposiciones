@@ -16,6 +16,7 @@ export interface IStorage {
   getTests(): Promise<{ id: string; count: number; category: string | null }[]>;
   getQuestionsByTestId(testId: string): Promise<Question[]>;
   createQuestions(questionsList: InsertQuestion[]): Promise<void>;
+  createQuestion(question: InsertQuestion): Promise<Question>;
   updateQuestion(id: number, question: Partial<InsertQuestion>): Promise<Question | undefined>;
   deleteQuestion(id: number): Promise<void>;
   
@@ -52,6 +53,11 @@ export class DatabaseStorage implements IStorage {
   async createQuestions(questionsList: InsertQuestion[]): Promise<void> {
     if (questionsList.length === 0) return;
     await db.insert(questions).values(questionsList);
+  }
+
+  async createQuestion(question: InsertQuestion): Promise<Question> {
+    const [created] = await db.insert(questions).values(question).returning();
+    return created;
   }
 
   async updateQuestion(id: number, update: Partial<InsertQuestion>): Promise<Question | undefined> {
