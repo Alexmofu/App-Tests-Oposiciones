@@ -1,0 +1,50 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "com.opostest.pro",
+  "productName": "OposTest Pro",
+  "directories": {
+    "output": "release",
+    "buildResources": "build-resources"
+  },
+  "files": [
+    "dist-electron/**/*",
+    "electron-dist/**/*"
+  ],
+  "extraResources": [
+    {
+      "from": "node_modules/better-sqlite3/build/Release/better_sqlite3.node",
+      "to": "better_sqlite3.node"
+    }
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "build-resources/icon.ico",
+    "artifactName": "${productName}-${version}-Setup.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "installerIcon": "build-resources/icon.ico",
+    "uninstallerIcon": "build-resources/icon.ico",
+    "installerHeaderIcon": "build-resources/icon.ico",
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "OposTest Pro"
+  },
+  "linux": {
+    "target": ["AppImage", "deb"],
+    "icon": "build-resources/icon.png",
+    "category": "Education"
+  },
+  "mac": {
+    "target": ["dmg"],
+    "icon": "build-resources/icon.icns",
+    "category": "public.app-category.education"
+  }
+}

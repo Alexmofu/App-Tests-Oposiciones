@@ -126,3 +126,20 @@ The application is configured as a PWA for installation on Windows, Android, and
 ### Configuration API
 - **Endpoint**: `GET /api/config` returns app configuration
 - **Config file**: `server/config.ts` reads from environment variables with defaults
+
+### Electron Desktop Build (feature/electron-desktop branch)
+The application can be built as a standalone Windows desktop app that works 100% offline:
+- **Branch**: `feature/electron-desktop`
+- **Database**: SQLite (local file in AppData)
+- **Documentation**: See `ELECTRON.md` for build instructions
+- **Key Files**:
+  - `electron/main.ts` - Main Electron process with IPC handlers
+  - `electron/preload.ts` - Bridge between renderer and main process
+  - `server/db-sqlite.ts` - SQLite database initialization
+  - `server/storage-sqlite.ts` - SQLite storage implementation
+  - `shared/schema-sqlite.ts` - Drizzle schema for SQLite
+  - `script/build-electron.ts` - Build script for Electron
+  - `electron-builder.json` - Windows installer configuration
+- **Build Commands**:
+  - `tsx script/build-electron.ts` - Build the app
+  - `npx electron-builder --win` - Create Windows installer
