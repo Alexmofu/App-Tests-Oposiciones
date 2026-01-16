@@ -179,7 +179,36 @@ Presiona `Ctrl + C` para detener la aplicación.
 
 ---
 
-## Paso 11: Configurar como Servicio (systemd)
+## Paso 11: Configurar como Servicio
+
+Tienes dos opciones para ejecutar la aplicación como servicio: **PM2** (más fácil) o **systemd** (más robusto).
+
+### Opción A: Usar PM2 (Recomendado para principiantes)
+
+PM2 es un gestor de procesos fácil de usar:
+
+```bash
+# Instalar PM2 globalmente
+sudo npm install -g pm2
+
+# Iniciar la aplicación
+cd /var/www/opostest
+pm2 start dist/index.cjs --name opostest
+
+# Configurar para que inicie automáticamente al reiniciar el servidor
+pm2 startup
+pm2 save
+
+# Comandos útiles:
+pm2 status              # Ver estado
+pm2 logs opostest       # Ver logs en tiempo real
+pm2 restart opostest    # Reiniciar aplicación
+pm2 stop opostest       # Detener aplicación
+```
+
+> **Nota**: La aplicación ya carga automáticamente el archivo `.env` al iniciar. No necesitas configuración adicional.
+
+### Opción B: Usar systemd (Más robusto)
 
 Para que la aplicación se ejecute automáticamente al iniciar el servidor:
 
@@ -366,6 +395,14 @@ psql -U opostest -d opostest -h localhost
 1. Verifica que `DATABASE_URL` en `.env` es correcta
 2. Verifica que PostgreSQL está corriendo: `sudo systemctl status postgresql`
 3. Verifica el usuario y contraseña de PostgreSQL
+
+### Error: DATABASE_URL must be set
+Este error normalmente indica que la aplicación no encuentra el archivo `.env`. Verifica que:
+1. El archivo `.env` existe en la raíz del proyecto (`/var/www/opostest/.env`)
+2. El archivo tiene la variable `DATABASE_URL` configurada
+3. Si usas PM2, simplemente reinicia: `pm2 restart opostest`
+
+> **Nota técnica**: La aplicación carga automáticamente dotenv al inicio del bundle de producción, por lo que no necesitas exportar las variables manualmente.
 
 ### Puerto 5000 ya en uso
 Cambia el puerto en `.env`:
