@@ -2,107 +2,243 @@ import { useTests, useTest, useDeleteQuestion } from "@/hooks/use-tests";
 import { Link } from "wouter";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { EditQuestionDialog } from "@/components/EditQuestionDialog";
-import { ArrowLeft, Trash2, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Trash2, Plus, FileText, Search, BookOpen, Check, X } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Admin() {
   const { data: tests } = useTests();
   const [selectedTestId, setSelectedTestId] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
   
   const { data: questions, isLoading } = useTest(selectedTestId);
   const { mutate: deleteQuestion } = useDeleteQuestion();
 
+  const filteredQuestions = questions?.filter(q => 
+    q.questionText.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const selectedTest = tests?.find(t => t.id === selectedTestId);
+
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <header className="flex items-center gap-4">
+    <div className="min-h-screen bg-muted/30">
+      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur-md border-b">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center gap-4">
           <Link href="/">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" data-testid="button-back-home">
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
-          <h1 className="text-3xl font-display font-bold">Admin Dashboard</h1>
-        </header>
+          <div className="flex-1">
+            <h1 className="text-xl font-display font-bold">Question Manager</h1>
+            <p className="text-sm text-muted-foreground hidden md:block">Create, edit, and organize your test questions</p>
+          </div>
+        </div>
+      </header>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Manage Questions</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="w-full md:w-1/3">
-              <Select value={selectedTestId} onValueChange={setSelectedTestId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a test to edit" />
-                </SelectTrigger>
-                <SelectContent>
-                  {tests?.map(test => (
-                    <SelectItem key={test.id} value={test.id}>{test.id}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+      <main className="max-w-7xl mx-auto px-4 md:px-6 py-6 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-1 space-y-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  Select Test
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Select value={selectedTestId} onValueChange={setSelectedTestId}>
+                  <SelectTrigger data-testid="select-test">
+                    <SelectValue placeholder="Choose a test..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {tests?.map(test => (
+                      <SelectItem key={test.id} value={test.id}>
+                        <div className="flex items-center gap-2">
+                          <span className="truncate max-w-[180px]">{test.id.replace('.json', '')}</span>
+                          <Badge variant="secondary" className="ml-auto text-xs">{test.count}</Badge>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </CardContent>
+            </Card>
 
-            {selectedTestId && (
-              <div className="border rounded-md">
-                {isLoading ? (
-                  <div className="p-8 text-center text-muted-foreground">Loading questions...</div>
-                ) : (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-[50px]">ID</TableHead>
-                        <TableHead>Question</TableHead>
-                        <TableHead className="w-[100px] text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {questions?.map((q) => (
-                        <TableRow key={q.id}>
-                          <TableCell className="font-mono text-xs text-muted-foreground">{q.id}</TableCell>
-                          <TableCell className="font-medium line-clamp-2 max-w-xl">
-                            {q.questionText}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex justify-end gap-2">
-                              <EditQuestionDialog question={q} />
-                              
-                              <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50">
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                  <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      This action cannot be undone. This will permanently delete this question from the database.
-                                    </AlertDialogDescription>
-                                  </AlertDialogHeader>
-                                  <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={() => deleteQuestion(q.id)} className="bg-destructive hover:bg-destructive/90">
-                                      Delete
-                                    </AlertDialogAction>
-                                  </AlertDialogFooter>
-                                </AlertDialogContent>
-                              </AlertDialog>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )}
-              </div>
+            {selectedTest && (
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <BookOpen className="w-4 h-4" />
+                    Test Info
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-muted-foreground">Questions</span>
+                    <span className="font-medium">{selectedTest.count}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-muted-foreground">Category</span>
+                    <span className="font-medium">{selectedTest.category || "General"}</span>
+                  </div>
+                </CardContent>
+              </Card>
             )}
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+
+          <div className="lg:col-span-3">
+            {!selectedTestId ? (
+              <Card className="h-[400px] flex items-center justify-center">
+                <div className="text-center space-y-3 p-8">
+                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto">
+                    <FileText className="w-8 h-8 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-lg font-semibold">No Test Selected</h3>
+                  <p className="text-muted-foreground text-sm max-w-xs">
+                    Choose a test from the sidebar to view and manage its questions.
+                  </p>
+                </div>
+              </Card>
+            ) : (
+              <Card className="overflow-hidden">
+                <CardHeader className="border-b bg-card">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                      <CardTitle className="text-lg">{selectedTestId.replace('.json', '')}</CardTitle>
+                      <CardDescription>{filteredQuestions?.length || 0} questions</CardDescription>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input 
+                          placeholder="Search questions..." 
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="pl-9 w-[200px]"
+                          data-testid="input-search-questions"
+                        />
+                      </div>
+                      <EditQuestionDialog 
+                        mode="create" 
+                        testId={selectedTestId}
+                        trigger={
+                          <Button size="sm" data-testid="button-add-new-question">
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add Question
+                          </Button>
+                        }
+                      />
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  {isLoading ? (
+                    <div className="p-8 text-center">
+                      <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                      <p className="text-sm text-muted-foreground mt-3">Loading questions...</p>
+                    </div>
+                  ) : filteredQuestions?.length === 0 ? (
+                    <div className="p-8 text-center">
+                      <p className="text-muted-foreground">
+                        {searchQuery ? "No questions match your search." : "No questions in this test yet."}
+                      </p>
+                    </div>
+                  ) : (
+                    <ScrollArea className="h-[calc(100vh-320px)]">
+                      <div className="divide-y">
+                        <AnimatePresence mode="popLayout">
+                          {filteredQuestions?.map((q, index) => (
+                            <motion.div
+                              key={q.id}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, x: -20 }}
+                              transition={{ duration: 0.2, delay: index * 0.02 }}
+                              className="p-4 hover:bg-muted/50 transition-colors group"
+                            >
+                              <div className="flex items-start gap-4">
+                                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
+                                  {index + 1}
+                                </div>
+                                
+                                <div className="flex-1 min-w-0 space-y-3">
+                                  <p className="text-sm font-medium leading-relaxed line-clamp-3" data-testid={`text-question-${q.id}`}>
+                                    {q.questionText}
+                                  </p>
+                                  
+                                  <div className="flex flex-wrap gap-2">
+                                    {Object.entries(q.answers as Record<string, string>).sort().map(([key, value]) => (
+                                      <Badge 
+                                        key={key}
+                                        variant={key === q.correctAnswer ? "default" : "outline"}
+                                        className={cn(
+                                          "text-xs font-normal max-w-[200px] truncate",
+                                          key === q.correctAnswer && "bg-green-500 hover:bg-green-600"
+                                        )}
+                                      >
+                                        {key === q.correctAnswer && <Check className="w-3 h-3 mr-1" />}
+                                        <span className="font-semibold mr-1">{key}:</span>
+                                        <span className="truncate">{value}</span>
+                                      </Badge>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <EditQuestionDialog question={q} mode="edit" />
+                                  
+                                  <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                      <Button 
+                                        variant="ghost" 
+                                        size="sm" 
+                                        className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                                        data-testid={`button-delete-${q.id}`}
+                                      >
+                                        <Trash2 className="h-4 w-4" />
+                                      </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle>Delete Question?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                          This action cannot be undone. The question will be permanently removed from this test.
+                                        </AlertDialogDescription>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction 
+                                          onClick={() => deleteQuestion(q.id)} 
+                                          className="bg-destructive hover:bg-destructive/90"
+                                          data-testid={`button-confirm-delete-${q.id}`}
+                                        >
+                                          Delete
+                                        </AlertDialogAction>
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </AnimatePresence>
+                      </div>
+                    </ScrollArea>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

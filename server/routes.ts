@@ -87,6 +87,17 @@ export async function registerRoutes(
   });
 
   // === Questions ===
+  app.post(api.questions.create.path, async (req, res) => {
+    try {
+      const input = api.questions.create.input.parse(req.body);
+      const question = await storage.createQuestion(input);
+      res.status(201).json(question);
+    } catch (err) {
+      console.error("Create question error:", err);
+      res.status(400).json({ message: "Validation error" });
+    }
+  });
+
   app.put(api.questions.update.path, async (req, res) => {
     try {
       const id = Number(req.params.id);
