@@ -12,7 +12,7 @@ async function buildElectron() {
   console.log("\n2. Building Electron main process...");
   await esbuild.build({
     entryPoints: ["electron/main.ts"],
-    outfile: "electron-dist/main.js",
+    outfile: "electron-dist/main.cjs",
     bundle: true,
     platform: "node",
     target: "node18",
@@ -29,7 +29,7 @@ async function buildElectron() {
   console.log("\n3. Building Electron preload script...");
   await esbuild.build({
     entryPoints: ["electron/preload.ts"],
-    outfile: "electron-dist/preload.js",
+    outfile: "electron-dist/preload.cjs",
     bundle: true,
     platform: "node",
     target: "node18",
@@ -42,7 +42,7 @@ async function buildElectron() {
   const electronPkg = {
     name: pkg.name,
     version: pkg.version,
-    main: "electron-dist/main.js",
+    main: "electron-dist/main.cjs",
     author: pkg.author || "OposTest Team",
     description: "Plataforma de práctica para oposiciones españolas",
     dependencies: {
