@@ -81,8 +81,9 @@ export function useCreateQuestion() {
       if (!res.ok) throw new Error("Failed to create question");
       return api.questions.create.responses[201].parse(await res.json());
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [api.tests.get.path] });
+    onSuccess: (data) => {
+      // Invalidate both the specific test query and test list
+      queryClient.invalidateQueries({ queryKey: [api.tests.get.path, data.testId] });
       queryClient.invalidateQueries({ queryKey: [api.tests.list.path] });
       toast({ title: "Question Created" });
     },
@@ -105,9 +106,9 @@ export function useUpdateQuestion() {
       if (!res.ok) throw new Error("Failed to update question");
       return api.questions.update.responses[200].parse(await res.json());
     },
-    onSuccess: (_, variables) => {
-      // Invalidate specific test queries might be hard without testId, so invalidate all specific tests for now or pass testId
-      queryClient.invalidateQueries({ queryKey: [api.tests.get.path] });
+    onSuccess: (data) => {
+      // Invalidate the specific test query using testId from the response
+      queryClient.invalidateQueries({ queryKey: [api.tests.get.path, data.testId] });
       toast({ title: "Question Updated" });
     },
     onError: () => toast({ title: "Update Failed", variant: "destructive" }),
