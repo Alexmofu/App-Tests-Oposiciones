@@ -133,6 +133,58 @@ export function useDeleteQuestion() {
   });
 }
 
+// === TEST MANAGEMENT ===
+export function useDeleteTest() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async (testId: string) => {
+      const url = buildUrl(api.tests.delete.path, { id: testId });
+      const res = await fetch(url, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete test");
+      return testId;
+    },
+    onSuccess: (deletedTestId) => {
+      // Invalidate the test list
+      queryClient.invalidateQueries({ queryKey: [api.tests.list.path] });
+      // Also invalidate the specific test query if it was cached
+      queryClient.invalidateQueries({ queryKey: [api.tests.get.path, deletedTestId] });
+      toast({ title: "Test Eliminado" });
+    },
+    onError: () => toast({ title: "Error al Eliminar", variant: "destructive" }),
+  });
+}
+
+export function useRenameTest() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async ({ testId, newName }: { testId: string; newName: string }) => {
+      const url = buildUrl(api.tests.rename.path, { id: testId });
+      const res = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ newName }),
+      });
+      if (!res.ok) throw new Error("Failed to rename test");
+      const result = api.tests.rename.responses[200].parse(await res.json());
+      return { oldTestId: testId, ...result };
+    },
+    onSuccess: (data) => {
+      // Invalidate the test list to show the new name
+      queryClient.invalidateQueries({ queryKey: [api.tests.list.path] });
+      // Invalidate the old test ID query
+      queryClient.invalidateQueries({ queryKey: [api.tests.get.path, data.oldTestId] });
+      // Also invalidate any query for the new test ID
+      queryClient.invalidateQueries({ queryKey: [api.tests.get.path, data.newId] });
+      toast({ title: "Test Renombrado" });
+    },
+    onError: () => toast({ title: "Error al Renombrar", variant: "destructive" }),
+  });
+}
+
 // === REMOTE ===
 
 export function useRemoteTests(url: string | null) {

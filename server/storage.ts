@@ -19,6 +19,8 @@ export interface IStorage {
   createQuestion(question: InsertQuestion): Promise<Question>;
   updateQuestion(id: number, question: Partial<InsertQuestion>): Promise<Question | undefined>;
   deleteQuestion(id: number): Promise<void>;
+  deleteTest(testId: string): Promise<void>;
+  renameTest(oldTestId: string, newTestId: string): Promise<void>;
   
   // Results
   getResults(): Promise<Result[]>;
@@ -71,6 +73,16 @@ export class DatabaseStorage implements IStorage {
 
   async deleteQuestion(id: number): Promise<void> {
     await db.delete(questions).where(eq(questions.id, id));
+  }
+
+  async deleteTest(testId: string): Promise<void> {
+    await db.delete(questions).where(eq(questions.testId, testId));
+  }
+
+  async renameTest(oldTestId: string, newTestId: string): Promise<void> {
+    await db.update(questions)
+      .set({ testId: newTestId })
+      .where(eq(questions.testId, oldTestId));
   }
 
   async getResults(): Promise<Result[]> {

@@ -47,6 +47,26 @@ export const api = {
         404: errorSchemas.notFound,
       },
     },
+    delete: {
+      method: 'DELETE' as const,
+      path: '/api/tests/:id',
+      responses: {
+        204: z.void(),
+        404: errorSchemas.notFound,
+      },
+    },
+    rename: {
+      method: 'PUT' as const,
+      path: '/api/tests/:id/rename',
+      input: z.object({
+        newName: z.string().min(1),
+      }),
+      responses: {
+        200: z.object({ success: z.boolean(), newId: z.string() }),
+        400: errorSchemas.validation,
+        404: errorSchemas.notFound,
+      },
+    },
   },
   questions: {
     create: {

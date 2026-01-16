@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link } from "wouter";
-import { useTests, useRemoteTests, useFetchRemoteTest } from "@/hooks/use-tests";
+import { Link, useLocation } from "wouter";
+import { useTests, useRemoteTests, useFetchRemoteTest, useDeleteTest, useRenameTest } from "@/hooks/use-tests";
 import { ImportDialog } from "@/components/ImportDialog";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -8,22 +8,96 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Globe, RefreshCw, BarChart3, ChevronRight, Server } from "lucide-react";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { FileText, Globe, RefreshCw, BarChart3, ChevronRight, Server, Trash2, Pencil, Edit3 } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Home() {
   const { data: tests, isLoading: loadingTests } = useTests();
   const [remoteUrl, setRemoteUrl] = useState("");
   const [connectUrl, setConnectUrl] = useState("");
+  const [, navigate] = useLocation();
   
   const { data: remoteFiles, isLoading: loadingRemote, refetch: refetchRemote } = useRemoteTests(connectUrl || null);
   const { mutate: fetchRemote, isPending: isDownloading } = useFetchRemoteTest();
+  const { mutate: deleteTest, isPending: isDeleting } = useDeleteTest();
+  const { mutate: renameTest, isPending: isRenaming } = useRenameTest();
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
+  const [selectedTest, setSelectedTest] = useState<string | null>(null);
+  const [newTestName, setNewTestName] = useState("");
 
   const handleConnect = () => {
     if (!remoteUrl) return;
     let url = remoteUrl;
     if (!url.startsWith("http")) url = `http://${url}`;
     setConnectUrl(url);
+  };
+
+  const handleDeleteClick = (testId: string) => {
+    setSelectedTest(testId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleRenameClick = (testId: string) => {
+    setSelectedTest(testId);
+    setNewTestName(testId.replace('.json', ''));
+    setRenameDialogOpen(true);
+  };
+
+  const handleEditClick = (testId: string) => {
+    navigate(`/admin?test=${encodeURIComponent(testId)}`);
+  };
+
+  const confirmDelete = () => {
+    if (selectedTest) {
+      deleteTest(selectedTest, {
+        onSuccess: () => {
+          setDeleteDialogOpen(false);
+          setSelectedTest(null);
+        },
+      });
+    }
+  };
+
+  const confirmRename = () => {
+    if (selectedTest && newTestName.trim()) {
+      renameTest(
+        { testId: selectedTest, newName: newTestName.trim() },
+        {
+          onSuccess: () => {
+            setRenameDialogOpen(false);
+            setSelectedTest(null);
+            setNewTestName("");
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -83,30 +157,70 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <Link href={`/test/${test.id}`} className="group block h-full">
-                      <Card className="h-full hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden relative">
-                        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <CardHeader>
-                          <div className="flex justify-between items-start mb-2">
-                            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                              <FileText className="w-5 h-5" />
+                    <ContextMenu>
+                      <ContextMenuTrigger asChild>
+                        <Link href={`/test/${test.id}`} className="group block h-full" data-testid={`link-test-${test.id}`}>
+                          <Card className="h-full hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden relative">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <CardHeader>
+                              <div className="flex justify-between items-start mb-2">
+                                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                                  <FileText className="w-5 h-5" />
+                                </div>
+                                <Badge variant="secondary" className="font-mono text-xs">
+                                  {test.count} Preg.
+                                </Badge>
+                              </div>
+                              <CardTitle className="line-clamp-2 text-lg group-hover:text-primary transition-colors">
+                                {test.id.replace('.json', '')}
+                              </CardTitle>
+                              <CardDescription className="line-clamp-1">
+                                {test.category || "Categoría General"}
+                              </CardDescription>
+                            </CardHeader>
+                            <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
+                              <ChevronRight className="w-5 h-5 text-primary" />
                             </div>
-                            <Badge variant="secondary" className="font-mono text-xs">
-                              {test.count} Preg.
-                            </Badge>
-                          </div>
-                          <CardTitle className="line-clamp-2 text-lg group-hover:text-primary transition-colors">
-                            {test.id.replace('.json', '')}
-                          </CardTitle>
-                          <CardDescription className="line-clamp-1">
-                            {test.category || "Categoría General"}
-                          </CardDescription>
-                        </CardHeader>
-                        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
-                          <ChevronRight className="w-5 h-5 text-primary" />
-                        </div>
-                      </Card>
-                    </Link>
+                          </Card>
+                        </Link>
+                      </ContextMenuTrigger>
+                      <ContextMenuContent className="w-48">
+                        <ContextMenuItem
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleEditClick(test.id);
+                          }}
+                          className="cursor-pointer"
+                          data-testid={`menu-edit-${test.id}`}
+                        >
+                          <Pencil className="w-4 h-4 mr-2" />
+                          Editar
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleRenameClick(test.id);
+                          }}
+                          className="cursor-pointer"
+                          data-testid={`menu-rename-${test.id}`}
+                        >
+                          <Edit3 className="w-4 h-4 mr-2" />
+                          Cambiar nombre
+                        </ContextMenuItem>
+                        <ContextMenuSeparator />
+                        <ContextMenuItem
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeleteClick(test.id);
+                          }}
+                          className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
+                          data-testid={`menu-delete-${test.id}`}
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Eliminar
+                        </ContextMenuItem>
+                      </ContextMenuContent>
+                    </ContextMenu>
                   </motion.div>
                 ))}
               </div>
@@ -132,8 +246,9 @@ export default function Home() {
                       value={remoteUrl}
                       onChange={(e) => setRemoteUrl(e.target.value)}
                       className="font-mono text-sm"
+                      data-testid="input-remote-url"
                     />
-                    <Button size="icon" onClick={handleConnect} disabled={!remoteUrl}>
+                    <Button size="icon" onClick={handleConnect} disabled={!remoteUrl} data-testid="button-connect">
                       <Server className="w-4 h-4" />
                     </Button>
                   </div>
@@ -143,7 +258,7 @@ export default function Home() {
                   <div className="pt-4 border-t space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-muted-foreground">Archivos Disponibles</span>
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => refetchRemote()}>
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => refetchRemote()} data-testid="button-refresh-remote">
                         <RefreshCw className={`w-3 h-3 ${loadingRemote ? 'animate-spin' : ''}`} />
                       </Button>
                     </div>
@@ -166,6 +281,7 @@ export default function Home() {
                               className="text-primary hover:text-primary hover:bg-primary/10 h-7"
                               disabled={isDownloading}
                               onClick={() => fetchRemote({ url: connectUrl, filename: file })}
+                              data-testid={`button-download-${file}`}
                             >
                               Descargar
                             </Button>
@@ -179,13 +295,75 @@ export default function Home() {
             </Card>
             
             <Link href="/admin">
-              <Button variant="ghost" className="w-full text-muted-foreground hover:text-foreground">
+              <Button variant="ghost" className="w-full text-muted-foreground hover:text-foreground" data-testid="link-admin">
                 Ir al Panel de Administración
               </Button>
             </Link>
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar Test?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción eliminará permanentemente el test "{selectedTest?.replace('.json', '')}" y todas sus preguntas. Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting} data-testid="button-cancel-delete">
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              disabled={isDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              data-testid="button-confirm-delete"
+            >
+              {isDeleting ? "Eliminando..." : "Eliminar"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Rename Dialog */}
+      <Dialog open={renameDialogOpen} onOpenChange={setRenameDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Cambiar Nombre</DialogTitle>
+            <DialogDescription>
+              Introduce el nuevo nombre para el test.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="newName">Nuevo nombre</Label>
+              <Input
+                id="newName"
+                value={newTestName}
+                onChange={(e) => setNewTestName(e.target.value)}
+                placeholder="Nombre del test"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newTestName.trim()) {
+                    confirmRename();
+                  }
+                }}
+                data-testid="input-new-test-name"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRenameDialogOpen(false)} disabled={isRenaming} data-testid="button-cancel-rename">
+              Cancelar
+            </Button>
+            <Button onClick={confirmRename} disabled={isRenaming || !newTestName.trim()} data-testid="button-confirm-rename">
+              {isRenaming ? "Guardando..." : "Guardar"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

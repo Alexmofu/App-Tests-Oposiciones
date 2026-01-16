@@ -60,6 +60,28 @@ export async function registerRoutes(
     res.json(questions);
   });
 
+  app.delete(api.tests.delete.path, async (req, res) => {
+    const testId = req.params.id;
+    await storage.deleteTest(testId);
+    res.status(204).send();
+  });
+
+  app.put(api.tests.rename.path, async (req, res) => {
+    try {
+      const oldTestId = req.params.id;
+      const { newName } = api.tests.rename.input.parse(req.body);
+      
+      // Add .json extension if not present
+      const newTestId = newName.endsWith('.json') ? newName : `${newName}.json`;
+      
+      await storage.renameTest(oldTestId, newTestId);
+      res.json({ success: true, newId: newTestId });
+    } catch (err) {
+      console.error("Rename error:", err);
+      res.status(400).json({ message: "Invalid data" });
+    }
+  });
+
   app.post(api.tests.import.path, async (req, res) => {
     try {
       const input = api.tests.import.input.parse(req.body);
