@@ -51,6 +51,10 @@ async function buildElectron() {
     main: "main.cjs",
     author: pkg.author || "OposTest Team",
     description: "Plataforma de práctica para oposiciones españolas",
+    dependencies: {
+      "better-sqlite3": pkg.dependencies["better-sqlite3"] || "^9.0.0",
+      "bcryptjs": pkg.dependencies["bcryptjs"] || "^2.4.3",
+    },
   };
   fs.writeFileSync("electron-app/package.json", JSON.stringify(electronPkg, null, 2));
 
@@ -60,7 +64,9 @@ async function buildElectron() {
   console.log("  - preload.cjs (script de preload)");
   console.log("  - renderer/ (frontend)");
   console.log("  - package.json");
-  console.log("\nPara empaquetar para Windows, ejecuta:");
+  console.log("\n⚠️  IMPORTANTE: Antes de empaquetar, ejecuta:");
+  console.log("  cd electron-app && npm install && cd ..");
+  console.log("\nLuego empaqueta para Windows:");
   console.log("  npx electron-builder --win --config electron-builder.json");
 }
 

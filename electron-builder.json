@@ -11,12 +11,6 @@
   "files": [
     "**/*"
   ],
-  "extraResources": [
-    {
-      "from": "node_modules/better-sqlite3/build/Release/better_sqlite3.node",
-      "to": "better_sqlite3.node"
-    }
-  ],
   "win": {
     "target": [
       {
@@ -28,18 +22,14 @@
     "artifactName": "${productName}-${version}-Setup.${ext}"
   },
   "nsis": {
-    "oneClick": false,
+    "oneClick": true,
     "perMachine": false,
-    "allowToChangeInstallationDirectory": true,
-    "installerIcon": "build-resources/icon.ico",
-    "uninstallerIcon": "build-resources/icon.ico",
-    "installerHeaderIcon": "build-resources/icon.ico",
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
     "shortcutName": "OposTest Pro"
   },
   "linux": {
-    "target": ["AppImage", "deb"],
+    "target": ["AppImage"],
     "icon": "build-resources/icon.png",
     "category": "Education"
   },
