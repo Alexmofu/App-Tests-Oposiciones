@@ -36,7 +36,7 @@ function createWindow() {
     mainWindow.loadURL("http://localhost:5000");
     mainWindow.webContents.openDevTools();
   } else {
-    const indexPath = path.join(appPath, "dist-electron", "index.html");
+    const indexPath = path.join(appPath.replace("app.asar", "app.asar.unpacked"), "dist-electron", "index.html");
     console.log("Loading:", indexPath);
     mainWindow.loadFile(indexPath);
   }

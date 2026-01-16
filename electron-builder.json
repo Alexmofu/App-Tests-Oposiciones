@@ -10,6 +10,9 @@
     "dist-electron/**/*",
     "electron-dist/**/*"
   ],
+  "asarUnpack": [
+    "dist-electron/**/*"
+  ],
   "extraResources": [
     {
       "from": "node_modules/better-sqlite3/build/Release/better_sqlite3.node",
