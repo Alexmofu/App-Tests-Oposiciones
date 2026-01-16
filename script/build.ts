@@ -53,7 +53,7 @@ async function buildAll() {
     format: "cjs",
     outfile: "dist/index.cjs",
     banner: {
-      js: 'require("dotenv").config();',
+      js: 'require("dotenv").config({ path: require("path").resolve(__dirname, "..", ".env") });',
     },
     define: {
       "process.env.NODE_ENV": '"production"',

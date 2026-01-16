@@ -191,9 +191,8 @@ PM2 es un gestor de procesos fácil de usar:
 # Instalar PM2 globalmente
 sudo npm install -g pm2
 
-# Iniciar la aplicación
-cd /var/www/opostest
-pm2 start dist/index.cjs --name opostest
+# Iniciar la aplicación (IMPORTANTE: usar --cwd para establecer el directorio correcto)
+pm2 start /var/www/opostest/dist/index.cjs --name opostest --cwd /var/www/opostest
 
 # Configurar para que inicie automáticamente al reiniciar el servidor
 pm2 startup
@@ -204,9 +203,10 @@ pm2 status              # Ver estado
 pm2 logs opostest       # Ver logs en tiempo real
 pm2 restart opostest    # Reiniciar aplicación
 pm2 stop opostest       # Detener aplicación
+pm2 delete opostest     # Eliminar y volver a crear si hay problemas
 ```
 
-> **Nota**: La aplicación ya carga automáticamente el archivo `.env` al iniciar. No necesitas configuración adicional.
+> **Importante**: Usa siempre `--cwd /var/www/opostest` para que PM2 ejecute la aplicación desde el directorio correcto donde está el archivo `.env`.
 
 ### Opción B: Usar systemd (Más robusto)
 
