@@ -352,7 +352,7 @@ export default function TestView() {
       </div>
 
       {/* Footer Nav */}
-      <div className="flex-shrink-0 border-t bg-background/95 backdrop-blur-md py-3 md:py-6 safe-area-pb">
+      <div className="flex-shrink-0 border-t bg-background/95 backdrop-blur-md pt-3 pb-5 md:py-6 safe-area-pb">
         <div className="max-w-4xl mx-auto px-4 md:px-4 flex justify-between items-center gap-4">
           <Button 
             variant="ghost" 
