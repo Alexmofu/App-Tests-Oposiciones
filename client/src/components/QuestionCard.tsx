@@ -56,8 +56,17 @@ export function QuestionCard({
             <motion.button
               key={key}
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
+              animate={{ 
+                opacity: 1, 
+                y: 0,
+                scale: showFeedback && isCorrect ? [1, 1.02, 1] : 1,
+                x: showFeedback && isWrongSelection ? [0, -4, 4, -4, 4, 0] : 0
+              }}
+              transition={{ 
+                delay: index * 0.05,
+                scale: { duration: 0.3, ease: "easeOut" },
+                x: { duration: 0.4, ease: "easeInOut" }
+              }}
               onClick={() => !showFeedback && onSelectAnswer(key)}
               disabled={showFeedback}
               className={cn(
