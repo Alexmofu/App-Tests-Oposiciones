@@ -66,7 +66,7 @@ export default function Results() {
         ) : (
           <>
             {/* Stats Cards - Always visible at top */}
-            <div className="sticky top-0 z-10 bg-background pb-4 -mx-4 px-4 md:static md:mx-0 md:px-0 md:pb-0">
+            <div className="sticky top-0 z-10 bg-background pt-2 pb-4 -mx-4 px-4 md:static md:mx-0 md:px-0 md:pt-0 md:pb-0 border-b md:border-b-0 border-border/50">
               <div className="grid grid-cols-3 gap-2 md:gap-6">
                 <Card className="bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
                   <CardContent className="p-3 md:pt-6 md:p-6 flex flex-col items-center text-center">
