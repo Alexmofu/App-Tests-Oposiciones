@@ -311,18 +311,18 @@ export default function TestView() {
 
   // Test Interface
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="h-[100dvh] bg-background flex flex-col overflow-hidden">
       {/* Top Bar */}
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b">
-        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
-          <Button variant="ghost" size="sm" onClick={handleSaveAndExit} data-testid="button-save-exit">
-            <Save className="w-4 h-4 mr-1" /> Guardar y Salir
+      <div className="flex-shrink-0 z-10 bg-background/80 backdrop-blur-md border-b">
+        <div className="max-w-4xl mx-auto px-3 md:px-4 h-12 md:h-16 flex items-center justify-between gap-2">
+          <Button variant="ghost" size="sm" onClick={handleSaveAndExit} data-testid="button-save-exit" className="px-2 md:px-3">
+            <Save className="w-4 h-4 md:mr-1" /> <span className="hidden md:inline">Guardar y Salir</span>
           </Button>
           <div className="font-mono font-medium text-sm text-muted-foreground">
             {currentIndex + 1} / {activeQuestions.length}
-            <span className="ml-2 text-xs">({answeredCount} respondidas)</span>
+            <span className="hidden sm:inline ml-2 text-xs">({answeredCount} respondidas)</span>
           </div>
-          <Button variant="ghost" size="sm" className="text-muted-foreground" data-testid="button-flag">
+          <Button variant="ghost" size="sm" className="text-muted-foreground px-2" data-testid="button-flag">
             <Flag className="w-4 h-4" />
           </Button>
         </div>
@@ -330,7 +330,7 @@ export default function TestView() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 container max-w-4xl mx-auto px-4 py-8 md:py-12 flex flex-col justify-center min-h-[60vh]">
+      <div className="flex-1 min-h-0 container max-w-4xl mx-auto px-3 md:px-4 py-3 md:py-8 flex flex-col justify-center overflow-y-auto">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuestion.id}
@@ -338,41 +338,44 @@ export default function TestView() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.2 }}
+            className="flex-shrink-0"
           >
             <QuestionCard
               question={currentQuestion}
               selectedAnswer={answers[currentQuestion.id] || null}
               onSelectAnswer={handleAnswer}
               showFeedback={!!answers[currentQuestion.id]}
+              compact
             />
           </motion.div>
         </AnimatePresence>
       </div>
 
       {/* Footer Nav */}
-      <div className="border-t bg-card py-6">
-        <div className="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <div className="flex-shrink-0 border-t bg-card py-3 md:py-6 safe-area-pb">
+        <div className="max-w-4xl mx-auto px-3 md:px-4 flex justify-between items-center gap-2">
           <Button 
             variant="outline" 
             onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
             disabled={currentIndex === 0}
             data-testid="button-previous"
+            size="sm"
+            className="md:size-default"
           >
-            Anterior
+            <ChevronLeft className="w-4 h-4 md:mr-1" /> <span className="hidden md:inline">Anterior</span>
           </Button>
 
           {currentIndex === activeQuestions.length - 1 ? (
-            <Button size="lg" onClick={handleFinish} className="px-8 bg-green-600 hover:bg-green-700" data-testid="button-finish">
-              Finalizar Test
+            <Button onClick={handleFinish} className="px-4 md:px-8 bg-green-600 hover:bg-green-700" data-testid="button-finish">
+              Finalizar
             </Button>
           ) : (
             <Button 
-              size="lg" 
               onClick={() => setCurrentIndex(prev => prev + 1)}
-              className="px-8"
+              className="px-4 md:px-8"
               data-testid="button-next"
             >
-              Siguiente <ChevronRight className="w-4 h-4 ml-2" />
+              Siguiente <ChevronRight className="w-4 h-4 ml-1 md:ml-2" />
             </Button>
           )}
         </div>

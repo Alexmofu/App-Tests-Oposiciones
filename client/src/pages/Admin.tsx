@@ -115,14 +115,14 @@ export default function Admin() {
                       <CardTitle className="text-lg">{selectedTestId.replace('.json', '')}</CardTitle>
                       <CardDescription>{filteredQuestions?.length || 0} preguntas</CardDescription>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
+                    <div className="flex items-center gap-2 md:gap-3 flex-wrap justify-end">
+                      <div className="relative flex-1 min-w-[140px] max-w-[200px]">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                         <Input 
-                          placeholder="Buscar preguntas..." 
+                          placeholder="Buscar..." 
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className="pl-9 w-[200px]"
+                          className="pl-9 w-full"
                           data-testid="input-search-questions"
                         />
                       </div>
@@ -130,9 +130,9 @@ export default function Admin() {
                         mode="create" 
                         testId={selectedTestId}
                         trigger={
-                          <Button size="sm" data-testid="button-add-new-question">
-                            <Plus className="w-4 h-4 mr-2" />
-                            Añadir Pregunta
+                          <Button size="sm" data-testid="button-add-new-question" className="shrink-0">
+                            <Plus className="w-4 h-4 md:mr-2" />
+                            <span className="hidden md:inline">Añadir Pregunta</span>
                           </Button>
                         }
                       />
