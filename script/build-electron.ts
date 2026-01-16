@@ -14,7 +14,7 @@ async function buildElectron() {
 
   console.log("1. Building frontend with Vite...");
   const rendererOutDir = path.resolve(process.cwd(), "electron-app", "renderer");
-  execSync(`npx vite build --outDir "${rendererOutDir}"`, { stdio: "inherit" });
+  execSync(`npx vite build --outDir "${rendererOutDir}" --base ./`, { stdio: "inherit" });
   
   // Verificar que el frontend se generó correctamente
   const indexPath = path.join(rendererOutDir, "index.html");
