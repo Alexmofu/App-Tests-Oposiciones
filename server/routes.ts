@@ -97,7 +97,7 @@ export async function registerRoutes(
     });
   });
 
-  app.get("/api/auth/user", (req, res) => {
+  app.get("/api/auth/me", (req, res) => {
     if (req.isAuthenticated()) {
       res.json({ id: req.user!.id, username: req.user!.username });
     } else {

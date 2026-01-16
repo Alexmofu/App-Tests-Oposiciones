@@ -37,9 +37,11 @@ The backend serves both API routes and static files in production. In developmen
 - **Database**: PostgreSQL
 - **ORM**: Drizzle ORM with Zod integration for type-safe schemas
 - **Schema Location**: `shared/schema.ts` contains table definitions for:
-  - `questions` - Test questions imported from JSON files
-  - `results` - Completed test scores and history
-  - `testAttempts` - In-progress and completed test sessions
+  - `users` - User accounts with bcrypt-hashed passwords
+  - `questions` - Test questions imported from JSON files (linked to userId)
+  - `results` - Completed test scores and history (linked to userId)
+  - `testAttempts` - In-progress and completed test sessions (linked to userId)
+- **Session Storage**: PostgreSQL-backed sessions via `connect-pg-simple` (30-day expiration)
 
 ### Key Design Patterns
 1. **Shared Types**: Schema and route definitions live in `shared/` directory, consumed by both frontend and backend
@@ -47,7 +49,22 @@ The backend serves both API routes and static files in production. In developmen
 3. **Attempt Persistence**: Tests can be paused and resumed via the `testAttempts` table
 4. **Seed Data**: Initial questions are auto-seeded from `attached_assets/` on first run
 
+### Authentication System
+- **Implementation**: Passport.js with LocalStrategy (username/password)
+- **Password Security**: bcrypt with 10 salt rounds
+- **Session Management**: express-session with PostgreSQL store (connect-pg-simple)
+- **Session Duration**: 30-day cookie expiration with httpOnly and secure flags
+- **User Isolation**: All data (tests, results, attempts) filtered by userId
+- **Protected Routes**: All API endpoints (except auth and config) require authentication via `requireAuth` middleware
+- **Auth Endpoints**:
+  - `POST /api/auth/register` - Create new account
+  - `POST /api/auth/login` - Login with username/password
+  - `POST /api/auth/logout` - End session
+  - `GET /api/auth/me` - Get current user
+- **Frontend Auth**: `useAuth` hook manages auth state, redirects to login when unauthenticated
+
 ### Recent Features
+- **User Authentication**: Complete login/register system with persistent sessions
 - **Full Spanish (Spain) UI**: All interface text, toast notifications, and date formatting in Spanish
 - **Context Menu on Tests**: Right-click on test cards in the library to access:
   - "Editar" - Navigate directly to admin panel for that test
@@ -55,6 +72,7 @@ The backend serves both API routes and static files in production. In developmen
   - "Eliminar" - Delete the test with confirmation dialog
 - **Continue Test**: Save progress mid-test and resume from History page
 - **Dynamic Answer Options**: Admin panel supports 2-8 answer options per question
+- **Logout Buttons**: Available in Home header, Admin panel, and mobile navigation
 
 ### PWA (Progressive Web App)
 The application is configured as a PWA for installation on Windows, Android, and other platforms:
@@ -85,7 +103,9 @@ The application is configured as a PWA for installation on Windows, Android, and
 - `recharts`: Score visualization charts
 - `framer-motion`: Animation library
 - `zod`: Runtime type validation
-- `connect-pg-simple`: PostgreSQL session storage (available but may not be in active use)
+- `connect-pg-simple`: PostgreSQL session storage for persistent user sessions
+- `bcryptjs`: Password hashing
+- `passport` / `passport-local`: Authentication framework
 
 ### Build Tools
 - **Vite**: Frontend bundling and development server

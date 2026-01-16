@@ -64,6 +64,15 @@ OposTest Pro es una aplicación web progresiva (PWA) diseñada específicamente 
 | **Gráficas de evolución** | Visualiza tu progreso con el tiempo |
 | **Estadísticas detalladas** | Porcentaje de aciertos, tiempo medio, etc. |
 
+### Sistema de Usuarios
+
+| Característica | Descripción |
+|----------------|-------------|
+| **Registro e inicio de sesión** | Cada usuario tiene su propia cuenta |
+| **Datos privados** | Cada usuario solo ve sus propios tests y resultados |
+| **Sesiones persistentes** | No necesitas iniciar sesión cada vez (30 días) |
+| **Contraseñas seguras** | Encriptadas con bcrypt |
+
 ### Experiencia de Usuario
 
 | Característica | Descripción |
@@ -152,7 +161,7 @@ SESSION_SECRET=tu_clave_secreta_aqui
 | `APP_NAME` | Nombre de la aplicación | `OposTest Pro` |
 | `APP_DESCRIPTION` | Descripción corta | `Preparación de oposiciones` |
 | `WELCOME_MESSAGE` | Mensaje de bienvenida | `Preparando tu entorno de estudio...` |
-| `SESSION_SECRET` | Clave para encriptar sesiones | Requerido en producción |
+| `SESSION_SECRET` | Clave para encriptar sesiones | **Requerido** |
 
 ---
 
@@ -208,11 +217,22 @@ OposTest Pro acepta archivos JSON con el siguiente formato:
 
 ## API Endpoints
 
+> **Nota**: Todas las rutas (excepto autenticación y configuración) requieren que el usuario esté autenticado.
+
+### Autenticación
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| `POST` | `/api/auth/register` | Registra un nuevo usuario |
+| `POST` | `/api/auth/login` | Inicia sesión |
+| `POST` | `/api/auth/logout` | Cierra la sesión actual |
+| `GET` | `/api/auth/me` | Obtiene el usuario actual |
+
 ### Tests
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| `GET` | `/api/tests` | Lista todos los tests disponibles |
+| `GET` | `/api/tests` | Lista los tests del usuario |
 | `GET` | `/api/tests/:id` | Obtiene las preguntas de un test |
 | `POST` | `/api/tests` | Importa un nuevo test (JSON) |
 | `PUT` | `/api/tests/:id/rename` | Renombra un test |
@@ -222,7 +242,7 @@ OposTest Pro acepta archivos JSON con el siguiente formato:
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| `GET` | `/api/results` | Lista el historial de resultados |
+| `GET` | `/api/results` | Lista el historial del usuario |
 | `POST` | `/api/results` | Guarda un nuevo resultado |
 | `DELETE` | `/api/results/:id` | Elimina un resultado |
 
@@ -230,7 +250,7 @@ OposTest Pro acepta archivos JSON con el siguiente formato:
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| `GET` | `/api/attempts` | Lista intentos en progreso |
+| `GET` | `/api/attempts` | Lista intentos del usuario |
 | `GET` | `/api/attempts/:id` | Obtiene un intento específico |
 | `POST` | `/api/attempts` | Crea un nuevo intento |
 | `PUT` | `/api/attempts/:id` | Actualiza un intento |
@@ -277,6 +297,7 @@ opostest-pro/
 ├── server/                 # Backend Express
 │   ├── routes.ts           # Definición de rutas API
 │   ├── storage.ts          # Capa de abstracción de datos
+│   ├── auth.ts             # Sistema de autenticación
 │   └── config.ts           # Configuración del servidor
 ├── shared/                 # Código compartido
 │   ├── schema.ts           # Esquema de base de datos (Drizzle)

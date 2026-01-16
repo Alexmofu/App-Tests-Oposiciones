@@ -121,12 +121,15 @@ DATABASE_URL=postgresql://opostest:tu_contraseña_segura@localhost:5432/opostest
 # Puerto (5000 por defecto, cámbialo si es necesario)
 PORT=5000
 
-# Genera una clave secreta con: openssl rand -base64 32
+# IMPORTANTE: Genera una clave secreta segura para las sesiones de usuario
+# Ejecuta: openssl rand -base64 32
 SESSION_SECRET=tu_clave_secreta_generada
 
 # Nombre de tu aplicación
 APP_NAME=OposTest Pro
 ```
+
+> **Importante**: El `SESSION_SECRET` es obligatorio y se usa para encriptar las sesiones de usuario. Genera una clave segura con `openssl rand -base64 32` y nunca la compartas.
 
 Guarda el archivo: `Ctrl + X`, luego `Y`, luego `Enter`.
 
@@ -150,6 +153,8 @@ npm install
 npm run db:push
 ```
 
+> **Nota**: Esto creará las tablas necesarias incluyendo `users`, `questions`, `results`, `test_attempts` y `session` (para sesiones persistentes).
+
 ---
 
 ## Paso 9: Compilar la Aplicación
@@ -168,7 +173,7 @@ npm run build
 npm start
 ```
 
-Abre tu navegador y visita `http://IP_DE_TU_SERVIDOR:5000`. Deberías ver la aplicación funcionando.
+Abre tu navegador y visita `http://IP_DE_TU_SERVIDOR:5000`. Deberías ver la página de inicio de sesión. Registra tu primera cuenta de usuario para empezar a usar la aplicación.
 
 Presiona `Ctrl + C` para detener la aplicación.
 

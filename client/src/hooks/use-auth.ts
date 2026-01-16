@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { queryClient, apiRequest } from "@/lib/queryClient";
+import { queryClient, apiRequest, getQueryFn } from "@/lib/queryClient";
 import { useLocation } from "wouter";
 
 interface User {
@@ -20,8 +20,9 @@ interface RegisterData {
 export function useAuth() {
   const [, setLocation] = useLocation();
 
-  const { data: user, isLoading, error } = useQuery<User>({
-    queryKey: ["/api/auth/user"],
+  const { data: user, isLoading } = useQuery<User | null>({
+    queryKey: ["/api/auth/me"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
     retry: false,
     staleTime: Infinity,
   });
@@ -32,7 +33,7 @@ export function useAuth() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
     },
   });
 
@@ -42,7 +43,7 @@ export function useAuth() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
     },
   });
 
@@ -58,9 +59,9 @@ export function useAuth() {
   });
 
   return {
-    user: error ? null : user,
+    user,
     isLoading,
-    isAuthenticated: !!user && !error,
+    isAuthenticated: !!user,
     login: loginMutation.mutateAsync,
     loginError: loginMutation.error,
     isLoggingIn: loginMutation.isPending,
