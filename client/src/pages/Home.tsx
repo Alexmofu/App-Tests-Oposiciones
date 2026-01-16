@@ -35,12 +35,12 @@ export default function Home() {
             <h1 className="text-3xl md:text-4xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
               OposTest Pro
             </h1>
-            <p className="text-muted-foreground font-medium">Professional Examination Platform</p>
+            <p className="text-muted-foreground font-medium">Plataforma de Preparación de Oposiciones</p>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/results">
               <Button variant="outline" className="gap-2 hidden sm:flex">
-                <BarChart3 className="w-4 h-4" /> History
+                <BarChart3 className="w-4 h-4" /> Historial
               </Button>
             </Link>
             <ThemeToggle />
@@ -52,7 +52,7 @@ export default function Home() {
           {/* Main Content: Local Tests */}
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold tracking-tight">Your Library</h2>
+              <h2 className="text-2xl font-semibold tracking-tight">Tu Biblioteca</h2>
               <ImportDialog />
             </div>
 
@@ -69,8 +69,8 @@ export default function Home() {
                     <FileText className="w-8 h-8 text-muted-foreground" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium">No tests imported yet</h3>
-                    <p className="text-muted-foreground">Import a JSON file or connect to a remote server to get started.</p>
+                    <h3 className="text-lg font-medium">No hay tests importados</h3>
+                    <p className="text-muted-foreground">Importa un archivo JSON o conéctate a un servidor remoto para empezar.</p>
                   </div>
                 </CardContent>
               </Card>
@@ -92,14 +92,14 @@ export default function Home() {
                               <FileText className="w-5 h-5" />
                             </div>
                             <Badge variant="secondary" className="font-mono text-xs">
-                              {test.count} Qs
+                              {test.count} Preg.
                             </Badge>
                           </div>
                           <CardTitle className="line-clamp-2 text-lg group-hover:text-primary transition-colors">
                             {test.id.replace('.json', '')}
                           </CardTitle>
                           <CardDescription className="line-clamp-1">
-                            {test.category || "General Category"}
+                            {test.category || "Categoría General"}
                           </CardDescription>
                         </CardHeader>
                         <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
@@ -115,17 +115,17 @@ export default function Home() {
 
           {/* Sidebar: Remote Connection */}
           <div className="space-y-6">
-            <h2 className="text-2xl font-semibold tracking-tight">Remote Server</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">Servidor Remoto</h2>
             <Card className="border-muted bg-card shadow-sm">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-accent" /> Connect
+                  <Globe className="w-5 h-5 text-accent" /> Conectar
                 </CardTitle>
-                <CardDescription>Connect to a local network server</CardDescription>
+                <CardDescription>Conecta a un servidor de red local</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Server IP / URL</Label>
+                  <Label>IP / URL del Servidor</Label>
                   <div className="flex gap-2">
                     <Input 
                       placeholder="192.168.1.50:8000" 
@@ -142,7 +142,7 @@ export default function Home() {
                 {connectUrl && (
                   <div className="pt-4 border-t space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-muted-foreground">Available Files</span>
+                      <span className="text-sm font-medium text-muted-foreground">Archivos Disponibles</span>
                       <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => refetchRemote()}>
                         <RefreshCw className={`w-3 h-3 ${loadingRemote ? 'animate-spin' : ''}`} />
                       </Button>
@@ -154,7 +154,7 @@ export default function Home() {
                         <div className="h-8 w-full bg-muted rounded animate-pulse" />
                       </div>
                     ) : remoteFiles?.length === 0 ? (
-                      <p className="text-sm text-muted-foreground text-center py-2">No files found.</p>
+                      <p className="text-sm text-muted-foreground text-center py-2">No se encontraron archivos.</p>
                     ) : (
                       <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
                         {remoteFiles?.map((file) => (
@@ -167,7 +167,7 @@ export default function Home() {
                               disabled={isDownloading}
                               onClick={() => fetchRemote({ url: connectUrl, filename: file })}
                             >
-                              Download
+                              Descargar
                             </Button>
                           </div>
                         ))}
@@ -180,7 +180,7 @@ export default function Home() {
             
             <Link href="/admin">
               <Button variant="ghost" className="w-full text-muted-foreground hover:text-foreground">
-                Go to Admin Dashboard
+                Ir al Panel de Administración
               </Button>
             </Link>
           </div>

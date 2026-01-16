@@ -79,8 +79,8 @@ export function useDeleteAttempt() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [api.attempts.list.path] });
-      toast({ title: "Attempt Deleted" });
+      toast({ title: "Intento Eliminado" });
     },
-    onError: () => toast({ title: "Delete Failed", variant: "destructive" }),
+    onError: () => toast({ title: "Error al Eliminar", variant: "destructive" }),
   });
 }

@@ -119,22 +119,22 @@ export function EditQuestionDialog({
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl">
-            {mode === "edit" ? "Edit Question" : "Add New Question"}
+            {mode === "edit" ? "Editar Pregunta" : "Añadir Nueva Pregunta"}
           </DialogTitle>
           <DialogDescription>
             {mode === "edit" 
-              ? "Modify the question text, answers, and correct answer."
-              : "Create a new question with multiple choice answers."}
+              ? "Modifica el texto de la pregunta, las respuestas y la respuesta correcta."
+              : "Crea una nueva pregunta con opciones de respuesta múltiple."}
           </DialogDescription>
         </DialogHeader>
         
         <div className="space-y-6 py-4">
           <div className="space-y-3">
-            <Label className="text-base font-semibold">Question Text</Label>
+            <Label className="text-base font-semibold">Texto de la Pregunta</Label>
             <Textarea 
               value={text} 
               onChange={(e) => setText(e.target.value)} 
-              placeholder="Enter the question..."
+              placeholder="Escribe la pregunta..."
               className="min-h-[120px] text-base resize-none"
               data-testid="input-question-text"
             />
@@ -142,9 +142,9 @@ export function EditQuestionDialog({
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label className="text-base font-semibold">Answer Options</Label>
+              <Label className="text-base font-semibold">Opciones de Respuesta</Label>
               <Badge variant="secondary" className="text-xs">
-                {answerKeys.length} options
+                {answerKeys.length} opciones
               </Badge>
             </div>
             
@@ -168,7 +168,7 @@ export function EditQuestionDialog({
                             : "border-muted-foreground/30 text-muted-foreground hover:border-green-500 hover:text-green-500"
                         )}
                         onClick={() => setCorrect(key)}
-                        title="Click to set as correct answer"
+                        title="Haz clic para marcar como respuesta correcta"
                         data-testid={`button-correct-${key}`}
                       >
                         {correct === key ? <Check className="w-4 h-4" /> : key}
@@ -179,7 +179,7 @@ export function EditQuestionDialog({
                       <Input 
                         value={answers[key]} 
                         onChange={(e) => setAnswers(prev => ({ ...prev, [key]: e.target.value }))}
-                        placeholder={`Answer option ${key}...`}
+                        placeholder={`Opción de respuesta ${key}...`}
                         className="text-base"
                         data-testid={`input-answer-${key}`}
                       />
@@ -200,7 +200,7 @@ export function EditQuestionDialog({
                   
                   {correct === key && (
                     <div className="mt-2 ml-14 text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
-                      <Check className="w-3 h-3" /> Correct Answer
+                      <Check className="w-3 h-3" /> Respuesta Correcta
                     </div>
                   )}
                 </Card>
@@ -215,7 +215,7 @@ export function EditQuestionDialog({
                 data-testid="button-add-answer"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                Add Answer Option
+                Añadir Opción de Respuesta
               </Button>
             )}
           </div>
@@ -223,14 +223,14 @@ export function EditQuestionDialog({
           {!isValid && (
             <div className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg">
               <AlertCircle className="w-4 h-4" />
-              <span>Fill in the question and all answer options to save.</span>
+              <span>Rellena la pregunta y todas las opciones de respuesta para guardar.</span>
             </div>
           )}
         </div>
         
         <div className="flex justify-end gap-3 pt-4 border-t">
           <Button variant="outline" onClick={() => setOpen(false)} data-testid="button-cancel-edit">
-            Cancel
+            Cancelar
           </Button>
           <Button 
             onClick={handleSave} 
@@ -238,7 +238,7 @@ export function EditQuestionDialog({
             className="min-w-[120px]"
             data-testid="button-save-question"
           >
-            {isPending ? "Saving..." : mode === "edit" ? "Save Changes" : "Create Question"}
+            {isPending ? "Guardando..." : mode === "edit" ? "Guardar Cambios" : "Crear Pregunta"}
           </Button>
         </div>
       </DialogContent>

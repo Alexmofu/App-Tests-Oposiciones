@@ -29,8 +29,8 @@ export function useCreateResult() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [api.results.list.path] });
-      toast({ title: "Result Saved", description: "Your score has been recorded." });
+      toast({ title: "Resultado Guardado", description: "Tu puntuación ha sido registrada." });
     },
-    onError: () => toast({ title: "Error", description: "Failed to save result.", variant: "destructive" }),
+    onError: () => toast({ title: "Error", description: "No se pudo guardar el resultado.", variant: "destructive" }),
   });
 }
