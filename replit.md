@@ -132,6 +132,7 @@ The application can be built as a standalone Windows desktop app that works 100%
 - **Branch**: `feature/electron-desktop`
 - **Database**: SQLite (local file in AppData)
 - **Documentation**: See `ELECTRON.md` for build instructions
+- **Output Format**: CommonJS (.cjs) to avoid ES module conflicts with package.json "type": "module"
 - **Key Files**:
   - `electron/main.ts` - Main Electron process with IPC handlers
   - `electron/preload.ts` - Bridge between renderer and main process

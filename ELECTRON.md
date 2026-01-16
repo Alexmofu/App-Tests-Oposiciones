@@ -36,7 +36,7 @@ build-resources/     # Iconos y recursos para el instalador
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
-  "main": "electron-dist/main.js",
+  "main": "electron-dist/main.cjs",
   ...
 }
 ```
