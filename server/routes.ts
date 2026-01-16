@@ -123,6 +123,53 @@ export async function registerRoutes(
     }
   });
 
+  // === Attempts ===
+  app.get(api.attempts.list.path, async (req, res) => {
+    const attempts = await storage.getAttempts();
+    res.json(attempts);
+  });
+
+  app.get(api.attempts.get.path, async (req, res) => {
+    const id = Number(req.params.id);
+    const attempt = await storage.getAttempt(id);
+    if (!attempt) {
+      return res.status(404).json({ message: "Attempt not found" });
+    }
+    res.json(attempt);
+  });
+
+  app.post(api.attempts.create.path, async (req, res) => {
+    try {
+      const input = api.attempts.create.input.parse(req.body);
+      const attempt = await storage.createAttempt(input);
+      res.status(201).json(attempt);
+    } catch (err) {
+      console.error("Create attempt error:", err);
+      res.status(400).json({ message: "Validation error" });
+    }
+  });
+
+  app.put(api.attempts.update.path, async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const update = api.attempts.update.input.parse(req.body);
+      const updated = await storage.updateAttempt(id, update);
+      if (!updated) {
+        return res.status(404).json({ message: "Attempt not found" });
+      }
+      res.json(updated);
+    } catch (err) {
+      console.error("Update attempt error:", err);
+      res.status(400).json({ message: "Validation error" });
+    }
+  });
+
+  app.delete(api.attempts.delete.path, async (req, res) => {
+    const id = Number(req.params.id);
+    await storage.deleteAttempt(id);
+    res.status(204).send();
+  });
+
   // === Remote ===
   app.get(api.remote.list.path, async (req, res) => {
     const url = req.query.url as string;
