@@ -22,6 +22,10 @@ import { passport } from "./auth";
 import { pool } from "./db";
 
 const app = express();
+
+// Trust proxy for HTTPS behind Nginx/reverse proxy (required for secure cookies)
+app.set("trust proxy", 1);
+
 const httpServer = createServer(app);
 
 declare module "http" {
