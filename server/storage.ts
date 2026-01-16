@@ -2,10 +2,12 @@ import { db } from "./db";
 import {
   questions,
   results,
+  testAttempts,
   type InsertQuestion,
   type Question,
   type InsertResult,
-  type Result
+  type Result,
+  type TestAttempt
 } from "@shared/schema";
 import { eq, desc, sql } from "drizzle-orm";
 
@@ -20,11 +22,17 @@ export interface IStorage {
   // Results
   getResults(): Promise<Result[]>;
   createResult(result: InsertResult): Promise<Result>;
+
+  // Attempts
+  getAttempts(): Promise<TestAttempt[]>;
+  getAttempt(id: number): Promise<TestAttempt | undefined>;
+  createAttempt(attempt: { testId: string; questionOrder: number[]; totalQuestions: number }): Promise<TestAttempt>;
+  updateAttempt(id: number, update: Partial<TestAttempt>): Promise<TestAttempt | undefined>;
+  deleteAttempt(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
   async getTests(): Promise<{ id: string; count: number; category: string | null }[]> {
-    // Group by testId and count
     const rows = await db
       .select({
         id: questions.testId,
@@ -43,7 +51,6 @@ export class DatabaseStorage implements IStorage {
 
   async createQuestions(questionsList: InsertQuestion[]): Promise<void> {
     if (questionsList.length === 0) return;
-    // Drizzle insert many
     await db.insert(questions).values(questionsList);
   }
 
@@ -67,6 +74,45 @@ export class DatabaseStorage implements IStorage {
   async createResult(result: InsertResult): Promise<Result> {
     const [saved] = await db.insert(results).values(result).returning();
     return saved;
+  }
+
+  // Attempts
+  async getAttempts(): Promise<TestAttempt[]> {
+    return await db.select().from(testAttempts).orderBy(desc(testAttempts.startedAt));
+  }
+
+  async getAttempt(id: number): Promise<TestAttempt | undefined> {
+    const [attempt] = await db.select().from(testAttempts).where(eq(testAttempts.id, id));
+    return attempt;
+  }
+
+  async createAttempt(attempt: { testId: string; questionOrder: number[]; totalQuestions: number }): Promise<TestAttempt> {
+    const [created] = await db.insert(testAttempts).values({
+      testId: attempt.testId,
+      questionOrder: attempt.questionOrder,
+      totalQuestions: attempt.totalQuestions,
+      status: "in_progress",
+      currentIndex: 0,
+      answers: {},
+    }).returning();
+    return created;
+  }
+
+  async updateAttempt(id: number, update: Partial<TestAttempt>): Promise<TestAttempt | undefined> {
+    const updateData: any = { ...update };
+    if (update.status === "completed") {
+      updateData.completedAt = new Date();
+    }
+    const [updated] = await db
+      .update(testAttempts)
+      .set(updateData)
+      .where(eq(testAttempts.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteAttempt(id: number): Promise<void> {
+    await db.delete(testAttempts).where(eq(testAttempts.id, id));
   }
 }
 

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { insertQuestionSchema, insertResultSchema, questions, results } from './schema';
+import { insertQuestionSchema, insertResultSchema, insertAttemptSchema, questions, results, testAttempts } from './schema';
 
 export const errorSchemas = {
   validation: z.object({
@@ -32,7 +32,7 @@ export const api = {
       path: '/api/tests/import',
       input: z.object({
         filename: z.string(),
-        content: z.array(z.any()), // We accept any JSON array and validate structure in backend
+        content: z.array(z.any()),
       }),
       responses: {
         201: z.object({ success: z.boolean(), count: z.number() }),
@@ -85,11 +85,63 @@ export const api = {
       },
     },
   },
+  attempts: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/attempts',
+      responses: {
+        200: z.array(z.custom<typeof testAttempts.$inferSelect>()),
+      },
+    },
+    get: {
+      method: 'GET' as const,
+      path: '/api/attempts/:id',
+      responses: {
+        200: z.custom<typeof testAttempts.$inferSelect>(),
+        404: errorSchemas.notFound,
+      },
+    },
+    create: {
+      method: 'POST' as const,
+      path: '/api/attempts',
+      input: z.object({
+        testId: z.string(),
+        questionOrder: z.array(z.number()),
+        totalQuestions: z.number(),
+      }),
+      responses: {
+        201: z.custom<typeof testAttempts.$inferSelect>(),
+      },
+    },
+    update: {
+      method: 'PUT' as const,
+      path: '/api/attempts/:id',
+      input: z.object({
+        currentIndex: z.number().optional(),
+        answers: z.record(z.string()).optional(),
+        status: z.enum(['in_progress', 'completed']).optional(),
+        correctCount: z.number().optional(),
+        score: z.number().optional(),
+      }),
+      responses: {
+        200: z.custom<typeof testAttempts.$inferSelect>(),
+        404: errorSchemas.notFound,
+      },
+    },
+    delete: {
+      method: 'DELETE' as const,
+      path: '/api/attempts/:id',
+      responses: {
+        204: z.void(),
+        404: errorSchemas.notFound,
+      },
+    },
+  },
   remote: {
     list: {
       method: 'GET' as const,
       path: '/api/remote/list',
-      input: z.object({ url: z.string() }).optional(), // passed as query param
+      input: z.object({ url: z.string() }).optional(),
       responses: {
         200: z.array(z.string()),
         400: errorSchemas.validation,
@@ -98,7 +150,7 @@ export const api = {
     fetch: {
       method: 'GET' as const,
       path: '/api/remote/fetch',
-      input: z.object({ url: z.string(), filename: z.string() }).optional(), // passed as query param
+      input: z.object({ url: z.string(), filename: z.string() }).optional(),
       responses: {
         200: z.array(z.any()),
         400: errorSchemas.validation,
