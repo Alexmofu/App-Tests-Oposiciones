@@ -6,7 +6,11 @@ import { useImportTest } from "@/hooks/use-tests";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function ImportDialog() {
+interface ImportDialogProps {
+  trigger?: React.ReactNode;
+}
+
+export function ImportDialog({ trigger }: ImportDialogProps) {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const { mutate, isPending } = useImportTest();
@@ -39,14 +43,18 @@ export function ImportDialog() {
     reader.readAsText(file);
   };
 
+  const defaultTrigger = (
+    <Button className="gap-2 bg-gradient-to-r from-primary to-primary/90 shadow-lg shadow-primary/20 shrink-0">
+      <UploadCloud className="w-4 h-4" />
+      <span className="hidden sm:inline">Importar JSON Local</span>
+      <span className="sm:hidden">Importar</span>
+    </Button>
+  );
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2 bg-gradient-to-r from-primary to-primary/90 shadow-lg shadow-primary/20 shrink-0">
-          <UploadCloud className="w-4 h-4" />
-          <span className="hidden sm:inline">Importar JSON Local</span>
-          <span className="sm:hidden">Importar</span>
-        </Button>
+        {trigger || defaultTrigger}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
