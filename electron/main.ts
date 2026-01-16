@@ -13,6 +13,12 @@ let currentUserId: number | null = null;
 function createWindow() {
   const appPath = app.getAppPath();
   
+  // En producción: resources/app/ contiene main.cjs, preload.cjs, renderer/
+  // En desarrollo: electron/main.ts está en electron/, el frontend en localhost
+  const preloadPath = isDev 
+    ? path.join(__dirname, "preload.cjs")
+    : path.join(appPath, "preload.cjs");
+  
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -22,11 +28,11 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, "preload.cjs"),
+      preload: preloadPath,
     },
     icon: isDev 
       ? path.join(__dirname, "../client/public/icon-192.png")
-      : path.join(appPath, "dist-electron/icon-192.png"),
+      : path.join(appPath, "renderer/icon-192.png"),
     title: "OposTest Pro",
   });
   
@@ -36,7 +42,7 @@ function createWindow() {
     mainWindow.loadURL("http://localhost:5000");
     mainWindow.webContents.openDevTools();
   } else {
-    const indexPath = path.join(appPath, "dist-electron", "index.html");
+    const indexPath = path.join(appPath, "renderer", "index.html");
     console.log("Loading:", indexPath);
     mainWindow.loadFile(indexPath);
   }

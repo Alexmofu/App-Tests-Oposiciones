@@ -26,22 +26,7 @@ build-resources/     # Iconos y recursos para el instalador
 
 ## IMPORTANTE: Configurar package.json
 
-**Debes añadir estos cambios manualmente a tu package.json:**
-
-1. Añade el campo `main` después de `"license": "MIT"`:
-
-```json
-{
-  "name": "rest-express",
-  "version": "1.0.0",
-  "type": "module",
-  "license": "MIT",
-  "main": "electron-dist/main.cjs",
-  ...
-}
-```
-
-2. Añade estos scripts en la sección `"scripts"`:
+**Debes añadir estos scripts manualmente a tu package.json en la sección `"scripts"`:**
 
 ```json
 "scripts": {
@@ -50,13 +35,12 @@ build-resources/     # Iconos y recursos para el instalador
   "start": "NODE_ENV=production node dist/index.cjs",
   "check": "tsc",
   "db:push": "drizzle-kit push",
-  "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5000 && electron .\"",
   "electron:build": "tsx script/build-electron.ts",
-  "electron:package": "npm run electron:build && electron-builder --win --config electron-builder.json"
+  "electron:package": "npm run electron:build && npx electron-builder --win --config electron-builder.json"
 }
 ```
 
-**Sin estos cambios, Electron no funcionará.**
+**Nota:** El script de build genera automáticamente un `package.json` dentro de `electron-app/` con la configuración correcta para Electron.
 
 ## Comandos
 

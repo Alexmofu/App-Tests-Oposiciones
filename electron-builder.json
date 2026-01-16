@@ -5,11 +5,11 @@
   "asar": false,
   "directories": {
     "output": "release",
-    "buildResources": "build-resources"
+    "buildResources": "build-resources",
+    "app": "electron-app"
   },
   "files": [
-    "dist-electron/**/*",
-    "electron-dist/**/*"
+    "**/*"
   ],
   "extraResources": [
     {
