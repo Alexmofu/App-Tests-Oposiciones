@@ -10,6 +10,7 @@ const allowlist = [
   "connect-pg-simple",
   "cors",
   "date-fns",
+  "dotenv",
   "drizzle-orm",
   "drizzle-zod",
   "express",
@@ -52,9 +53,6 @@ async function buildAll() {
     bundle: true,
     format: "cjs",
     outfile: "dist/index.cjs",
-    banner: {
-      js: 'require("dotenv").config({ path: require("path").resolve(__dirname, "..", ".env") });',
-    },
     define: {
       "process.env.NODE_ENV": '"production"',
     },

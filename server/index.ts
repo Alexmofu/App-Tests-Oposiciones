@@ -1,4 +1,17 @@
-import "dotenv/config";
+import path from "path";
+import dotenv from "dotenv";
+
+// Resolve .env path (works in both ESM/tsx and CJS/esbuild bundle)
+function resolveEnvPath(): string {
+  // process.argv[1] is the entry script path in both environments
+  const entryDir = process.argv[1] ? path.dirname(process.argv[1]) : process.cwd();
+  // In production: dist/index.cjs -> go up one level to find .env
+  // In development: server/index.ts -> go up one level to find .env  
+  return path.resolve(entryDir, "..", ".env");
+}
+
+dotenv.config({ path: resolveEnvPath() });
+
 import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
