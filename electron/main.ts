@@ -18,6 +18,7 @@ function createWindow() {
     height: 800,
     minWidth: 800,
     minHeight: 600,
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -28,6 +29,8 @@ function createWindow() {
       : path.join(appPath, "dist-electron/icon-192.png"),
     title: "OposTest Pro",
   });
+  
+  mainWindow.setMenuBarVisibility(false);
 
   if (isDev) {
     mainWindow.loadURL("http://localhost:5000");
