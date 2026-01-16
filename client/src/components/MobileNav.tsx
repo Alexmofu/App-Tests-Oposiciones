@@ -82,17 +82,15 @@ export function MobileNav() {
           </Link>
 
           {/* Add test button (replaces Online indicator) */}
-          <div className="flex flex-col items-center justify-center gap-1 min-w-[64px]">
-            <ImportDialog trigger={
-              <button
-                className="flex flex-col items-center justify-center gap-1 px-4 py-2 rounded-lg transition-colors text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                data-testid="nav-add-test"
-              >
-                <Plus className="h-5 w-5" />
-                <span className="text-xs font-medium">Añadir</span>
-              </button>
-            } />
-          </div>
+          <ImportDialog trigger={
+            <button
+              className="flex flex-col items-center justify-center gap-1 px-4 py-2 rounded-lg transition-colors text-muted-foreground hover:text-foreground hover:bg-muted/50 min-w-[64px]"
+              data-testid="nav-add-test"
+            >
+              <Plus className="h-5 w-5" />
+              <span className="text-xs font-medium">Añadir</span>
+            </button>
+          } />
         </div>
       </nav>
     </>

@@ -8,26 +8,31 @@ interface QuestionCardProps {
   selectedAnswer: string | null;
   onSelectAnswer: (key: string) => void;
   showFeedback: boolean;
+  compact?: boolean;
 }
 
 export function QuestionCard({ 
   question, 
   selectedAnswer, 
   onSelectAnswer, 
-  showFeedback 
+  showFeedback,
+  compact = false
 }: QuestionCardProps) {
   const answers = question.answers as AnswerMap;
   const answerKeys = Object.keys(answers).sort(); // A, B, C, D...
 
   return (
     <div className="w-full max-w-3xl mx-auto">
-      <div className="mb-8">
-        <h3 className="text-xl md:text-2xl font-display font-semibold leading-relaxed text-foreground">
+      <div className={cn("mb-4", compact ? "md:mb-6" : "mb-8")}>
+        <h3 className={cn(
+          "font-display font-semibold leading-relaxed text-foreground",
+          compact ? "text-base md:text-xl" : "text-xl md:text-2xl"
+        )}>
           {question.questionText}
         </h3>
       </div>
 
-      <div className="space-y-4">
+      <div className={cn("space-y-2", compact ? "md:space-y-3" : "space-y-4")}>
         {answerKeys.map((key, index) => {
           const isSelected = selectedAnswer === key;
           const isCorrect = key === question.correctAnswer;
@@ -56,13 +61,15 @@ export function QuestionCard({
               onClick={() => !showFeedback && onSelectAnswer(key)}
               disabled={showFeedback}
               className={cn(
-                "w-full text-left p-4 rounded-xl border-2 transition-all duration-200 relative group flex items-start gap-4",
+                "w-full text-left rounded-xl border-2 transition-all duration-200 relative group flex items-start gap-2 md:gap-4",
+                compact ? "p-2.5 md:p-4" : "p-4",
                 stateStyles,
                 !showFeedback && "hover:shadow-md hover:-translate-y-0.5"
               )}
             >
               <span className={cn(
-                "flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm border",
+                "flex-shrink-0 rounded-lg flex items-center justify-center font-bold text-sm border",
+                compact ? "w-6 h-6 md:w-8 md:h-8 text-xs md:text-sm" : "w-8 h-8",
                 showFeedback && isCorrect ? "bg-green-500 border-green-500 text-white" :
                 showFeedback && isWrongSelection ? "bg-red-500 border-red-500 text-white" :
                 isSelected ? "bg-primary border-primary text-primary-foreground" :
@@ -70,17 +77,20 @@ export function QuestionCard({
               )}>
                 {key}
               </span>
-              <span className="flex-grow pt-1 font-medium">{answers[key]}</span>
+              <span className={cn(
+                "flex-grow font-medium",
+                compact ? "text-sm md:text-base pt-0.5" : "pt-1"
+              )}>{answers[key]}</span>
               
               <AnimatePresence>
                 {showFeedback && isCorrect && (
                   <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
-                    <CheckCircle2 className="w-6 h-6 text-green-500" />
+                    <CheckCircle2 className={cn(compact ? "w-5 h-5" : "w-6 h-6", "text-green-500")} />
                   </motion.div>
                 )}
                 {showFeedback && isWrongSelection && (
                   <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
-                    <XCircle className="w-6 h-6 text-red-500" />
+                    <XCircle className={cn(compact ? "w-5 h-5" : "w-6 h-6", "text-red-500")} />
                   </motion.div>
                 )}
               </AnimatePresence>
