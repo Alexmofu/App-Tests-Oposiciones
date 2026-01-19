@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useTests, useRemoteTests, useFetchRemoteTest, useDeleteTest, useRenameTest } from "@/hooks/use-tests";
 import { ImportDialog } from "@/components/ImportDialog";
@@ -43,9 +43,6 @@ export default function Home() {
   const [remoteUrl, setRemoteUrl] = useState("");
   const [connectUrl, setConnectUrl] = useState("");
   const [, navigate] = useLocation();
-
-  // Control which context-menu is open so we can reliably close it before opening dialogs/navigating.
-  const [openContextMenuFor, setOpenContextMenuFor] = useState<string | null>(null);
   
   const { data: remoteFiles, isLoading: loadingRemote, refetch: refetchRemote } = useRemoteTests(connectUrl || null);
   const { mutate: fetchRemote, isPending: isDownloading } = useFetchRemoteTest();
@@ -65,28 +62,29 @@ export default function Home() {
   };
 
   const handleDeleteClick = (testId: string) => {
-    setOpenContextMenuFor(null);
     setSelectedTest(testId);
     setDeleteDialogOpen(true);
   };
 
   const handleRenameClick = (testId: string) => {
-    setOpenContextMenuFor(null);
     setSelectedTest(testId);
     setNewTestName(testId.replace('.json', ''));
     setRenameDialogOpen(true);
   };
 
   const handleEditClick = (testId: string) => {
-    setOpenContextMenuFor(null);
     navigate(`/admin?test=${encodeURIComponent(testId)}`);
   };
 
   const confirmDelete = () => {
     if (selectedTest) {
+      setDeleteDialogOpen(false);
+      // Limpiar pointer-events inmediatamente al cerrar
+      setTimeout(() => {
+        document.body.style.pointerEvents = '';
+      }, 0);
       deleteTest(selectedTest, {
         onSuccess: () => {
-          setDeleteDialogOpen(false);
           setSelectedTest(null);
         },
       });
@@ -95,11 +93,15 @@ export default function Home() {
 
   const confirmRename = () => {
     if (selectedTest && newTestName.trim()) {
+      setRenameDialogOpen(false);
+      // Limpiar pointer-events inmediatamente al cerrar
+      setTimeout(() => {
+        document.body.style.pointerEvents = '';
+      }, 0);
       renameTest(
         { testId: selectedTest, newName: newTestName.trim() },
         {
           onSuccess: () => {
-            setRenameDialogOpen(false);
             setSelectedTest(null);
             setNewTestName("");
           },
@@ -108,6 +110,17 @@ export default function Home() {
     }
   };
 
+  // Limpiar pointer-events del body cuando los diálogos se cierren
+  useEffect(() => {
+    if (!deleteDialogOpen && !renameDialogOpen) {
+      // Pequeño delay para asegurar que Radix UI haya terminado de limpiar
+      const timer = setTimeout(() => {
+        document.body.style.pointerEvents = '';
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [deleteDialogOpen, renameDialogOpen]);
+
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-6xl mx-auto space-y-8">
@@ -115,7 +128,7 @@ export default function Home() {
         <header className="flex items-center justify-between pb-6 border-b border-border">
           <div className="space-y-1">
             <h1 className="text-3xl md:text-4xl font-display font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-              OposTest Pro
+              Hexfield
             </h1>
             <p className="text-muted-foreground font-medium">Plataforma de Preparación de Oposiciones</p>
           </div>
@@ -181,10 +194,7 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <ContextMenu
-                      open={openContextMenuFor === test.id}
-                      onOpenChange={(open) => setOpenContextMenuFor(open ? test.id : null)}
-                    >
+                    <ContextMenu>
                       <ContextMenuTrigger asChild>
                         <Link href={`/test/${test.id}`} className="group block h-full" data-testid={`link-test-${test.id}`}>
                           <Card className="h-full hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden relative">
@@ -213,7 +223,10 @@ export default function Home() {
                       </ContextMenuTrigger>
                       <ContextMenuContent className="w-48">
                         <ContextMenuItem
-                          onSelect={() => handleEditClick(test.id)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleEditClick(test.id);
+                          }}
                           className="cursor-pointer"
                           data-testid={`menu-edit-${test.id}`}
                         >
@@ -221,7 +234,10 @@ export default function Home() {
                           Editar
                         </ContextMenuItem>
                         <ContextMenuItem
-                          onSelect={() => handleRenameClick(test.id)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleRenameClick(test.id);
+                          }}
                           className="cursor-pointer"
                           data-testid={`menu-rename-${test.id}`}
                         >
@@ -230,7 +246,10 @@ export default function Home() {
                         </ContextMenuItem>
                         <ContextMenuSeparator />
                         <ContextMenuItem
-                          onSelect={() => handleDeleteClick(test.id)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeleteClick(test.id);
+                          }}
                           className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
                           data-testid={`menu-delete-${test.id}`}
                         >
@@ -322,7 +341,18 @@ export default function Home() {
       </div>
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+      <AlertDialog 
+        open={deleteDialogOpen} 
+        onOpenChange={(open) => {
+          setDeleteDialogOpen(open);
+          if (!open) {
+            // Asegurar que se limpie el pointer-events cuando se cierra
+            setTimeout(() => {
+              document.body.style.pointerEvents = '';
+            }, 0);
+          }
+        }}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar Test?</AlertDialogTitle>
@@ -347,7 +377,18 @@ export default function Home() {
       </AlertDialog>
 
       {/* Rename Dialog */}
-      <Dialog open={renameDialogOpen} onOpenChange={setRenameDialogOpen}>
+      <Dialog 
+        open={renameDialogOpen} 
+        onOpenChange={(open) => {
+          setRenameDialogOpen(open);
+          if (!open) {
+            // Asegurar que se limpie el pointer-events cuando se cierra
+            setTimeout(() => {
+              document.body.style.pointerEvents = '';
+            }, 0);
+          }
+        }}
+      >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Cambiar Nombre</DialogTitle>

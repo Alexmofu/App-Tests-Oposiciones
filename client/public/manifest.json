@@ -1,7 +1,7 @@
 {
-  "name": "OposTest Pro",
-  "short_name": "OposTest",
-  "description": "Plataforma de Preparación de Oposiciones - Practica para tus exámenes de oposiciones",
+  "name": "Hexfield - App Oposiciones",
+  "short_name": "Hexfield",
+  "description": "App Oposiciones",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
