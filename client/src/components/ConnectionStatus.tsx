@@ -98,7 +98,7 @@ export function ConnectionStatus({ onComplete }: ConnectionStatusProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                OposTest Pro
+                Hexfield
               </motion.h1>
 
               <AnimatePresence mode="wait">
