@@ -79,13 +79,19 @@ export default function Home() {
   const confirmDelete = () => {
     if (selectedTest) {
       setDeleteDialogOpen(false);
-      // Limpiar pointer-events inmediatamente al cerrar
-      setTimeout(() => {
-        document.body.style.pointerEvents = '';
-      }, 0);
+      // Limpiar pointer-events usando múltiples estrategias para asegurar que funcione
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.body.style.pointerEvents = '';
+        });
+      });
       deleteTest(selectedTest, {
         onSuccess: () => {
           setSelectedTest(null);
+          // Limpiar de nuevo después de la operación
+          requestAnimationFrame(() => {
+            document.body.style.pointerEvents = '';
+          });
         },
       });
     }
@@ -94,31 +100,71 @@ export default function Home() {
   const confirmRename = () => {
     if (selectedTest && newTestName.trim()) {
       setRenameDialogOpen(false);
-      // Limpiar pointer-events inmediatamente al cerrar
-      setTimeout(() => {
-        document.body.style.pointerEvents = '';
-      }, 0);
+      // Limpiar pointer-events usando múltiples estrategias para asegurar que funcione
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.body.style.pointerEvents = '';
+        });
+      });
       renameTest(
         { testId: selectedTest, newName: newTestName.trim() },
         {
           onSuccess: () => {
             setSelectedTest(null);
             setNewTestName("");
+            // Limpiar de nuevo después de la operación
+            requestAnimationFrame(() => {
+              document.body.style.pointerEvents = '';
+            });
           },
         }
       );
     }
   };
 
-  // Limpiar pointer-events del body cuando los diálogos se cierren
+  // MutationObserver + verificación periódica para detectar y limpiar pointer-events: none
   useEffect(() => {
-    if (!deleteDialogOpen && !renameDialogOpen) {
-      // Pequeño delay para asegurar que Radix UI haya terminado de limpiar
-      const timer = setTimeout(() => {
-        document.body.style.pointerEvents = '';
-      }, 100);
-      return () => clearTimeout(timer);
-    }
+    const cleanupPointerEvents = () => {
+      if (!deleteDialogOpen && !renameDialogOpen) {
+        const computedStyle = window.getComputedStyle(document.body);
+        if (computedStyle.pointerEvents === 'none') {
+          document.body.style.pointerEvents = '';
+        }
+      }
+    };
+
+    // MutationObserver para detectar cambios en tiempo real
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+          const target = mutation.target as HTMLElement;
+          if (target === document.body) {
+            requestAnimationFrame(() => {
+              cleanupPointerEvents();
+            });
+          }
+        }
+      });
+    });
+
+    // Observar cambios en el atributo style del body
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['style'],
+    });
+
+    // Verificación periódica como respaldo (cada 100ms cuando los diálogos están cerrados)
+    const intervalId = setInterval(() => {
+      cleanupPointerEvents();
+    }, 100);
+
+    // Limpiar inmediatamente cuando los diálogos se cierren
+    cleanupPointerEvents();
+
+    return () => {
+      observer.disconnect();
+      clearInterval(intervalId);
+    };
   }, [deleteDialogOpen, renameDialogOpen]);
 
   return (
@@ -346,10 +392,12 @@ export default function Home() {
         onOpenChange={(open) => {
           setDeleteDialogOpen(open);
           if (!open) {
-            // Asegurar que se limpie el pointer-events cuando se cierra
-            setTimeout(() => {
-              document.body.style.pointerEvents = '';
-            }, 0);
+            // Limpiar pointer-events usando requestAnimationFrame para asegurar que se ejecute después de Radix
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                document.body.style.pointerEvents = '';
+              });
+            });
           }
         }}
       >
@@ -382,10 +430,12 @@ export default function Home() {
         onOpenChange={(open) => {
           setRenameDialogOpen(open);
           if (!open) {
-            // Asegurar que se limpie el pointer-events cuando se cierra
-            setTimeout(() => {
-              document.body.style.pointerEvents = '';
-            }, 0);
+            // Limpiar pointer-events usando requestAnimationFrame para asegurar que se ejecute después de Radix
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                document.body.style.pointerEvents = '';
+              });
+            });
           }
         }}
       >
