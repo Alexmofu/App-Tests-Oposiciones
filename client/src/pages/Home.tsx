@@ -61,92 +61,111 @@ export default function Home() {
     setConnectUrl(url);
   };
 
-  // Función para limpiar pointer-events de forma agresiva
-  const forceCleanPointerEvents = () => {
-    // Remover el atributo style completo del body si solo contiene pointer-events
-    if (document.body.style.pointerEvents === 'none') {
-      document.body.style.removeProperty('pointer-events');
-    }
-    // También verificar computed style y forzar limpieza
-    const computedStyle = window.getComputedStyle(document.body);
-    if (computedStyle.pointerEvents === 'none') {
-      document.body.style.pointerEvents = 'auto';
-      // Si aún está en none, remover el atributo completamente
-      setTimeout(() => {
-        if (window.getComputedStyle(document.body).pointerEvents === 'none') {
-          document.body.style.removeProperty('pointer-events');
-        }
-      }, 0);
-    }
-  };
-
-  // FIREWALL: Prevenir que el body tenga pointer-events: none SIEMPRE
+  // DEBUG: Log inicial al montar
   useEffect(() => {
-    // MutationObserver que intercepta CUALQUIER cambio en el style del body
+    console.log('🔍 [DEBUG] ========== COMPONENTE MONTADO ==========');
+    console.log('🔍 [DEBUG] Body pointer-events inicial:', document.body.style.pointerEvents);
+    console.log('🔍 [DEBUG] Computed pointer-events inicial:', window.getComputedStyle(document.body).pointerEvents);
+    console.log('🔍 [DEBUG] Full style attribute inicial:', document.body.getAttribute('style'));
+  }, []);
+
+  // DEBUG: Observar cambios en pointer-events del body
+  useEffect(() => {
+    console.log('🔍 [DEBUG] Iniciando observador de pointer-events');
+    
+    const checkPointerEvents = () => {
+      const inlineStyle = document.body.style.pointerEvents;
+      const computedStyle = window.getComputedStyle(document.body).pointerEvents;
+      const fullStyle = document.body.getAttribute('style');
+      
+      if (inlineStyle === 'none' || computedStyle === 'none') {
+        console.log('🚨 [DEBUG] ⚠️⚠️⚠️ POINTER-EVENTS: NONE DETECTADO ⚠️⚠️⚠️');
+        console.log('🚨 [DEBUG] Inline style:', inlineStyle);
+        console.log('🚨 [DEBUG] Computed style:', computedStyle);
+        console.log('🚨 [DEBUG] Full style attribute:', fullStyle);
+        console.log('🚨 [DEBUG] deleteDialogOpen:', deleteDialogOpen);
+        console.log('🚨 [DEBUG] renameDialogOpen:', renameDialogOpen);
+        console.log('🚨 [DEBUG] Stack trace:', new Error().stack);
+      }
+    };
+
+    // MutationObserver para detectar cambios en el style del body
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
           const target = mutation.target as HTMLElement;
           if (target === document.body) {
-            // Si Radix UI intenta poner pointer-events: none, eliminarlo inmediatamente
-            if (document.body.style.pointerEvents === 'none') {
-              document.body.style.removeProperty('pointer-events');
-            }
-            // También verificar computed style
-            const computed = window.getComputedStyle(document.body);
-            if (computed.pointerEvents === 'none') {
-              document.body.style.pointerEvents = 'auto';
-            }
+            const oldValue = mutation.oldValue || '';
+            const newValue = document.body.getAttribute('style') || '';
+            console.log('🔍 [DEBUG] MutationObserver detectó cambio en body.style');
+            console.log('🔍 [DEBUG] Old value:', oldValue);
+            console.log('🔍 [DEBUG] New value:', newValue);
+            checkPointerEvents();
           }
         }
       });
     });
 
-    // Observar cambios en el atributo style del body
     observer.observe(document.body, {
       attributes: true,
       attributeFilter: ['style'],
-      attributeOldValue: false,
+      attributeOldValue: true,
     });
 
-    // Verificación constante cada 50ms para asegurar que nunca tenga pointer-events: none
+    // Verificar periódicamente
     const intervalId = setInterval(() => {
-      if (document.body.style.pointerEvents === 'none') {
-        document.body.style.removeProperty('pointer-events');
-      }
-      const computed = window.getComputedStyle(document.body);
-      if (computed.pointerEvents === 'none') {
-        document.body.style.pointerEvents = 'auto';
-      }
-    }, 50);
+      checkPointerEvents();
+    }, 100);
 
-    // Limpiar al desmontar
     return () => {
       observer.disconnect();
       clearInterval(intervalId);
     };
-  }, []); // Solo se ejecuta una vez al montar
+  }, [deleteDialogOpen, renameDialogOpen]);
 
   const handleDeleteClick = (testId: string) => {
+    console.log('🔍 [DEBUG] handleDeleteClick llamado con testId:', testId);
+    console.log('🔍 [DEBUG] Body pointer-events antes:', document.body.style.pointerEvents);
     setSelectedTest(testId);
     setDeleteDialogOpen(true);
+    setTimeout(() => {
+      console.log('🔍 [DEBUG] Body pointer-events después de abrir diálogo:', document.body.style.pointerEvents);
+      console.log('🔍 [DEBUG] Computed pointer-events:', window.getComputedStyle(document.body).pointerEvents);
+    }, 100);
   };
 
   const handleRenameClick = (testId: string) => {
+    console.log('🔍 [DEBUG] handleRenameClick llamado con testId:', testId);
+    console.log('🔍 [DEBUG] Body pointer-events antes:', document.body.style.pointerEvents);
     setSelectedTest(testId);
     setNewTestName(testId.replace('.json', ''));
     setRenameDialogOpen(true);
+    setTimeout(() => {
+      console.log('🔍 [DEBUG] Body pointer-events después de abrir diálogo:', document.body.style.pointerEvents);
+      console.log('🔍 [DEBUG] Computed pointer-events:', window.getComputedStyle(document.body).pointerEvents);
+    }, 100);
   };
 
   const handleEditClick = (testId: string) => {
+    console.log('🔍 [DEBUG] handleEditClick llamado con testId:', testId);
+    console.log('🔍 [DEBUG] Body pointer-events antes:', document.body.style.pointerEvents);
     navigate(`/admin?test=${encodeURIComponent(testId)}`);
   };
 
   const confirmDelete = () => {
+    console.log('🔍 [DEBUG] confirmDelete llamado');
+    console.log('🔍 [DEBUG] Body pointer-events antes de cerrar:', document.body.style.pointerEvents);
     if (selectedTest) {
       setDeleteDialogOpen(false);
+      console.log('🔍 [DEBUG] deleteDialogOpen establecido a false');
+      setTimeout(() => {
+        console.log('🔍 [DEBUG] Body pointer-events después de cerrar diálogo:', document.body.style.pointerEvents);
+        console.log('🔍 [DEBUG] Computed pointer-events:', window.getComputedStyle(document.body).pointerEvents);
+      }, 100);
       deleteTest(selectedTest, {
         onSuccess: () => {
+          console.log('🔍 [DEBUG] deleteTest onSuccess');
+          console.log('🔍 [DEBUG] Body pointer-events en onSuccess:', document.body.style.pointerEvents);
           setSelectedTest(null);
         },
       });
@@ -154,12 +173,21 @@ export default function Home() {
   };
 
   const confirmRename = () => {
+    console.log('🔍 [DEBUG] confirmRename llamado');
+    console.log('🔍 [DEBUG] Body pointer-events antes de cerrar:', document.body.style.pointerEvents);
     if (selectedTest && newTestName.trim()) {
       setRenameDialogOpen(false);
+      console.log('🔍 [DEBUG] renameDialogOpen establecido a false');
+      setTimeout(() => {
+        console.log('🔍 [DEBUG] Body pointer-events después de cerrar diálogo:', document.body.style.pointerEvents);
+        console.log('🔍 [DEBUG] Computed pointer-events:', window.getComputedStyle(document.body).pointerEvents);
+      }, 100);
       renameTest(
         { testId: selectedTest, newName: newTestName.trim() },
         {
           onSuccess: () => {
+            console.log('🔍 [DEBUG] renameTest onSuccess');
+            console.log('🔍 [DEBUG] Body pointer-events en onSuccess:', document.body.style.pointerEvents);
             setSelectedTest(null);
             setNewTestName("");
           },
@@ -272,6 +300,8 @@ export default function Home() {
                       <ContextMenuContent className="w-48">
                         <ContextMenuItem
                           onSelect={(e) => {
+                            console.log('🔍 [DEBUG] ContextMenuItem Editar onSelect');
+                            console.log('🔍 [DEBUG] Body pointer-events en onSelect:', document.body.style.pointerEvents);
                             e.preventDefault();
                             handleEditClick(test.id);
                           }}
@@ -283,6 +313,8 @@ export default function Home() {
                         </ContextMenuItem>
                         <ContextMenuItem
                           onSelect={(e) => {
+                            console.log('🔍 [DEBUG] ContextMenuItem Cambiar nombre onSelect');
+                            console.log('🔍 [DEBUG] Body pointer-events en onSelect:', document.body.style.pointerEvents);
                             e.preventDefault();
                             handleRenameClick(test.id);
                           }}
@@ -295,6 +327,8 @@ export default function Home() {
                         <ContextMenuSeparator />
                         <ContextMenuItem
                           onSelect={(e) => {
+                            console.log('🔍 [DEBUG] ContextMenuItem Eliminar onSelect');
+                            console.log('🔍 [DEBUG] Body pointer-events en onSelect:', document.body.style.pointerEvents);
                             e.preventDefault();
                             handleDeleteClick(test.id);
                           }}
@@ -391,7 +425,21 @@ export default function Home() {
       {/* Delete Confirmation Dialog */}
       <AlertDialog 
         open={deleteDialogOpen} 
-        onOpenChange={setDeleteDialogOpen}
+        onOpenChange={(open) => {
+          console.log('🔍 [DEBUG] AlertDialog onOpenChange llamado con open:', open);
+          console.log('🔍 [DEBUG] Body pointer-events antes de onOpenChange:', document.body.style.pointerEvents);
+          console.log('🔍 [DEBUG] Computed pointer-events antes:', window.getComputedStyle(document.body).pointerEvents);
+          setDeleteDialogOpen(open);
+          setTimeout(() => {
+            console.log('🔍 [DEBUG] Body pointer-events después de onOpenChange:', document.body.style.pointerEvents);
+            console.log('🔍 [DEBUG] Computed pointer-events después:', window.getComputedStyle(document.body).pointerEvents);
+            console.log('🔍 [DEBUG] Full style attribute:', document.body.getAttribute('style'));
+          }, 50);
+          setTimeout(() => {
+            console.log('🔍 [DEBUG] Body pointer-events 200ms después:', document.body.style.pointerEvents);
+            console.log('🔍 [DEBUG] Computed pointer-events 200ms después:', window.getComputedStyle(document.body).pointerEvents);
+          }, 200);
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -401,7 +449,14 @@ export default function Home() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting} data-testid="button-cancel-delete">
+            <AlertDialogCancel 
+              disabled={isDeleting} 
+              data-testid="button-cancel-delete"
+              onClick={() => {
+                console.log('🔍 [DEBUG] AlertDialogCancel onClick');
+                console.log('🔍 [DEBUG] Body pointer-events en cancel:', document.body.style.pointerEvents);
+              }}
+            >
               Cancelar
             </AlertDialogCancel>
             <AlertDialogAction
@@ -419,7 +474,21 @@ export default function Home() {
       {/* Rename Dialog */}
       <Dialog 
         open={renameDialogOpen} 
-        onOpenChange={setRenameDialogOpen}
+        onOpenChange={(open) => {
+          console.log('🔍 [DEBUG] Dialog onOpenChange llamado con open:', open);
+          console.log('🔍 [DEBUG] Body pointer-events antes de onOpenChange:', document.body.style.pointerEvents);
+          console.log('🔍 [DEBUG] Computed pointer-events antes:', window.getComputedStyle(document.body).pointerEvents);
+          setRenameDialogOpen(open);
+          setTimeout(() => {
+            console.log('🔍 [DEBUG] Body pointer-events después de onOpenChange:', document.body.style.pointerEvents);
+            console.log('🔍 [DEBUG] Computed pointer-events después:', window.getComputedStyle(document.body).pointerEvents);
+            console.log('🔍 [DEBUG] Full style attribute:', document.body.getAttribute('style'));
+          }, 50);
+          setTimeout(() => {
+            console.log('🔍 [DEBUG] Body pointer-events 200ms después:', document.body.style.pointerEvents);
+            console.log('🔍 [DEBUG] Computed pointer-events 200ms después:', window.getComputedStyle(document.body).pointerEvents);
+          }, 200);
+        }}
       >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -446,7 +515,16 @@ export default function Home() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRenameDialogOpen(false)} disabled={isRenaming} data-testid="button-cancel-rename">
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                console.log('🔍 [DEBUG] Dialog Cancel onClick');
+                console.log('🔍 [DEBUG] Body pointer-events en cancel:', document.body.style.pointerEvents);
+                setRenameDialogOpen(false);
+              }} 
+              disabled={isRenaming} 
+              data-testid="button-cancel-rename"
+            >
               Cancelar
             </Button>
             <Button onClick={confirmRename} disabled={isRenaming || !newTestName.trim()} data-testid="button-confirm-rename">
