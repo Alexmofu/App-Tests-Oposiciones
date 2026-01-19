@@ -168,80 +168,72 @@ export default function Home() {
               </Card>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {tests?.map((test, index) => (
-                  <motion.div
-                    key={test.id}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <ContextMenu>
-                      <ContextMenuTrigger asChild>
-                        <Link href={`/test/${test.id}`} className="group block h-full" data-testid={`link-test-${test.id}`}>
-                          <Card className="h-full hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden relative">
-                            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            <CardHeader>
-                              <div className="flex justify-between items-start mb-2">
-                                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                                  <FileText className="w-5 h-5" />
-                                </div>
-                                <Badge variant="secondary" className="font-mono text-xs">
-                                  {test.count} Preg.
-                                </Badge>
-                              </div>
-                              <CardTitle className="line-clamp-2 text-lg group-hover:text-primary transition-colors">
-                                {test.id.replace('.json', '')}
-                              </CardTitle>
-                              <CardDescription className="line-clamp-1">
-                                {test.category || "Categoría General"}
-                              </CardDescription>
-                            </CardHeader>
-                            <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
-                              <ChevronRight className="w-5 h-5 text-primary" />
-                            </div>
-                          </Card>
-                        </Link>
-                      </ContextMenuTrigger>
-                      <ContextMenuContent className="w-48">
-                        <ContextMenuItem
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleEditClick(test.id);
-                          }}
-                          className="cursor-pointer"
-                          data-testid={`menu-edit-${test.id}`}
-                        >
-                          <Pencil className="w-4 h-4 mr-2" />
-                          Editar
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleRenameClick(test.id);
-                          }}
-                          className="cursor-pointer"
-                          data-testid={`menu-rename-${test.id}`}
-                        >
-                          <Edit3 className="w-4 h-4 mr-2" />
-                          Cambiar nombre
-                        </ContextMenuItem>
-                        <ContextMenuSeparator />
-                        <ContextMenuItem
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleDeleteClick(test.id);
-                          }}
-                          className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
-                          data-testid={`menu-delete-${test.id}`}
-                        >
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Eliminar
-                        </ContextMenuItem>
-                      </ContextMenuContent>
-                    </ContextMenu>
-                  </motion.div>
-                ))}
+  {tests?.map((test, index) => (
+    <motion.div
+      key={test.id}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: index * 0.05 }}
+    >
+      <ContextMenu>
+        {/* Trigger solo con el Card */}
+        <ContextMenuTrigger asChild>
+          <Card className="h-full hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden relative cursor-pointer">
+            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <CardHeader>
+              <div className="flex justify-between items-start mb-2">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <Badge variant="secondary" className="font-mono text-xs">
+                  {test.count} Preg.
+                </Badge>
               </div>
+              <CardTitle className="line-clamp-2 text-lg group-hover:text-primary transition-colors">
+                {test.id.replace('.json', '')}
+              </CardTitle>
+              <CardDescription className="line-clamp-1">
+                {test.category || "Categoría General"}
+              </CardDescription>
+            </CardHeader>
+            <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all">
+              <ChevronRight className="w-5 h-5 text-primary" />
+            </div>
+          </Card>
+        </ContextMenuTrigger>
+
+        <ContextMenuContent className="w-48">
+          <ContextMenuItem
+            onClick={() => navigate(`/test/${test.id}`)}
+            className="cursor-pointer"
+            data-testid={`menu-edit-${test.id}`}
+          >
+            <Pencil className="w-4 h-4 mr-2" />
+            Abrir Test
+          </ContextMenuItem>
+          <ContextMenuItem
+            onClick={() => handleRenameClick(test.id)}
+            className="cursor-pointer"
+            data-testid={`menu-rename-${test.id}`}
+          >
+            <Edit3 className="w-4 h-4 mr-2" />
+            Cambiar nombre
+          </ContextMenuItem>
+          <ContextMenuSeparator />
+          <ContextMenuItem
+            onClick={() => handleDeleteClick(test.id)}
+            className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
+            data-testid={`menu-delete-${test.id}`}
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            Eliminar
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    </motion.div>
+  ))}
+</div>
+
             )}
           </div>
 
