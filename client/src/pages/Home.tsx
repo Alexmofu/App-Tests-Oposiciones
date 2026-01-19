@@ -80,6 +80,53 @@ export default function Home() {
     }
   };
 
+  // FIREWALL: Prevenir que el body tenga pointer-events: none SIEMPRE
+  useEffect(() => {
+    // MutationObserver que intercepta CUALQUIER cambio en el style del body
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+          const target = mutation.target as HTMLElement;
+          if (target === document.body) {
+            // Si Radix UI intenta poner pointer-events: none, eliminarlo inmediatamente
+            if (document.body.style.pointerEvents === 'none') {
+              document.body.style.removeProperty('pointer-events');
+            }
+            // También verificar computed style
+            const computed = window.getComputedStyle(document.body);
+            if (computed.pointerEvents === 'none') {
+              document.body.style.pointerEvents = 'auto';
+            }
+          }
+        }
+      });
+    });
+
+    // Observar cambios en el atributo style del body
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['style'],
+      attributeOldValue: false,
+    });
+
+    // Verificación constante cada 50ms para asegurar que nunca tenga pointer-events: none
+    const intervalId = setInterval(() => {
+      if (document.body.style.pointerEvents === 'none') {
+        document.body.style.removeProperty('pointer-events');
+      }
+      const computed = window.getComputedStyle(document.body);
+      if (computed.pointerEvents === 'none') {
+        document.body.style.pointerEvents = 'auto';
+      }
+    }, 50);
+
+    // Limpiar al desmontar
+    return () => {
+      observer.disconnect();
+      clearInterval(intervalId);
+    };
+  }, []); // Solo se ejecuta una vez al montar
+
   const handleDeleteClick = (testId: string) => {
     setSelectedTest(testId);
     setDeleteDialogOpen(true);
@@ -98,15 +145,9 @@ export default function Home() {
   const confirmDelete = () => {
     if (selectedTest) {
       setDeleteDialogOpen(false);
-      // Limpiar inmediatamente
-      forceCleanPointerEvents();
       deleteTest(selectedTest, {
         onSuccess: () => {
           setSelectedTest(null);
-          // Limpiar de nuevo después de la operación
-          setTimeout(() => {
-            forceCleanPointerEvents();
-          }, 100);
         },
       });
     }
@@ -115,69 +156,18 @@ export default function Home() {
   const confirmRename = () => {
     if (selectedTest && newTestName.trim()) {
       setRenameDialogOpen(false);
-      // Limpiar inmediatamente
-      forceCleanPointerEvents();
       renameTest(
         { testId: selectedTest, newName: newTestName.trim() },
         {
           onSuccess: () => {
             setSelectedTest(null);
             setNewTestName("");
-            // Limpiar de nuevo después de la operación
-            setTimeout(() => {
-              forceCleanPointerEvents();
-            }, 100);
           },
         }
       );
     }
   };
 
-  // Limpiar pointer-events cuando los diálogos se cierren
-  useEffect(() => {
-    if (!deleteDialogOpen && !renameDialogOpen) {
-      // Usar múltiples estrategias para asegurar la limpieza
-      const cleanup = () => {
-        forceCleanPointerEvents();
-      };
-      
-      // Limpiar inmediatamente
-      cleanup();
-      
-      // Limpiar después de múltiples delays para asegurar que funcione
-      const timeout1 = setTimeout(cleanup, 50);
-      const timeout2 = setTimeout(cleanup, 150);
-      const timeout3 = setTimeout(cleanup, 300);
-      const timeout4 = setTimeout(cleanup, 500);
-      
-      return () => {
-        clearTimeout(timeout1);
-        clearTimeout(timeout2);
-        clearTimeout(timeout3);
-        clearTimeout(timeout4);
-      };
-    }
-  }, [deleteDialogOpen, renameDialogOpen]);
-
-  // Listener global para detectar cuando cualquier overlay de Radix se cierra
-  useEffect(() => {
-    const checkAndClean = () => {
-      if (!deleteDialogOpen && !renameDialogOpen) {
-        forceCleanPointerEvents();
-      }
-    };
-
-    // Verificar periódicamente cuando no hay diálogos abiertos
-    const intervalId = setInterval(() => {
-      if (!deleteDialogOpen && !renameDialogOpen) {
-        checkAndClean();
-      }
-    }, 200);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [deleteDialogOpen, renameDialogOpen]);
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
@@ -283,11 +273,7 @@ export default function Home() {
                         <ContextMenuItem
                           onSelect={(e) => {
                             e.preventDefault();
-                            // Limpiar pointer-events ANTES de abrir el diálogo
-                            forceCleanPointerEvents();
-                            setTimeout(() => {
-                              handleEditClick(test.id);
-                            }, 10);
+                            handleEditClick(test.id);
                           }}
                           className="cursor-pointer"
                           data-testid={`menu-edit-${test.id}`}
@@ -298,11 +284,7 @@ export default function Home() {
                         <ContextMenuItem
                           onSelect={(e) => {
                             e.preventDefault();
-                            // Limpiar pointer-events ANTES de abrir el diálogo
-                            forceCleanPointerEvents();
-                            setTimeout(() => {
-                              handleRenameClick(test.id);
-                            }, 10);
+                            handleRenameClick(test.id);
                           }}
                           className="cursor-pointer"
                           data-testid={`menu-rename-${test.id}`}
@@ -314,11 +296,7 @@ export default function Home() {
                         <ContextMenuItem
                           onSelect={(e) => {
                             e.preventDefault();
-                            // Limpiar pointer-events ANTES de abrir el diálogo
-                            forceCleanPointerEvents();
-                            setTimeout(() => {
-                              handleDeleteClick(test.id);
-                            }, 10);
+                            handleDeleteClick(test.id);
                           }}
                           className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
                           data-testid={`menu-delete-${test.id}`}
@@ -413,16 +391,7 @@ export default function Home() {
       {/* Delete Confirmation Dialog */}
       <AlertDialog 
         open={deleteDialogOpen} 
-        onOpenChange={(open) => {
-          setDeleteDialogOpen(open);
-          if (!open) {
-            // Limpiar inmediatamente y con delays
-            forceCleanPointerEvents();
-            setTimeout(() => forceCleanPointerEvents(), 50);
-            setTimeout(() => forceCleanPointerEvents(), 150);
-            setTimeout(() => forceCleanPointerEvents(), 300);
-          }
-        }}
+        onOpenChange={setDeleteDialogOpen}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -450,16 +419,7 @@ export default function Home() {
       {/* Rename Dialog */}
       <Dialog 
         open={renameDialogOpen} 
-        onOpenChange={(open) => {
-          setRenameDialogOpen(open);
-          if (!open) {
-            // Limpiar inmediatamente y con delays
-            forceCleanPointerEvents();
-            setTimeout(() => forceCleanPointerEvents(), 50);
-            setTimeout(() => forceCleanPointerEvents(), 150);
-            setTimeout(() => forceCleanPointerEvents(), 300);
-          }
-        }}
+        onOpenChange={setRenameDialogOpen}
       >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
