@@ -53,7 +53,6 @@ export default function Home() {
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [selectedTest, setSelectedTest] = useState<string | null>(null);
   const [newTestName, setNewTestName] = useState("");
-  const [contextMenuOpen, setContextMenuOpen] = useState<string | null>(null);
 
   const handleConnect = () => {
     if (!remoteUrl) return;
@@ -63,17 +62,23 @@ export default function Home() {
   };
 
   const handleDeleteClick = (testId: string) => {
+    // Forzar la limpieza del pointer-events
+    document.body.style.pointerEvents = '';
     setSelectedTest(testId);
     setDeleteDialogOpen(true);
   };
 
   const handleRenameClick = (testId: string) => {
+    // Forzar la limpieza del pointer-events
+    document.body.style.pointerEvents = '';
     setSelectedTest(testId);
     setNewTestName(testId.replace('.json', ''));
     setRenameDialogOpen(true);
   };
 
   const handleEditClick = (testId: string) => {
+    // Forzar la limpieza del pointer-events
+    document.body.style.pointerEvents = '';
     navigate(`/admin?test=${encodeURIComponent(testId)}`);
   };
 
@@ -176,7 +181,7 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <ContextMenu onOpenChange={(open) => setContextMenuOpen(open ? test.id : null)}>
+                    <ContextMenu>
                       <ContextMenuTrigger asChild>
                         <Link href={`/test/${test.id}`} className="group block h-full" data-testid={`link-test-${test.id}`}>
                           <Card className="h-full hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden relative">
@@ -205,10 +210,9 @@ export default function Home() {
                       </ContextMenuTrigger>
                       <ContextMenuContent className="w-48">
                         <ContextMenuItem
-                          onClick={(e) => {
+                          onSelect={(e) => {
                             e.preventDefault();
-                            setContextMenuOpen(null);
-                            setTimeout(() => handleEditClick(test.id), 0);
+                            setTimeout(() => handleEditClick(test.id), 100);
                           }}
                           className="cursor-pointer"
                           data-testid={`menu-edit-${test.id}`}
@@ -217,10 +221,9 @@ export default function Home() {
                           Editar
                         </ContextMenuItem>
                         <ContextMenuItem
-                          onClick={(e) => {
+                          onSelect={(e) => {
                             e.preventDefault();
-                            setContextMenuOpen(null);
-                            setTimeout(() => handleRenameClick(test.id), 0);
+                            setTimeout(() => handleRenameClick(test.id), 100);
                           }}
                           className="cursor-pointer"
                           data-testid={`menu-rename-${test.id}`}
@@ -230,10 +233,9 @@ export default function Home() {
                         </ContextMenuItem>
                         <ContextMenuSeparator />
                         <ContextMenuItem
-                          onClick={(e) => {
+                          onSelect={(e) => {
                             e.preventDefault();
-                            setContextMenuOpen(null);
-                            setTimeout(() => handleDeleteClick(test.id), 0);
+                            setTimeout(() => handleDeleteClick(test.id), 100);
                           }}
                           className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
                           data-testid={`menu-delete-${test.id}`}
