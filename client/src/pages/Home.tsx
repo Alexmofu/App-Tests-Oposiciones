@@ -43,6 +43,9 @@ export default function Home() {
   const [remoteUrl, setRemoteUrl] = useState("");
   const [connectUrl, setConnectUrl] = useState("");
   const [, navigate] = useLocation();
+
+  // Control which context-menu is open so we can reliably close it before opening dialogs/navigating.
+  const [openContextMenuFor, setOpenContextMenuFor] = useState<string | null>(null);
   
   const { data: remoteFiles, isLoading: loadingRemote, refetch: refetchRemote } = useRemoteTests(connectUrl || null);
   const { mutate: fetchRemote, isPending: isDownloading } = useFetchRemoteTest();
@@ -62,17 +65,20 @@ export default function Home() {
   };
 
   const handleDeleteClick = (testId: string) => {
+    setOpenContextMenuFor(null);
     setSelectedTest(testId);
     setDeleteDialogOpen(true);
   };
 
   const handleRenameClick = (testId: string) => {
+    setOpenContextMenuFor(null);
     setSelectedTest(testId);
     setNewTestName(testId.replace('.json', ''));
     setRenameDialogOpen(true);
   };
 
   const handleEditClick = (testId: string) => {
+    setOpenContextMenuFor(null);
     navigate(`/admin?test=${encodeURIComponent(testId)}`);
   };
 
@@ -175,7 +181,10 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <ContextMenu>
+                    <ContextMenu
+                      open={openContextMenuFor === test.id}
+                      onOpenChange={(open) => setOpenContextMenuFor(open ? test.id : null)}
+                    >
                       <ContextMenuTrigger asChild>
                         <Link href={`/test/${test.id}`} className="group block h-full" data-testid={`link-test-${test.id}`}>
                           <Card className="h-full hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden relative">
@@ -204,10 +213,7 @@ export default function Home() {
                       </ContextMenuTrigger>
                       <ContextMenuContent className="w-48">
                         <ContextMenuItem
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleEditClick(test.id);
-                          }}
+                          onSelect={() => handleEditClick(test.id)}
                           className="cursor-pointer"
                           data-testid={`menu-edit-${test.id}`}
                         >
@@ -215,10 +221,7 @@ export default function Home() {
                           Editar
                         </ContextMenuItem>
                         <ContextMenuItem
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleRenameClick(test.id);
-                          }}
+                          onSelect={() => handleRenameClick(test.id)}
                           className="cursor-pointer"
                           data-testid={`menu-rename-${test.id}`}
                         >
@@ -227,10 +230,7 @@ export default function Home() {
                         </ContextMenuItem>
                         <ContextMenuSeparator />
                         <ContextMenuItem
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleDeleteClick(test.id);
-                          }}
+                          onSelect={() => handleDeleteClick(test.id)}
                           className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
                           data-testid={`menu-delete-${test.id}`}
                         >
